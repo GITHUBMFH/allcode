@@ -1,0 +1,195 @@
+<include file="public/header" />
+
+<style>
+    .add_material {
+        padding: 10px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <div class="layui-inline">
+                <input name='name' type="text" class="layui-input" placeholder="请输入名称">
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="supplier_lst" lay-filter="supplier_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="suppliertoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_supplier'>添加供应商</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="supplierbar">
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="check_bank">银行信息</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="check_contact">查看联系人</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add_contact">添加联系人</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 获取后台客户地址数据 -->
+<script type="text/html" id="address">
+    {{d.address.address}}
+</script>
+
+<input type="text" style="display: none" id="getinformation">
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/supplier.js?{$csspass}"></script>
+
+<div class="add_form" id="add_supplier_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="supplier_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">简称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="s_name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">供应商名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_supplier_form" lay-submit lay-filter="add_supplier_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_supplier_form" lay-submit lay-filter="edit_supplier_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="add_form" id="contact_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="contact_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名字</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">岗位</label>
+                <div class="layui-input-block">
+                    <input type="text" name="station" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number" placeholder="请输入" autocomplete="off" class="layui-input"
+                    lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="contact_form_form">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="bank" style="display: none">
+    <div class="add_material">
+        <table id="bank_lst" lay-filter="bank_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="banktoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_bank'>添加银行信息</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="bankbar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<div class="add_form" id="bank_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="bank_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">银行卡号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='number|required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">银行类型</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank_name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开户行</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank_des" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn edit_bank_form" lay-submit lay-filter="edit_bank_form"
+                        style="display:none">立即提交</button>
+                    <button class="layui-btn add_bank_form" lay-submit lay-filter="add_bank_form"
+                        style="display:none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

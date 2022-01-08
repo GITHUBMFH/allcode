@@ -1,0 +1,157 @@
+<include file="public/header" />
+<style>
+    #card_body {
+        position: relative;
+        left: -8%;
+        padding-top: 20px;
+    }
+
+    #fixed_nav {
+        display: none;
+    }
+
+    #header_refresh {
+        display: none;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body" style="text-align: center;">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>图片</td>
+                    <td>
+                        <if condition="isset($product[0]['img'])">
+                            <img src="http://resource.yasfurniture.cn/{$product[0]['img']}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+                                alt="">
+                        </if>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>生产单号</td>
+                    <td colspan="3">
+                        {$product[0]['year']}-{$product[0]['num']}单
+                    </td>
+                </tr>
+                <tr>
+                    <td>项目名称</td>
+                    <td colspan="3">
+                        {$product[0]['project']}
+                    </td>
+                </tr>
+                <tr>
+                    <td>序号</td>
+                    <td>{$product[0]['pro_num']}</td>
+                </tr>
+                <tr>
+                    <td>产品名称</td>
+                    <td>{$product[0]['pro_name']}</td>
+                </tr>
+                <tr>
+                    <td>规格</td>
+                    <td>{$product[0]['size']}</td>
+                </tr>
+                <tr>
+                    <td>完成数量</td>
+                    <td>
+                        <input id="ad_product_num" type="text" value="{$number}" class="layui-input"
+                            style="text-align: center;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>产品单价</td>
+                    <td>
+                        <input id="ad_product_price" type="text" value="{$price}" class="layui-input"
+                            style="text-align: center;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>总额</td>
+                    <td>
+                        <input id="amount" type="text" value="" readonly class="layui-input"
+                            style="text-align: center;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>工位</td>
+                    <td>{$worker.work_name}</td>
+                </tr>
+                <tr>
+                    <td>姓名</td>
+                    <td>{$worker.name}</td>
+                </tr>
+                <tr>
+                    <td>完成时间</td>
+                    <td>{$date}月</td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="layui-btn layui-btn-normal" style="margin-top:10px;" id="add_match">完成任务</button>
+    </div>
+</div>
+
+<include file="public/footer" />
+<script>
+    layui.use(['layer', 'jquery'], function () {
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        getamount();
+
+        function getamount() {
+            var product_num = $('#ad_product_num').val();
+            var product_price = $('#ad_product_price').val();
+            $('#amount').val(product_num * product_price);
+        }
+
+
+        $('#ad_product_num').on('change', function () {
+            getamount()
+        })
+        $('#ad_product_price').on('change', function () {
+            getamount()
+        })
+
+        $('#add_match').on('click', function () {
+            var product_price = $('#ad_product_price').val();
+            var product_num = $('#ad_product_num').val();
+            if (product_price == 0) {
+                layer.msg('单价不能为零');
+            } else if (product_num < !0) {
+                layer.msg('数量不能小于零');
+            } else {
+                $.ajax({
+                    type: 'POST', //请求类型
+                    url: '/yes/match/addPost', //URL
+                    data: {
+                        year: '{$year}',
+                        product_id: '{$product_id}',
+                        worker_id: '{$worker_id}',
+                        num: product_num,
+                        amount: $('#amount').val(),
+                        month: '{$date}',
+                    }, //传递的参数
+                    dataType: "json", //返回的数据类型
+                    success: function (data) {
+                        layer.msg(data.msg, {
+                            success: function () {
+                                setTimeout(function () {
+                                    window.close();
+                                    // $(window).attr('location','/myes/index/getsuccess');
+                                    // window.close();
+                                    $(window).attr('location','/myes/index/task');
+                                }, 2000)
+                            }
+                        });
+                    },
+                    error: function (data) {
+                        layer.msg(data.msg);
+                    }
+                });
+
+            }
+        })
+    })
+</script>

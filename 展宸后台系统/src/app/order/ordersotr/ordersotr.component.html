@@ -1,0 +1,27 @@
+<h1>生产排序表</h1>
+<app-table
+  [tabledata]="tabledata"
+  [total]="total"
+  [tabletitle]="tabletitle"
+  (editclick)="edit($event)"
+  [post]="delpost"
+  [contex]="contex"
+  (db)="dbclick($event)"
+  (getdata)="pagechange($event)"
+  [cdkDro]='true'
+  [ischeck]='false'
+  [nzShowSort]='false'
+  [nzShowPagination]='false'
+  #ordertable
+></app-table>
+
+
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="editfromdata"
+  [post]="addpost"
+  [title]="editfromtitle"
+  #drawereditfrom
+></app-drawer-from>
+
+<app-product #productlist></app-product>

@@ -1,0 +1,92 @@
+<nz-drawer
+  [nzBodyStyle]="{ overflow: 'hideen' }"
+  [nzMaskClosable]="true"
+  [nzWidth]="1200"
+  [nzVisible]="visible"
+  [nzTitle]="title"
+  nzPlacement="left"
+  (nzOnClose)="drawerstate()"
+>
+  <app-table
+    [tabledata]="tabledata"
+    [total]="total"
+    [tabletitle]="tabletitle"
+    [post]="delpost"
+    (editclick)="edit($event)"
+    [contex]="contex"
+    [nzShowPagination]="false"
+    (additemclick)="addclick($event)"
+    (getdata)="gettabledata()"
+    [nzBordered]="false"
+    (img)="upimg($event)"
+    (importdata)="importdata($event)"
+    (excel)='emptyexcel()'
+    #producttable
+  ></app-table>
+</nz-drawer>
+
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="editfromdata"
+  [post]="addpost"
+  [title]="editfromtitle"
+  [self]="true"
+  (selfsubmit)="eidtsublimt($event)"
+  #drawereditfrom
+></app-drawer-from>
+
+<!-- 添加新项目 -->
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="addfromdata"
+  [post]="addpost"
+  [self]="true"
+  (selfsubmit)="addsubmit($event)"
+  [title]="addfromtitle"
+  #draweraddfrom
+></app-drawer-from>
+
+<nz-modal
+  [(nzVisible)]="isVisibleMiddle"
+  nzTitle="上传查看图片"
+  [nzCancelText]="null"
+  nzOkText="关闭"
+  (nzOnCancel)="handleCancelMiddle()"
+  (nzOnOk)="handleCancelMiddle()"
+  nzWidth="500px"
+>
+  <ng-container *nzModalContent>
+    <nz-upload
+      nzType="drag"
+      [nzMultiple]="true"
+      [nzAction]="action"
+      (nzChange)="updone($event)"
+      nzListType='picture'
+    >
+      <p class="ant-upload-drag-icon">
+        <i nz-icon nzType="inbox"></i>
+      </p>
+      <p class="ant-upload-text">点击或拖拽文件到这里上传文件</p>
+      <p class="ant-upload-hint">支持单次或批量上传</p>
+    </nz-upload>
+    <br>
+    <nz-image-group>
+      <div nz-row [nzGutter]="[8, 8]" cdkDropList (cdkDropListDropped)="drop($event)" nzAlign='middle' nzJustify='center'>
+        <ng-container *ngFor="let data of fileList">
+          <div nz-col [nzSpan]="24" cdkDrag (contextmenu)="contextMenu($event, menu, data.url)">
+            <nz-card nzHoverable class="imgbox">
+              <img nz-image class='imglst' [nzSrc]="data.url" alt="" />
+              <!-- <nz-card-meta nzTitle="Europe Street beat" nzDescription="www.instagram.com"></nz-card-meta> -->
+            </nz-card>
+          </div>
+        </ng-container>
+      </div>
+    </nz-image-group>
+  </ng-container>
+</nz-modal>
+
+<nz-dropdown-menu #menu>
+  <ul nz-menu>
+    <li nz-menu-item (click)="delimg()">删除</li>
+  </ul>
+</nz-dropdown-menu>

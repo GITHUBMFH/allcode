@@ -1,0 +1,137 @@
+<include file="public/header" />
+
+<style>
+    .add_material {
+        padding: 20px;
+    }
+
+    #product .layui-card-body .layui-table-body .layui-table-cell {
+        height: 50px;
+        line-height: 50px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <!-- 引入产品搜索 -->
+            <div class="layui-input-inline" style="width: 120px">
+                <select name="year" lay-search lay-filter="spare_year_form" id="spare_year_form">
+                    <option value="">请选择年份</option>
+                    <foreach name="year" item="vo">
+                        <option value="{$vo.year}">{$vo.year}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 120px">
+                <select name="client_id" lay-search lay-filter="spare_year_form" id="spare_client_form">
+                    <option value="">请选择客户</option>
+                    <foreach name="client" item="vo">
+                        <option value="{$vo.id}">{$vo.s_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline show-select" style="width: 130px">
+                <select name="order_id" lay-search id='spare_num_form'>
+                    <option value="">请选择生产单</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="pro_progress" lay-search>
+                    <option value="">完成状态</option>
+                    <option value="1">未完成</option>
+                    <option value="100">已完成</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="ship_progress" lay-search>
+                    <option value="">出货状态</option>
+                    <option value="1">未出完</option>
+                    <option value="100">已出完</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="complete" lay-search>
+                    <option value="">结清状态</option>
+                    <option value="1">未结清</option>
+                    <option value="2">已结清</option>
+                </select>
+            </div>
+
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+        </form>
+    </div>
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="order_lst" lay-filter="order_lst"></table>
+    </div>
+</div>
+
+<!-- 生产進度 -->
+<script type="text/html" id="pro_progress">
+    {{# if(d.pro_progress>100){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-red" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# } else if(d.pro_progress == 100 ){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# } }}
+</script>
+
+<!-- 出货進度 -->
+<script type="text/html" id="ship_progress">
+    {{# if(d.ship_progress>100){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-red" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# } else if(d.ship_progress == 100 ){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# } }}
+</script>
+
+<!-- 操作 -->
+<script type="text/html" id="orderbar">
+    <a class="layui-btn layui-btn-xs" lay-event="finance">进账记录</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="product">产品价格</a>
+</script>
+
+<script type="text/html" id="recordtoolbar">
+    <button class="layui-btn layui-btn-warm" id='get_amount' lay-event="get_amount">求和</button>
+</script>
+
+<include file="public/footer" />
+<script src="__STATIC__/yes/js/data.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+<!-- 产品列表 -->
+<div id="product" style="display: none">
+    <div class="add_material">
+        <table id="product_lst" lay-filter="product_lst"></table>
+    </div>
+</div>
+
+<!-- 进账记录表 -->
+<div id="finance" style="display: none">
+    <div class="add_material">
+        <table id="finance_lst" lay-filter="finance_lst"></table>
+    </div>
+</div>

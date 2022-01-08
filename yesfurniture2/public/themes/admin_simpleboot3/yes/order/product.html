@@ -1,0 +1,155 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/orderproduct.css?{$csspass}">
+<style>
+    .layui-card-body .layui-table-body .layui-table-cell {
+        height: 28px;
+        line-height: 28px;
+    }
+
+    #card_body {
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+
+    <!-- 表单 -->
+    <div class="layui-card-body layui-text-center">
+        <div id="card_body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客户</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                            value="{$result['client_name']}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生产单</label>
+                    <div class="layui-input-block">
+                        <input type="text" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                            value="{$result['year']}{$result['num']}-{$result['pro_num']}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="product_dec" required lay-verify="required" placeholder="请输入标题"
+                            autocomplete="off" class="layui-input" value="{$result['product_dec']}" readonly>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规格</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="size" required lay-verify="required" placeholder="请输入标题"
+                            autocomplete="off" class="layui-input" value="{$result['size']}" readonly>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="amount" required lay-verify="required" placeholder="请输入标题"
+                            autocomplete="off" class="layui-input" value="{$result['amount']}" readonly>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea" readonly>{$result.remark}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主图</label>
+                    <div class="layui-input-block">
+                        <input type="text" id='getimg' placeholder="请输入" autocomplete="off" class="layui-input"
+                            style="display: none" id="upload_img">
+                        <div class="layui-upload">
+                            <div class="img_box" id="uploadimg">
+                                <if condition="$result['img']!='' ">
+                                    <img class="layui-upload-img"
+                                        src="http://resource.yasfurniture.cn/{$result['img']}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+                                        id='preimg' style="display: block">
+                                    <else />
+                                    <img class="layui-upload-img" id='preimg'>
+                                </if>
+                            </div>
+                            <div class="eidt_btm">
+                                <div class="btm_box">
+                                    <a class="layui-btn layui-btn-xs change">替换</a>
+                                    <a class="layui-btn layui-btn-danger layui-btn-xs del">删除</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上传其他图片</label>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn" id="otherimg">多图片上传</button>
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list" id="other_img">
+                                <if condition="!empty($img)">
+                                    <foreach name="img" item="vo">
+                                        <div class="lst_box">
+                                            <img src="http://resource.yasfurniture.cn/{$vo.file_url}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+                                                class="layui-upload-img" data-id="{$vo.id}" data-key='{$vo.file_url}'>
+                                            <div class="show_cz">
+                                                <a class="layui-btn layui-btn-xs layui-btn-normal show_big">大图</a>
+                                                <a class="layui-btn layui-btn-xs layui-btn-danger show_del">删除</a>
+                                            </div>
+                                        </div>
+                                    </foreach>
+                                </if>
+                            </div>
+                        </blockquote>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">上传其他文件</label>
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-normal" id="other_file">选择多文件</button>
+                        <div class="layui-upload-list" id="table_file">
+                            <table id="otherfile" lay-filter="otherfile"></table>
+                        </div>
+                    </div>
+                </div>
+<!-- 
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="product_form">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div> -->
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="filebar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="down">下载</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<a href="" style="display: none" id="downfile"></a>
+<!-- 出货模板 -->
+nid="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75" alt="">
+        {{# } }}
+    </div>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/product.js?{$csspass}"></script>

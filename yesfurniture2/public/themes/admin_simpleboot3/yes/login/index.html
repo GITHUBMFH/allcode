@@ -1,0 +1,49 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/login.css?{$csspass}">
+<style>
+    #header_refresh{
+        display: none;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layadmin-user-login-box layadmin-user-login-header">
+        <h2>佛山市亚世家具有限公司</h2>
+        <p>酒店家具制造</p>
+    </div>
+
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layadmin-user-login-icon layui-icon layui-icon-username"
+                for="LAY-user-login-username"></label>
+            <input type="text" name="username" lay-verify="required" placeholder="用户名"
+                class="layui-input" id="admin_username">
+        </div>
+        <div class="layui-form-item">
+            <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                for="LAY-user-login-password"></label>
+            <input type="password" name="password" lay-verify="required" placeholder="密码" class="layui-input password">
+        </div>
+        <!-- <div class="layui-form-item">
+            <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                for="LAY-user-login-password"></label>
+            <input type="text" name="captcha" lay-verify="required" placeholder="验证码" class="layui-input captcha">
+            <captcha height="32" width="150" font-size="18"
+                style="cursor: pointer;position:absolute;right:1px;top:1px;" />
+        </div> -->
+
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="margin: 0">
+                <div id="slider"></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit"
+                id='LAY-user-login-submit'>登 入</button>
+        </div>
+    </form>
+
+</div>
+<include file="public/footer" />
+<script src="__STATIC__/yes/js/login.js?{$csspass}"></script>

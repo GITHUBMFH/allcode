@@ -1,0 +1,170 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <div class="layui-input-inline">
+                <select name="supplier" lay-search lay-filter="spare_year_form">
+                    <option value="">请选择供应商</option>
+                    <foreach name="supplier" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="state" lay-search lay-filter="spare_year_form">
+                    <option value="">请选择状态</option>
+                    <option value="5">现金结清</option>
+                    <option value="1">未结现金</option>
+                    <option value="2">未对账</option>
+                    <option value="3">已对账</option>
+                    <option value="4">月结结清</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="number" placeholder="请输入订单号" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <div class='layui-inline'>
+            <button class="layui-btn layui-btn-danger" id='end_month' lay-event="end_month" style='margin-left:6px;'>月结结清</button>
+            <button class="layui-btn layui-btn-warm" id='account2' style='margin-left:6px;'>生成对账单</button>
+            <div class="layui-input-block" style='margin:0;float: left;'>
+                <input type="text" name="data" placeholder="请选择日期" autocomplete="off" class="layui-input"
+                    id="finance_time" readonly>
+            </div>
+        </div>
+        <table id="record_lst" lay-filter="record_lst"></table>
+    </div>
+
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="recordtoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_record' lay-event="add_record">添加进账记录</button>
+    <button class="layui-btn layui-btn-normal" style='display:none' lay-event="end_month" id="click_end_month">添加进账记录</button>
+    <button class="layui-btn layui-btn-normal" style='display:none' lay-event="account" id="account">添加进账记录</button>
+    <div class='layui-inline'>
+        <button class="layui-btn" lay-event="change_state">修改状态为</button>
+        <div class="layui-input-inline">
+            <select name="state" id='change_state'>
+                <option value="">请选择状态</option>
+                <!-- <option value="1">未结现金</option> -->
+                <option value="2">未对账</option>
+                <option value="3">已对账</option>
+                <!-- <option value="4">月结结清</option> -->
+                <!-- <option value="5">现金结清</option> -->
+            </select>
+        </div>
+    </div>
+    <button class="layui-btn layui-btn-warm" id='get_amount' lay-event="get_amount">求和</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="recordbar">
+    <a class="layui-btn layui-btn-xs" lay-event="details">查看细节</a>
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 状态界面 -->
+<script type="text/html" id="state">
+    {{# if(d.state==1){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs">未结现金</a>
+    {{# }else if(d.state==2){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs">未对账</a>
+    {{# }else if(d.state==3){ }}
+    <a class="layui-btn layui-btn-xs">已对帐</a>
+    {{# }else if(d.state==4){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs">月结结清</a>
+    {{# }else if(d.state==5){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs">现金结清</a>
+    {{# } }}
+</script>
+
+
+<input type="text" style="display: none" id="getinformation">
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/record.js?{$csspass}"></script>
+
+<div class="add_form" id="add_record_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="record_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">供应商</label>
+                <div class="layui-input-block">
+                    <select name="supplier" lay-search lay-verify='required'>
+                        <option value="">请选择供应商</option>
+                        <foreach name="supplier" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item" id="monty_select">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <select name="state" lay-search lay-verify='required'>
+                        <option value="">请选择状态</option>
+                        <option value="5">现金结清</option>
+                        <option value="1">未结现金</option>
+                        <option value="2">未对账</option>
+                        <option value="3">已对账</option>
+                        <option value="4" disabled>月结结清</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">订单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="number" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="price" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">收货日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="data" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|data' id="record_time">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_record_form" lay-submit lay-filter="add_record_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_record_form" lay-submit lay-filter="edit_record_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

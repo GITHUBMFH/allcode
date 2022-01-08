@@ -1,0 +1,263 @@
+<include file="public/header" />
+
+<style>
+    .add_material {
+        padding: 20px;
+    }
+    .layui-upload-list::after{content:'\20';clear:both;*zoom:1;display:block}.layui-upload-list .lst_box{width:100px;margin-right:10px;margin-bottom:10px;position:relative;height:100px;float:left}.layui-upload-list .lst_box img{width:100%}.layui-upload-list .lst_box .show_cz{display:none;width:100%;height:100%;position:absolute;top:0;background:rgba(0,0,0,0.37)}.layui-upload-list .lst_box .show_cz a{position:absolute;top:50%;transform:translate(0%, -50%);-ms-transform:translate(0%, -50%);-moz-transform:translate(0%, -50%);-webkit-transform:translate(0%, -50%);-o-transform:translate(0%, -50%)}.layui-upload-list .lst_box .show_cz .show_big{left:10%}.layui-upload-list .lst_box .show_cz .show_del{right:10%}
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <div class="layui-inline">
+                <select name="type" lay-filter="select_type_tool">
+                    <option value="">请选择类型</option>
+                    <option value="client">收款</option>
+                    <option value="supplier">支付</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="name_id" lay-search id="select_type_tool">
+                    <option value="">请选择商家</option>
+                </select>
+            </div>
+            <div class="layui-inline">
+                <select name="method">
+                    <option value="">请选择交易账户</option>
+                    <option value="5513账户">5513账户</option>
+                    <option value="农行公账">农行公账</option>
+                    <option value="建行公账">建行公账</option>
+                    <option value="香港账户">香港账户</option>
+                    <option value="微信">微信</option>
+                    <option value="阿里信保">阿里信保</option>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="finance_lst" lay-filter="finance_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="financetoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_finance'>添加收款</button>
+</script>
+
+<!-- 生产模板 -->
+<script type="text/html" id="financebar">
+    <a class="layui-btn layui-btn-xs" lay-event="finance">进账记录</a>
+    {{#  if(d.img_url[0] !== ''){ }}
+    <a class="layui-btn layui-btn-xs" lay-event="certificate">凭证</a>
+    {{#  }else{ }} 
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="certificate">凭证</a>
+    {{#  }}} 
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 收款记录头部工具栏 -->
+<script type="text/html" id="add_finance_details">
+    <button class="layui-btn layui-btn-normal" lay-event='add_finance_details'>增加收款记录</button>
+</script>
+
+<!-- 收款记录工具栏 -->
+<script type="text/html" id="financedetailsbar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="payment_lstbar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/finance.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+<!-- 添加收款记录 -->
+<div class="add_form" id="finance_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="finance_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <select name="type" lay-verify="required">
+                        <option value="client">收款</option>
+                        <option value="supplier" disabled>支付</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">简称</label>
+                <div class="layui-input-block">
+                    <select name="name_id" lay-verify="required">
+                        <option value="">请选择商家</option>
+                        <foreach name="client" item="vo">
+                            <option value="{$vo.id}">{$vo.s_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="price" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">交易账户</label>
+                <div class="layui-input-block">
+                    <select name="method" lay-verify="required">
+                        <option value="">请选择交易账户</option>
+                        <option value="5513账户">5513账户</option>
+                        <option value="农行公账">农行公账</option>
+                        <option value="建行公账">建行公账</option>
+                        <option value="香港账户">香港账户</option>
+                        <option value="微信">微信</option>
+                        <option value="阿里信保">阿里信保</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">收款时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="data" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|date' id="finance_time" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn edit_finance_form" lay-submit lay-filter="edit_finance_form"
+                        style="display:none">立即提交</button>
+                    <button class="layui-btn add_finance_form" lay-submit lay-filter="add_finance_form"
+                        style="display:none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 支付明细 -->
+<div id="payment" style="display: none">
+    <div class="add_material">
+        <table id="payment_lst" lay-filter="payment_lst"></table>
+    </div>
+</div>
+
+<!-- 收款记录表 -->
+<div id="finance" style="display: none">
+    <div class="add_material">
+        <table id="finance_details_lst" lay-filter="finance_details_lst"></table>
+    </div>
+</div>
+
+<!-- 添加收款明细 -->
+<div class="add_form" id="finance_details_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="finance_details_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-block">
+                    <select name="year" lay-search lay-filter="produce_year_form" id="produce_year_form">
+                        <option value="">请选择年份</option>
+                        <foreach name="year" item="vo">
+                            <option value="{$vo.year}">{$vo.year}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户</label>
+                <div class="layui-input-block">
+                    <select name="client_id" lay-search lay-filter="produce_year_form" id="produce_client_form">
+                        <option value="">请选择客户</option>
+                        <foreach name="client" item="vo">
+                            <option value="{$vo.id}">{$vo.s_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产单号</label>
+                <div class="layui-input-inline">
+                    <select name="num" lay-search lay-filter="produce_num_form" id='produce_num_form'>
+                        <option value="">请选择生产单</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="receipt" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn edit_finance_details_form" lay-submit
+                        lay-filter="edit_finance_details_form" style="display:none">立即提交</button>
+                    <button class="layui-btn add_finance_details_form" lay-submit lay-filter="add_finance_details_form"
+                        style="display:none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div id="certificate" style="display: none">
+    <div class="add_material">
+        <div class="layui-form-item uploadbox">
+            <div>
+                <button type="button" class="layui-btn" id="otherimg">上传凭证</button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    预览图：
+                    <div class="layui-upload-list" id="other_img">
+        
+                    </div>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>

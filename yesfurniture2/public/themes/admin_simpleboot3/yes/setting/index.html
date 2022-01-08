@@ -1,0 +1,159 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/orderproduct.css?{$csspass}">
+<style>
+    .layui-card-body .layui-table-body .layui-table-cell {
+        height: 28px;
+        line-height: 28px;
+    }
+
+    #card_body {
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <!-- 表单 -->
+    <div class="layui-card-body layui-text-center">
+        <div class="layui-card-header">网站基本信息</div>
+        <div id="card_body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站名字</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site_name" placeholder="请输入网站名字" autocomplete="off" class="layui-input"
+                            value="{$site_info['site_name']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site_seo_title" placeholder="请输入标题" autocomplete="off"
+                            class="layui-input" value="{$site_info['site_seo_title']}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站关键词</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site_seo_keywords" required lay-verify="required" placeholder="请输入关键词"
+                            autocomplete="off" class="layui-input" value="{$site_info['site_seo_keywords']}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site_seo_description" required lay-verify="required"
+                            placeholder="请输入描述" autocomplete="off" class="layui-input"
+                            value="{$site_info['site_seo_description']}">
+                    </div>
+                </div>
+
+                <if condition="$site_info['ICP']">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备案号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="ICP" required lay-verify="required" placeholder="请输入ICP"
+                                autocomplete="off" class="layui-input" value="{$site_info['ICP']}">
+                        </div>
+                    </div>
+                </if>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">公司地址</label>
+                    <div class="layui-input-block">
+                        <input name="address" placeholder="请输入地址" class="layui-input" value="{$site_info.address}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">联系电话</label>
+                    <div class="layui-input-block">
+                        <input name="phone" placeholder="请输入电话" class="layui-input" value="{$site_info.phone}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">QQ</label>
+                    <div class="layui-input-block">
+                        <input name="qq" placeholder="请输入qq" class="layui-input" value="{$site_info.qq}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">SKYPE</label>
+                    <div class="layui-input-block">
+                        <input name="skype" placeholder="请输入skype" class="layui-input" value="{$site_info.skype}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">Whatsapp</label>
+                    <div class="layui-input-block">
+                        <input name="whatapp" placeholder="请输入whatapp" class="layui-input" value="{$site_info.whatapp}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">Facebook</label>
+                    <div class="layui-input-block">
+                        <input name="facebook" placeholder="请输入facebook" class="layui-input" value="{$site_info.facebook}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">联系二维码</label>
+                    <div class="layui-input-block">
+                        <input name="img" placeholder="请输入base64" class="layui-input" value="{$site_info.img}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">统计代码</label>
+                    <div class="layui-input-block">
+                        <input name="code" placeholder="请输入代码" class="layui-input" value="{$site_info.code}">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="site_info_form">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<include file="public/footer" />
+
+<script type="text/javascript">
+    layui.use(['form', 'layer', 'jquery', 'laydate'], function () {
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        // 搜索
+        form.on('submit(site_info_form)', function (data) {
+            var data = data.field;
+            $.ajax({
+                type: 'POST',
+                url: '/yes/setting/setPost',
+                data: {options:data},
+                dataType: "json",
+                success: function (data) {
+                    layer.msg(data.msg);
+                },
+                error: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+            return false;
+        });
+
+    })
+</script>

@@ -1,0 +1,157 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/progress.css?{$csspass}">
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <!-- 引入产品搜索 -->
+            <div class="layui-input-inline" style="width: 80px">
+                <select name="year" lay-search lay-filter="spare_year_form" id="spare_year_form">
+                    <option value="">年份</option>
+                    <foreach name="year" item="vo">
+                        <option value="{$vo.year}">{$vo.year}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 100px">
+                <select name="client_id" lay-search lay-filter="spare_year_form" id="spare_client_form">
+                    <option value="">客户</option>
+                    <foreach name="client" item="vo">
+                        <option value="{$vo.id}">{$vo.s_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline show-select" style="width: 126px">
+                <select name="order_id" lay-search id='spare_num_form'>
+                    <option value="">生产单</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="pro_progress" lay-search>
+                    <option value="">完成状态</option>
+                    <option value="1">未完成</option>
+                    <option value="100">已完成</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="ship_progress" lay-search>
+                    <option value="">出货状态</option>
+                    <option value="1">未出完</option>
+                    <option value="100">已出完</option>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 180px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <br>
+            <br>
+            <input type="checkbox" name="mugong" title="木工">
+            <input type="checkbox" name="shimu" title="实木">
+            <input type="checkbox" name='kaimian' title="开棉">
+            <input type="checkbox" name="dadi" title="打底">
+            <input type="checkbox" name="chewei" title="车位">
+            <input type="checkbox" name="caichuang" title="裁床">
+            <input type="checkbox" name="menggong" title="扪工">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 内容 -->
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <form class="layui-form" style="margin-top: 10px;">
+                <div class="layui-inline">
+                    <select name="work_id" lay-search lay-filter="worker_name2" id="ad_worker_id2">
+                        <option value="">请选择职位</option>
+                        <foreach name="work_type" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+
+                <div class="layui-inline">
+                    <select name="worker_id" lay-search id="worker_name2" lay-filter="ad_price_form">
+                        <option value="">请选择姓名</option>
+                        <foreach name="worker_name" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+
+                <a class="layui-btn layui-btn-normal" id='print_singer_sworker2'>下发单人任务</a>
+                <button type="reset" class="layui-btn layui-btn-primary fromreset" style="display: none;">重置</button>
+            </form>
+            <table id="record_lst" lay-filter="record_lst"></table>
+        </div>
+        <!-- 表单 -->
+        <div class="layui-card-body">
+            <table id="progress_lst" lay-filter="progress_lst"></table>
+        </div>
+    </div>
+
+    <!-- 工具栏模板 -->
+    <script type="text/html" id="progresstoolbar">
+        <button class="layui-btn layui-btn-normal" lay-event='print_singer_sworker' id='print_singer_sworker'
+            style='display:none;'>下发单人任务</button>
+    </script>
+
+
+    <!-- 出货模板 -->
+    <script type="text/html" id="clickimg">
+        <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+            {{# if(d.img!=='') { }}
+            <img style='height:100%;width:auto;'
+                src="http://resource.yasfurniture.cn/{{d.img}}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+                alt="">
+            {{# } }}
+        </div>
+    </script>
+
+
+    <!-- 状态界面 -->
+    <script type="text/html" id="task">
+        {{#  layui.each(d.task, function(index, item){ }}
+        <span lay-event='task' data-id='{{item.work_id}}'>{{item.name}}</span>
+        {{# if(d.amount - item.task_num < 0){ }}
+        <span style='color:red'>{{ item.task_num }}</span>
+        {{# }else if(item.task_num =='0'){ }}
+        <span>{{ item.task_num }}</span>
+        {{# }else if(d.amount == item.task_num){ }}
+        <span style='color:yellow'>{{ item.task_num }}</span>
+        {{# }else{ }}
+        <span style='color:#1E9FFF'>{{ item.task_num }}</span>
+        {{# } }}
+
+        <span>|</span>
+
+        {{# if(d.amount - item.pro_num < 0){ }}
+        <span style='color:red'>{{ item.pro_num }}</span>
+        {{# }else if(item.pro_num =='0'){ }}
+        <span>{{ item.pro_num }}</span>
+        {{# }else if(d.amount == item.pro_num){ }}
+        <span style='color:yellow'>{{ item.pro_num }}</span>
+        {{# }else{ }}
+        <span style='color:#009688'>{{ item.pro_num }}</span>
+        {{# } }}
+        {{#  }); }}
+    </script>
+    <include file="public/footer" />
+
+    <script src="__STATIC__/yes/xadmin.js?{$csspass}"></script>
+    <script src="__STATIC__/yes/js/progress.js?{$csspass}"></script>
+    <script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+    <div id="taskbox" style="display: none">
+        <div class="add_material">
+            <table id="task_lst" lay-filter="task_lst"></table>
+        </div>
+    </div>
+
+    <div id="p_worker" style="display: none">
+        <div class="add_material">
+            <table id="p_worker_lst" lay-filter="p_worker_lst"></table>
+        </div>
+        <button class="layui-btn layui-btn-normal" style="position: sticky;bottom: 10px;left: 99%;" id="end_p_worker_lst">下发任务</button>
+    </div>

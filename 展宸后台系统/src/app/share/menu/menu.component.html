@@ -1,0 +1,78 @@
+<ng-container>
+    <div nz-row>
+        <div class="logo" nz-col nzSpan="24">
+            <!-- 标题 -->
+            <button nz-button nzType="text" nzBlock nzSize="large">
+                {{ tiele }}
+            </button>
+            <!-- 操作人 -->
+            <button nz-button nzType="text" nzTooltipTitle="修改密码" nzTooltipPlacement="top" nz-tooltip>
+                莫富豪
+            </button>
+            <!-- 清除缓存 -->
+            <button nz-button nzType="primary" nzSize="small" nzShape="circle" [nzTooltipTitle]="titleTemplate"
+                nzTooltipPlacement="top" nz-tooltip>
+                <i nz-icon nzType="fire"></i>
+            </button>
+            <ng-template #titleTemplate>
+                <i nz-icon nzType="fire"></i>
+                <span>清除缓存</span>
+            </ng-template>
+        </div>
+    </div>
+    <!-- 菜单 -->
+    <ul nz-menu nzMode="inline" [nzInlineIndent]="20">
+        <li nz-menu-group nzTitle="订单">
+            <ul>
+                <li nz-menu-divider class="divider"></li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/ordersort']">生产排单</a>
+                </li>
+                <li nz-menu-item nzMatchRouter nzSelected>
+                    <a [routerLink]="['/order']" nzSelected>订单列表</a>
+                </li>
+            </ul>
+        </li>
+
+        <li nz-menu-group nzTitle="采购">
+            <ul>
+                <li nz-menu-divider class="divider"></li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/shop']">采购列表</a>
+                </li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['stock']">库存列表</a>
+                </li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/price']">采购单价</a>
+                </li>
+            </ul>
+        </li>
+
+        <li nz-menu-group nzTitle="信息资料">
+            <ul>
+                <li nz-menu-divider class="divider"></li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/supplier']">供应商资料</a>
+                </li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/people']">人员资料</a>
+                </li>
+            </ul>
+        </li>
+        <li nz-menu-group nzTitle="财务">
+            <ul>
+                <li nz-menu-divider class="divider"></li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/finance']">财务分析</a>
+                </li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/pay']">支出列表</a>
+                </li>
+                <li nz-menu-item nzMatchRouter>
+                    <a [routerLink]="['/income']">收入列表</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</ng-container>

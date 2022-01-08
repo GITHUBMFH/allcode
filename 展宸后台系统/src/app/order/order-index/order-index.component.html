@@ -1,0 +1,42 @@
+<div>
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="6" *ngFor="let item of geticon; let key = index">
+      <nz-card>
+        <div nz-row>
+          <div nz-col="18">
+            <div style="border-radius: 50%; padding: 6px" [style]="item.bg">
+              <button
+                [style]="item.color"
+                class="icon"
+                nzBlock
+                nz-button
+                nzType="primary"
+                nzShape="circle"
+              >
+                <i nz-icon [nzType]="item.icon"></i>
+              </button>
+            </div>
+          </div>
+          <div nz-col="3" nzOffset="3">
+            <nz-statistic
+              [nzValue]="item.number"
+              [nzTitle]="item.title"
+            ></nz-statistic>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</div>
+<nz-tabset>
+  <nz-tab nzTitle="生产清单">
+    <ng-template nz-tab>
+      <app-item-list></app-item-list>
+    </ng-template>
+  </nz-tab>
+  <nz-tab nzTitle="项目清单">
+    <ng-template nz-tab>
+      <app-order-list></app-order-list>
+    </ng-template>
+  </nz-tab>
+</nz-tabset>

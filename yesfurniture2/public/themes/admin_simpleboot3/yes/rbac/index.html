@@ -1,0 +1,71 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="rbac_lst" lay-filter="rbac_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="rbactoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_rbac'>添加角色</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="rbacbar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="authorize">权限管理</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<div class="add_form" id="edit_authorize" style="display: none">
+    <div class="add_cont">
+        <div id="rule_tree"></div>
+        <div class="layui-btn-container">
+            <button type="button" class="layui-btn layui-btn-sm" lay-demo="getChecked">提交</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-demo="setChecked">勾选指定节点</button>
+        </div>
+    </div>
+</div>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/rbac.js?{$csspass}"></script>
+
+<div class="add_form" id="add_rbac_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="rbac_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_rbac_from" lay-submit lay-filter="add_rbac_from"
+                        style="display: none">立即提交</button>
+                    <button class="layui-btn edit_rbac_from" lay-submit lay-filter="edit_rbac_from"
+                        style="display: none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

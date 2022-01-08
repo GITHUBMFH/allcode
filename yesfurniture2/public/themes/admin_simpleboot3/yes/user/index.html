@@ -1,0 +1,92 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="user_lst" lay-filter="user_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="usertoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_user'>添加用户</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="userbar">
+    {{#  if(d.user_status==1){ }}
+    <!-- <input type="checkbox" name="user_status" lay-skin="switch" lay-text="启用|禁用" value="1" checked lay-event="status"> -->
+    <a class="layui-btn layui-btn-xs" lay-event="status">禁用</a>
+
+    {{#  }else{ }}
+    <!-- <input type="checkbox" name="user_status" lay-skin="switch" lay-text="启用|禁用" value="1" lay-event="status"> -->
+    <a class="layui-btn layui-btn-xs" lay-event="status">启用</a>
+    {{#  } }}
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<input type="text" style="display: none" id="getchilduserid">
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/user.js?{$csspass}"></script>
+
+<div class="add_form" id="add_user_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="user_form">
+
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user_login" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色名称</label>
+                <div class="layui-input-block">
+                    <select name="role_id" lay-verify="">
+                        <option value="">请选择用户角色</option>
+                        <foreach name="role" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user_pass" placeholder="请输入" autocomplete="off" class="layui-input"
+                        type="password">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-block">
+                    <input type="text" name="user_email" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_user_form" lay-submit lay-filter="add_user_form" style="display:none">立即提交</button
+                        >
+                    <button class="layui-btn edit_user_form" lay-submit lay-filter="edit_user_form" style="display:none">立即提交</button
+                        >
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

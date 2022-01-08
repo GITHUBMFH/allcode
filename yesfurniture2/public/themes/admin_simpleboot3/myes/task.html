@@ -1,0 +1,249 @@
+<include file="public/header" />
+<style>
+    .click_img {
+        width: 100%;
+        height: 100%;
+        left: 50%;
+        position: relative;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        overflow: hidden;
+    }
+
+    .layui-table-cell {
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #check {
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        z-index: 99999;
+        position: fixed;
+        top: 0;
+        text-align: center;
+        /* display: none; */
+    }
+
+    #check .layui-card-body {
+        position: absolute;
+        top: 50%;
+        transform: translate(0%, -50%);
+        -ms-transform: translate(0%, -50%);
+        -moz-transform: translate(0%, -50%);
+        -webkit-transform: translate(0%, -50%);
+        -o-transform: translate(0%, -50%);
+    }
+
+    #check .layui-inline {
+        width: 90%;
+        margin-bottom: 10%;
+    }
+
+    #yes_lst {
+        display: none;
+    }
+</style>
+
+
+<div id="getserachbox"><i class="layui-icon">&#xe615;</i> </div>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body" id="getserach" style="display: none">
+        <form class="layui-form">
+            <!-- 引入产品搜索 -->
+            <div class="layui-input-block">
+                <select name="work_id" lay-filter="worker_name2" id="ad_worker_id2">
+                    <option value="">职位</option>
+                    <foreach name="work_type" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+
+            <div class="layui-input-block">
+                <select name="worker_id" id="worker_name2" lay-filter="ad_price_form">
+                    <option value="">姓名</option>
+                    <foreach name="worker_name" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="state">
+                    <option value="0">未完成</option>
+                    <option value="1">已完成</option>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="year" lay-filter="spare_year_form" id="spare_year_form">
+                    <option value="">请选择年份</option>
+                    <foreach name="year" item="vo">
+                        <option value="{$vo.year}">{$vo.year}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-block show-select">
+                <select name="order_id" lay-search lay-filter="spare_num_form" id='spare_num_form'>
+                    <option value="">请选择生产单</option>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="product_id" id="spare_product_form" lay-filter="ad_price_form">
+                    <option value="">请选择产品序号</option>
+                </select>
+            </div>
+            <!-- <div class="layui-input-block">
+                <input type="number" name="time" placeholder="输入时间如:202001,代表2020年1月" class="layui-input password">
+            </div> -->
+
+            <button class="layui-btn layui-btn-normal btn-left" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset btn-right">重置</button>
+        </form>
+    </div>
+
+    <!-- 表单 -->
+    <div class="layui-card-header">任务列表</div>
+
+    <!-- 未完成列表 -->
+    <div class="layui-card-body" id="no_list">
+        <table id="task_lst" lay-filter="task_lst"></table>
+    </div>
+    <hr>
+    <div class="layui-card-header">佛山市亚世家具有限公司</div>
+</div>
+
+<div id="taskbox" style="display: none">
+    <div class="add_material">
+        <table id="match_lst" lay-filter="match_lst"></table>
+    </div>
+</div>
+
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?	
+        imageView2/1/w/50/h/50/q/75|imageslim" alt="">
+        {{# } }}
+    </div>
+</script>
+<!-- 操作模板 -->
+<script type="text/html" id="taskbar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="deltaskall">
+    <button class="layui-btn" lay-event='state_all' id='state_all'>切换完成</button>
+    <button class="layui-btn layui-btn-danger" lay-event='deltask_all' id='deltask_all'>删除</button>
+</script>
+
+<include file="public/footer" />
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+<script src="__STATIC__/myes/js/task.js?{$csspass}"></script>
+
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery', 'element'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var element = layui.element;
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        table.render({
+            elem: '#task_lst',
+            url: '/yes/task/tasksearchlst',
+            method: 'post',
+            page: {
+                hash: true,
+                layout: ['prev', 'page', 'next', 'count'],
+            },
+            limit: 20,
+            loading: true,
+            id: 'task',
+            toolbar: '#deltaskall',
+            cols: [
+                [{
+                    field: 'id',
+                    title: 'ID',
+                    hide: true
+                }, {
+                    type: 'checkbox',
+                    title: '排序',
+                    fixed: 'left',
+                }, {
+                    field: 'order_year',
+                    title: '生产单',
+                    templet: function (d) {
+                        return "<span lay-event='open'>" + d.order_year + '-' + d
+                            .order_num + '-' + d.pro_num + "</span>"
+                    },
+                    width: '50%',
+                    align: 'center',
+                }, {
+                    toolbar: '#clickimg',
+                    field: 'img',
+                    title: '图片',
+                    width: '35%',
+                    align: 'center',
+                    edit: 'text',
+                }, {
+                    field: 'num',
+                    title: '下发',
+                    align: 'center',
+                    edit: 'text'
+                }, {
+                    field: 'match',
+                    title: '完成',
+                    align: 'center',
+                    templet: function (d) {
+                        if (d.amount - d.match < 0) {
+                            return "<span style='color:red' lay-event='match'>" + d.match +
+                                "</span>"
+                        } else {
+                            return "<span lay-event='match'>" + d.match + "</span>"
+                        }
+                    }
+                }, {
+                    field: 'amount',
+                    title: '总数',
+                    align: 'center',
+                }, {
+                    field: 'name',
+                    title: '姓名',
+                    align: 'center',
+                    width: '28%',
+                }, {
+                    field: 'work_name',
+                    title: '工种',
+                    align: 'center',
+                    width: '28%',
+                }, {
+                    field: 'date',
+                    width: '35%',
+                    title: '时间',
+                    align: 'center'
+                }, {
+                    field: 'state',
+                    title: '状态',
+                    align: 'center',
+                    width: '23%',
+                    templet: function (d) {
+                        if (d.state == '1') {
+                            return '<button class="layui-btn layui-btn-xs">已完成</button>';
+                        } else {
+                            return '<button class="layui-btn layui-btn-xs layui-btn-danger">未完成</button>';
+                        }
+                    }
+                }]
+            ],
+            done: function () {
+                element.render();
+            }
+        });
+    })
+</script>

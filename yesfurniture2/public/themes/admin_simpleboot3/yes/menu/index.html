@@ -1,0 +1,81 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="menu_lst" lay-filter="menu_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="meantoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_menu'>添加顶级菜单</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="meanbar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="child_menu">查看子菜单</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="add_child_menu">添加子菜单</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<input type="text" style="display: none" id="getchildmenuid">
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/menu.js?{$csspass}"></script>
+
+<div class="add_form" id="add_menu_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="menu_form">
+
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">应用名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="app" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">控制器名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="controller" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">操作名字</label>
+                <div class="layui-input-block">
+                    <input type="text" name="action" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_menu_form" lay-submit lay-filter="add_menu_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_menu_form" lay-submit lay-filter="edit_menu_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn add_child_menu" lay-submit lay-filter="add_child_menu">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

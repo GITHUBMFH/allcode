@@ -1,0 +1,48 @@
+
+<div id="l_GOTop"></div>
+<section id="footer">
+    <footer>
+        <p class="title">亚世家具有限公司</p>
+        <div class="contact">
+            <p>地址：佛山市顺德区龙江镇扒头工业区</p>
+            <p>手机：13666666666</p>
+            <p>邮箱：13666666666@163.com</p>
+        </div>
+        <span>联系电话：0724-36748498</span>
+    </footer>
+</section>
+<div class="top-magin"></div>
+
+<section id='go-now'>
+    <a>马上定制家具</a>
+</section>
+</body>
+
+</html>
+<script src="__STATIC__/foryes/js/jquery-1.11.3.min.js"></script>
+<script src="__STATIC__/foryes/js/jquery.lazyload.min.js"></script>
+<script src="__STATIC__/foryes/js/scrolltopcontrol.js?{$csspass}"></script>
+<script>
+    /*监听页面加载*/
+    $(window).load(function () {
+        preloader();
+    });
+
+    // 加载消失
+    function preloader() {
+        if ($('#loding').length) {
+            $('#loding').delay(100).fadeOut('slow');
+        }
+    }
+
+    $('.menu-info').on('click', function () {
+        var _this = $(this).find('.menu-icon');
+        if (_this.hasClass('menu-icon-click')) {
+            _this.removeClass('menu-icon-click')
+            $('.nav-main-info').fadeOut();
+        }else{
+            _this.addClass('menu-icon-click');
+            $('.nav-main-info').fadeIn();
+        }
+    })
+</script>

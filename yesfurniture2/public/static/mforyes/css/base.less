@@ -1,0 +1,458 @@
+@charset "utf-8";
+@bg: #ff5965;
+@bg1: #eb4554;
+*,
+::before,
+::after {
+    padding: 0;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+body {
+    color: #878787;
+    font-family: "MicroSoft YaHei", "黑体";
+    -webkit-touch-callout: inherit;
+    -webkit-user-select: auto;
+    background-color: #fff
+}
+
+ul,
+ol {
+    list-style: none
+}
+
+li {
+    white-space: normal;
+    word-break: break-all;
+    word-wrap: break-word
+}
+
+a {
+    color: #878787;
+    text-decoration: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+}
+
+a:hover {
+    text-decoration: none
+}
+
+input,
+textarea {
+    border: none;
+    resize: none;
+    -webkit-appearance: none
+}
+
+button,
+input,
+select,
+textarea {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    font-family: "Microsoft Yahei"
+}
+
+img {
+    vertical-align: middle;
+    border: 0
+}
+
+.f-l {
+    float: left
+}
+
+.f-r {
+    float: right
+}
+
+.clearfix::after,
+.clearfix::before {
+    content: ".";
+    line-height: 0;
+    height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both
+}
+
+.m-r10 {
+    margin-right: .5rem
+}
+
+.m-l10 {
+    margin-left: .5rem
+}
+
+.m-t10 {
+    margin-top: .5rem
+}
+
+.m-b10 {
+    margin-bottom: .5rem
+}
+
+html {
+    font-size: 11px
+}
+
+body {
+    min-width: 300px;
+    max-width: 750px;
+    margin: 0 auto
+}
+
+.textEllipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.textEllipsis2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    box-orient: vertical
+}
+
+.textEllipsis3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    box-orient: vertical
+}
+
+.betweenTMLR {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center
+}
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right
+}
+
+// 导航
+#nav{
+    .lifu-header-menu-info {
+        width: 100%;
+        height: 3.584002rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        padding: 0 1.194667rem;
+        background: #fff;
+        border-bottom: .074667rem solid #eee;
+        .logo {
+            width: 100%;
+            height: 100%;
+            font-size: 0;
+            background: url(../../foryes/img/logo2.png) no-repeat 0 50%;
+            background-size: 6.213338rem;
+            a {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+        }
+        .menu-info {
+            width: 3.584002rem;
+            height: 3.584002rem;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 9;
+            .menu-icon {
+                width: 100%;
+                height: 3.584002rem;
+                float: right;
+                text-align: center;
+                position: relative;
+                transition: background .5s;
+                span {
+                    position: absolute;
+                    left: calc((100% - 1.642668rem) / 2);
+                    top: calc((100% - .149333rem) / 2);
+                    width: 1.642668rem;
+                    height: .149333rem;
+                    background-color: #333;
+                }
+                span:nth-child(1) {
+                    transform: translateY(.6rem) rotate(0deg);
+                }
+                span:nth-child(2) {
+                    opacity: 1;
+                }
+                span:nth-child(3) {
+                    transform: translateY(-0.6rem) rotate(0deg);
+                }
+            }
+            .menu-icon-click{
+                span:nth-child(1) {
+                    animation-duration: .5s;
+                    animation-fill-mode: both;
+                    animation-name: menuClickFirst;
+                }
+                span:nth-child(2) {
+                    animation-duration: .5s;
+                    animation-fill-mode: both;
+                    animation-name: menuClickSecond;
+                }
+                span:nth-child(3) {
+                    animation-duration: .5s;
+                    animation-fill-mode: both;
+                    animation-name: menuClickThird;
+                }
+            }
+        }
+
+        .nav-main-info {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 5;
+            background: rgba(0,0,0,0.5);
+            padding: 0 0 0 2.986668rem;
+            display: none;
+            .logo {
+                height: 3.584002rem;
+                border-bottom: .149333rem solid #eee;
+                position: absolute;
+                top: 0;
+                left: 2.986668rem;
+                z-index: 3;
+                background: url(../../foryes/img/logo2.png) no-repeat 40% 50% #fff;
+                background-size: 6.213338rem;
+                a {
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                }
+            }
+            .menu-list {
+                height: calc(100% - 3.584002rem);
+                margin: 3.584002rem 0 0;
+                background: #fff;
+                overflow-y: auto;
+                li {
+                    width: 100%;
+                    line-height: 3.584002rem;
+                    font-size: 1.045334rem;
+                    border-bottom: .149333rem solid #eee;
+                    display: block;
+                    -webkit-transition: all .5s;
+                    -moz-transition: all .5s;
+                    -o-transition: all .5s;
+                    transition: all .5s;
+                    .caption {
+                        font-weight: 500;
+                        padding: 0 1.194667rem;
+                        color: #333;
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    
+
+}
+
+
+@keyframes menuClickFirst {
+    0% {
+        transform: translateY(.6rem) rotate(0deg)
+    }
+
+    100% {
+        transform: translateY(0) rotate(45deg)
+    }
+}
+
+@keyframes menuClickSecond {
+    0% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
+}
+
+@keyframes menuClickThird {
+    0% {
+        transform: translateY(-0.6rem) rotate(0deg)
+    }
+
+    100% {
+        transform: translateY(0) rotate(-45deg)
+    }
+}
+// 导航
+
+
+// 加载样式
+#loding {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+
+#Spotlight {
+    height: 100%;
+    font-family: 'Teko', sans-serif;
+    text-transform: uppercase;
+    font-size: 300%;
+    text-align: center;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    margin: 0;
+    min-height: calc(100vh - 16px);
+    background: white;
+    position: relative;
+    background: #333;
+    color: #fff;
+}
+
+#Spotlight:before {
+    content: attr(data-text);
+    position: absolute;
+    background: linear-gradient(#dc1414, #fff);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-size: 100% 90%;
+    line-height: 0.9;
+    clip-path: ellipse(4.479986rem 4.479986rem at -2.54% -9.25%);
+    animation: swing2 3s infinite;
+    animation-direction: alternate;
+}
+
+@keyframes swing2 {
+    0% {
+        clip-path: ellipse(4.479986rem 4.479986rem at -2.54% -9.25%)
+    }
+
+    50% {
+        clip-path: ellipse(4.479986rem 4.479986rem at 49.66% 64.36%);
+
+    }
+
+    100% {
+        clip-path: ellipse(4.479986rem 4.479986rem at 102.62% -1.61%)
+    }
+}
+// 加载样式
+
+// 头部底部公共框
+.top-magin{
+    height: 3.584002rem;
+}
+// 头部底部公共框
+
+// 拨打电话
+#go-now{
+    a{
+        height: 3.584002rem;
+        line-height:3.584002rem ;
+        text-align: center;
+        color: white;
+        background:#e32047;
+        font-size: 1.343996rem;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 20;
+    }
+}
+// 拨打电话
+
+// 加载
+#l_GOTop {
+    background: url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwQDAwQEBAQFBQQFBwsHBwYGBw4KCggLEA4RERAOEA8SFBoWEhMYEw8QFh8XGBsbHR0dERYgIh8cIhocHRz/2wBDAQUFBQcGBw0HBw0cEhASHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBz/wgARCAA3ADEDAREAAhEBAxEB/8QAHAAAAwACAwEAAAAAAAAAAAAAAAYHAQIDBAUI/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIQAxAAAAD7q2CWwFSoACXQwgLxUaDQWoaKBXhlrcAAAACUR6RymTJ0il1OYaKQoDwjiLhSvDDUujUZCh0H/8QAORAAAQMDAgQDAwgLAAAAAAAAAwECBQQGEQASBxMhQRAWMTJRsQgVICNSYXLBMDM3ZIGEk7TR4eL/2gAIAQEAAT8A8L6veokavy5buS1JV5RSi9c92NX4rqxL3qI6r8uXFkVSJeUIpfXPZjl+C/Rvy+T1VT5dt/Jasy8opRdVRe7Gr8V7asSxgWpSc42Cyhk+sL2Yn2G/d7176vqxgXXSc4OBSgU+rL2en2Hfd7l7asO+T0tT5duDIqsK8oRS9FVezHL8F7+JRNOJ4nbthEVrsOVFwqY9U6pq1bEjbULUHBkxyqu0pMZGzsxPzXv43TYkbdZQHPkJxKm4o8ZIzuxfyXtoImgEwTd2waI1uXKq4RMeq9V/QynG75mAepr7JumnpALh9QWi2DTLsZ3Kurd4qluGvoKZlmXNTgrFTFYeiVAI1Uyj1dn2dXLxbjIOZfBx8dJTsyxMkpo4PM5X4nf4zjVt8WY2bmWQkjHyUFMv/VU0iLl878Lu/wDHGdXhxRBalxggWQUtK156ZKprI8SEXYrnN9nOem3VBxriVkaWgmYedgTVb9giSlJyhq7smc+HHr9k9xfy/wDcD1apFFZEMRib3sjQuRPeqCauvk70gn2SeYevNkpStKaqMvtK5HY/618oekCljjlcoyRjKwRaUye0xyu1eNzttzjVByp46urcwCI4EeHmky4he2U1f09IcXYultmFtSdpXlqmFLVydIgRgYmcuzldfN371V/1f9a4uwMhcvD2YiYsHPkKhQIMe9rd2DMX1cqJq2KUtDbcPSHarKkFIAT2ZzhyMamOi40CCu3hRJyb7bjaebtWuOp0on1DQEpSKuFRrndtHgru4tSUb5jiwQlrUFQh30balpy1RE9GqremNVtsyh+M8ZcA6XMOGJdSPqOY3oXeVdu3O7x//8QAGREAAQUAAAAAAAAAAAAAAAAAAQACEDBQ/9oACAECAQE/AMMw1Gv/xAAUEQEAAAAAAAAAAAAAAAAAAABQ/9oACAEDAQE/AEf/2Q==) center center no-repeat #f5f5f8;
+    background-size: 1.829334rem 2.053334rem;
+    height: 5.632005rem;
+}
+// 加载
+
+// 公共底部
+#footer {
+    footer {
+        background: #eeeef2;
+        padding: 1.493329rem 0;
+        position: relative;
+
+        .title {
+            font-size: 1.343996rem;
+            margin-bottom: .746664rem;
+            text-align: center;
+            color: @bg1;
+        }
+
+        .contact {
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translate(-50%, 0%);
+            -ms-transform: translate(-50%, 0%);
+            /* IE 9 */
+            -moz-transform: translate(-50%, 0%);
+            /* Firefox */
+            -webkit-transform: translate(-50%, 0%);
+            /* Safari 和 Chrome */
+            -o-transform: translate(-50%, 0%);
+
+        }
+
+        p {
+            color: #666;
+            font-size: 1.04533rem;
+        }
+
+        span {
+            display: block;
+            width: 60%;
+            border: 1px solid @bg1;
+            border-radius: 2.239993rem;
+            text-align: center;
+            color: @bg1;
+            height: 2.239993rem;
+            margin: 0 auto;
+            line-height: 2.239993rem;
+            margin-top: .746664rem
+        }
+    }
+}
+// 公共底部

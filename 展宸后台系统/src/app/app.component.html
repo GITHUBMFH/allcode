@@ -1,0 +1,24 @@
+<div [hidden]="viewhideen" [ngClass]="{pagecontent: pagecontent}">
+    <nz-progress [hidden]="percenthide" [nzPercent]="percent" nzSize="small" nzStatus="active" [nzShowInfo]="false"
+        nzStrokeWidth="3" nzStrokeColor="#de0331d9"></nz-progress>
+    <nz-layout class="layout">
+        <nz-sider nzCollapsible [nzCollapsedWidth]="0" nzTheme="light" [nzTrigger]="null" [(nzCollapsed)]="isCollapsed">
+            <app-menu></app-menu>
+        </nz-sider>
+
+        <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+            (click)="isCollapsed = !isCollapsed" [style]="isCollapsed ? 'left: 0px' : 'margin-left: 202px'"></i>
+
+        <nz-layout class="right-layout" [style]="isCollapsed ? 'margin-left: 0px' : 'margin-left: 190px'">
+            <nz-content>
+                <div class="inner-content">
+                    <router-outlet></router-outlet>
+                </div>
+            </nz-content>
+            <nz-footer>佛山市展宸酒店家具有限公司</nz-footer>
+            <!-- <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer> -->
+        </nz-layout>
+    </nz-layout>
+</div>
+
+<router-outlet name="popup"></router-outlet>

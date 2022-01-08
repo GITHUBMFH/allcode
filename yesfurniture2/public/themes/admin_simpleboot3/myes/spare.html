@@ -1,0 +1,205 @@
+<include file="public/header" />
+
+<div id="getserachbox"><i class="layui-icon">&#xe615;</i> </div>
+<a href='/myes/index/spareid' id="getadd"><i class="layui-icon">&#xe654;</i> </a>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body" id="getserach" style="display: none">
+        <form class="layui-form">
+            <div class="layui-input-block">
+                <select name="type">
+                    <option value="">类型</option>
+                    <option value="外发">外发</option>
+                    <option value="采购">采购</option>
+                    <option value="客户提供">客户提供</option>
+                    <option value="维修">维修</option>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="state">
+                    <option value="">状态</option>
+                    <option value="1">审核中</option>
+                    <option value="2">采购中</option>
+                    <option value="3">已完成</option>
+                    <option value="4">已拒绝</option>
+                </select>
+            </div>
+            <!-- 引入产品搜索 -->
+            <div class="layui-input-block">
+                <select name="year" lay-filter="spare_year_form" id="spare_year_form">
+                    <option value="">请选择年份</option>
+                    <option value="1">日常采购</option>
+                    <foreach name="year" item="vo">
+                        <option value="{$vo.year}">{$vo.year}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="client_id" lay-filter="spare_year_form" id="spare_client_form" lay-search>
+                    <option value="">请选择客户</option>
+                    <foreach name="client" item="vo">
+                        <option value="{$vo.id}">{$vo.s_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-block show-select">
+                <select name="order_id" lay-filter="spare_num_form" id='spare_num_form'>
+                    <option value="">请选择生产单</option>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="product_id" id="spare_product_form">
+                    <option value="">请选择产品序号</option>
+                </select>
+            </div>
+
+            <button class="layui-btn layui-btn-normal btn-left" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset btn-right">重置</button>
+        </form>
+    </div>
+
+    <!-- 数据表单 -->
+    <div class="layui-card-header">采购列表</div>
+    <div class="layui-card-body">
+        <table id="spare_lst" lay-filter="spare_lst"></table>
+    </div>
+    <hr>
+    <div class="layui-card-header">佛山市亚世家具有限公司</div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="sparetoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event="add_spare">添加采购</button>
+    <button class="layui-btn" lay-event="add_daily_spare">添加日常采购</button>
+    <div class='layui-inline'>
+        <button class="layui-btn" lay-event="change_state">修改状态为</button>
+        <div class="layui-input-inline">
+            <select name="state" lay-verify="required" id='change_state'>
+                <option value=""></option>
+                <option value="1">审核中</option>
+                <option value="2">采购中</option>
+                <option value="3">已完成</option>
+                <option value="4">已拒绝</option>
+            </select>
+        </div>
+    </div>
+</script>
+
+<!-- 状态界面 -->
+<script type="text/html" id="state">
+    {{# if(d.state==1){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs">审核中</a>
+    {{# }else if(d.state==2){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs">采购中</a>
+    {{# }else if(d.state==3){ }}
+    <a class="layui-btn layui-btn-xs">已完成</a>
+    {{# }else if(d.state==4){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs">已拒绝</a>
+    {{# } }}
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/myes/js/spare.js?{$csspass}"></script>
+<script src="__STATIC__/myes/js/search.js?{$csspass}"></script>
+
+<!-- 采购提交框 -->
+<div class="add_form" id="add_spare_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="spare_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-block">
+                    <select name="state" lay-verify="required">
+                        <option value="1">审核中</option>
+                        <option value="2">采购中</option>
+                        <option value="3">已完成</option>
+                        <option value="4">已拒绝</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用途</label>
+                <div class="layui-input-inline">
+                    <select name="year" lay-filter="produce_year_form" id="produce_year_form">
+                        <option value="">请选择年份</option>
+                        <foreach name="year" item="vo">
+                            <option value="{$vo.year}">{$vo.year}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="client_id" lay-filter="produce_year_form" id="produce_client_form">
+                        <option value="">请选择客户</option>
+                        <foreach name="client" item="vo">
+                            <option value="{$vo.id}">{$vo.s_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="num" lay-filter="produce_num_form" id='produce_num_form'>
+                        <option value="">请选择生产单</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline" style='width: 142px'>
+                    <select name="product_id" lay-verify="required" lay-search id="produce_product_form">
+                        <option value="">请选择产品序号</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <select name="type" lay-verify="required">
+                        <option value=""></option>
+                        <option value="1">外发</option>
+                        <option value="2">采购</option>
+                        <option value="3">客户提供</option>
+                        <option value="4">维修</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">规格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="size" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="used" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <textarea name="details" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_spare_form" lay-submit lay-filter="add_spare_form"
+                        style="display:none">立即提交</button>
+                    <button class="layui-btn edit_spare_form" lay-submit lay-filter="edit_spare_form"
+                        style="display:none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

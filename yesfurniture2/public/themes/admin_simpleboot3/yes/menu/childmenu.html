@@ -1,0 +1,26 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <!-- 数据表单 -->
+    <div class="layui-card-body" id='child_menu'>
+        <table id="child_menu_lst" lay-filter="child__lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="childmeantoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_menu'>添加顶级菜单</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="childmeanbar">
+    <!-- <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="child_menu">子菜单</a> -->
+    <!-- <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a> -->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<include file="public/footer" /> 
+
+<script src="__STATIC__/yes/js/childmenu.js?{$csspass}"></script>

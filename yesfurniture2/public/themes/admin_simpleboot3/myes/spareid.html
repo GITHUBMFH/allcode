@@ -1,0 +1,239 @@
+<include file="public/header" />
+<style>
+    #card_body {
+        position: relative;
+        left: -8%;
+        padding-top: 20px;
+    }
+</style>
+<div id="getserachbox"><i class="layui-icon">&#xe640;</i> </div>
+<!-- 内容 -->
+<div class="layui-card" style="padding-top: 40px">
+    <div class="layui-card-body">
+        <!-- 采购提交框 -->
+        <div class="add_form" id="add_spare_form">
+            <div class="add_cont" id="card_body">
+                <form class="layui-form" lay-filter="spare_form">
+                    <div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label">ID</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="id" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-inline">
+                            <select name="state" lay-verify="required">
+                                <option value="1">待受理</option>
+                                <option value="2">已受理</option>
+                                <option value="3">已完成</option>
+                                <option value="4">已拒绝</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用途</label>
+                        <div class="layui-input-inline">
+                            <select name="year" lay-filter="produce_year_form" id="produce_year_form">
+                                <option value="">请选择年份</option>
+                                <foreach name="year" item="vo">
+                                    <option value="{$vo.year}">{$vo.year}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="client_id" lay-filter="produce_year_form" id="produce_client_form">
+                                <option value="">请选择客户</option>
+                                <foreach name="client" item="vo">
+                                    <option value="{$vo.id}">{$vo.s_name}</option>
+                                </foreach>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="num" lay-filter="produce_num_form" id='produce_num_form'>
+                                <option value="">请选择生产单</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="product_id"
+                                id="produce_product_form">
+                                <option value="">请选择产品序号</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">类型</label>
+                        <div class="layui-input-inline">
+                            <select name="type" lay-verify="required">
+                                <option value=""></option>
+                                <option value="外发">外发</option>
+                                <option value="采购">采购</option>
+                                <option value="客户提供">客户提供</option>
+                                <option value="维修">维修</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                                lay-verify='required'>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">规格</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="size" placeholder="请输入" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用量</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="used" placeholder="请输入" autocomplete="off" class="layui-input"
+                                lay-verify='required'>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">描述</label>
+                        <div class="layui-input-inline">
+                            <textarea name="details" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <button class="layui-btn add_spare_form" lay-submit lay-filter="add_spare_form"
+                                style="display: none">立即提交</button>
+                            <button class="layui-btn edit_spare_form" lay-submit lay-filter="edit_spare_form"
+                                style="display: none">立即提交</button>
+                            <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/myes/js/search.js?{$csspass}"></script>
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery', 'element', 'laydate'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var element = layui.element;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        var url = window.location.href;
+        var lastDigits = url.substring(url.lastIndexOf("/") + 1).match(/[0-9]*$/)[0];
+        
+        if (lastDigits == '') {
+            $('.add_spare_form').show();
+            $('#getserachbox').hide();
+        } else {
+            $('.edit_spare_form').show();
+            $('#produce_num_form').html($("<option>").val('{$result.order_id}').text('{$result.num}'));
+            $('#produce_product_form').html($("<option>").val('{$result.product_id}').text('{$result.pro_num}'));
+            form.val("spare_form", {
+                "id": '{$result.id}',
+                "year": '{$result.year}',
+                "num": '{$result.order_id}',
+                "product_id": '{$result.product_id}',
+                "type": '{$result.type}',
+                "name": '{$result.name}',
+                "size": '{$result.size}',
+                "used": '{$result.used}',
+                "details": '{$result.details}',
+                "state": '{$result.state}',
+                "client_id": '{$result.client_id}',
+            });
+        }
+
+        // 监听采购添加
+        form.on('submit(add_spare_form)', function (data) {
+            var data = data.field;
+            delete data.id;
+            delete data.year;
+            delete data.num;
+            if(data.product_id == ''){
+                data.product_id = '1';
+            }
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/yes/spare/addPost', //URL
+                data: data, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    layer.msg(data.msg, {
+                        success: function () {
+                            setTimeout(function () {
+                                $(location).attr('href',
+                                    '/myes/index/spare');
+                            }, 500)
+                        }
+                    });
+                },
+                error: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+            return false;
+        });
+
+        // 监听采购修改
+        form.on('submit(edit_spare_form)', function (data) {
+            var data = data.field;
+            delete data.year;
+            delete data.num;
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/yes/spare/editPost', //URL
+                data: data, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    layer.msg(data.msg, {
+                        success: function () {
+                            setTimeout(function () {
+                                $(location).attr('href',
+                                    '/myes/index/spare');
+                            }, 500)
+                        }
+                    });
+                },
+                error: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+            return false;
+        });
+
+        $('#getserachbox').on('click', function () {
+            layer.confirm('确定删除？', function (index) {
+                layer.close(index);
+                $.ajax({
+                    type: 'POST',
+                    url: '/yes/spare/delPOst',
+                    data: {
+                        id: lastDigits
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        layer.msg(data.msg, {
+                            success: function () {
+                                setTimeout(function () {
+                                    $(location).attr('href',
+                                        '/myes/index/spare');
+                                }, 500)
+                            }
+                        });
+                    },
+                    error: function (data) {
+                        layer.msg(data.msg);
+                    }
+                });
+            });
+        })
+    })
+</script>

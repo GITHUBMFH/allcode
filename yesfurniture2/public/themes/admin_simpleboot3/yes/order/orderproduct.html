@@ -1,0 +1,463 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/orderproduct.css?{$csspass}">
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class='layui-inline'>
+            <button class="layui-btn layui-btn-warm" id='all_shipment1' style='margin-left:6px;'>全部出货</button>
+            <button class="layui-btn layui-btn-normal" id='all_product1' style='margin-left:6px;'>全部生产</button>
+            <div class="layui-input-block" style='margin:0;float: left;'>
+                <input type="text" name="data" placeholder="请选择日期" autocomplete="off" class="layui-input" id="all_time"
+                    readonly>
+            </div>
+        </div>
+        <form class="layui-form" style="margin-top: 10px;">
+
+            <div class="layui-inline">
+                <select name="work_id" lay-search lay-filter="worker_name2" id="ad_worker_id2">
+                    <option value="">请选择职位</option>
+                    <foreach name="work_type" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+
+            <div class="layui-inline">
+                <select name="worker_id" lay-search id="worker_name2" lay-filter="ad_price_form">
+                    <option value="">请选择姓名</option>
+                    <foreach name="worker_name" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+
+            <a class="layui-btn layui-btn-normal" id='print_singer_sworker2'>下发单人任务</a>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset" style="display: none;">重置</button>
+        </form>
+        <table id="record_lst" lay-filter="record_lst"></table>
+    </div>
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="orderProduct_lst" lay-filter="orderProduct_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="orderProducttoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_orderProduct'>添加产品</button>
+    <button class="layui-btn " lay-event='print_product'>打印产品表</button>
+    <button class="layui-btn layui-btn-warm" lay-event='print_worker'>下发多人任务</button>
+    <button class="layui-btn layui-btn-normal" lay-event='print_singer_sworker' id='print_singer_sworker'
+        style='display:none;'>下发单人任务</button>
+    <button class="layui-btn layui-btn-warm" id='all_shipment' lay-event='all_shipment'
+        style='display:none;'>全部出货</button>
+    <button class="layui-btn layui-btn-warm" id='all_product' lay-event='all_product'
+        style='display:none;'>全部生产</button>
+</script>
+
+<!-- 生产模板 -->
+<script type="text/html" id="orderProductbar">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="produce">生产</a>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="shipment">出货</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+    <a class="layui-btn layui-btn-xs" lay-event="material">备料</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="cost_labor">人工</a>
+    <a class="layui-btn layui-btn-xs" lay-event="cost">用料</a>
+</script>
+
+<!-- 出货模板 -->
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img style="max-width:100px" src="http://resource.yasfurniture.cn/{{d.img}}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75" alt="">
+        {{# } }}
+    </div>
+</script>
+
+<!-- 状态界面 -->
+<script type="text/html" id="state">
+    {{# if(d.state==1){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs">待接受</a>
+    {{# }else if(d.state==2){ }}
+    <a class="layui-btn layui-btn-normal layui-btn-xs">已受理</a>
+    {{# }else if(d.state==3){ }}
+    <a class="layui-btn layui-btn-xs">已完成</a>
+    {{# }else if(d.state==4){ }}
+    <a class="layui-btn layui-btn-danger layui-btn-xs">已拒绝</a>
+    {{# } }}
+</script>
+
+<!-- 状态界面 -->
+<script type="text/html" id="task">
+    {{#  layui.each(d.task, function(index, item){ }}
+    <span lay-event='task' data-id='{{item.work_id}}'>{{item.name}}</span>
+
+    {{# if(item.task_num=='0'){ }}
+    <span style='color:#1E9FFF'>{{ item.task_num }}</span>
+    {{# }else{ }}
+    <span>{{ item.task_num }}</span>
+    {{# } }}
+
+    <span>|</span>
+
+    {{# if(item.pro_num - item.task_num>0){ }}
+    <span style='color:red'>{{ item.pro_num }}</span>
+    {{# }else{ }}
+    <span>{{ item.pro_num }}</span>
+    {{# } }}
+    {{#  }); }}
+</script>
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/xadmin.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/orderproduct.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+<div id="taskbox" style="display: none">
+    <div class="add_material">
+        <table id="task_lst" lay-filter="task_lst"></table>
+    </div>
+</div>
+
+<!-- 添加产品 -->
+<div class="add_form" id="orderProduct_form" style="display: none">
+    <div class="add_cont" style="height:auto;padding-top: 20px;">
+        <form class="layui-form" lay-filter="orderProduct_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input" id="product_id">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品序号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pro_num" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片</label>
+                <div class="layui-input-block">
+                    <input type="text" name="img" id='getimg' placeholder="请输入" autocomplete="off" class="layui-input"
+                        style="display: none" id="upload_img">
+                    <div class="layui-upload">
+                        <div class="img_box" id="uploadimg">
+                            <img class="layui-upload-img" src="http://resource.yasfurniture.cn/png1562255172.png"
+                                id='preimg'>
+                        </div>
+                        <div class="eidt_btm">
+                            <div class="btm_box">
+                                <a class="layui-btn layui-btn-xs change">替换</a>
+                                <a class="layui-btn layui-btn-danger layui-btn-xs del">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pro_name" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品规格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="size" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品描述</label>
+                <div class="layui-input-block">
+                    <textarea name="product_dec" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">总数</label>
+                <div class="layui-input-block">
+                    <input type="text" name="amount" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <a class="layui-btn add_orderProduct_form" lay-submit lay-filter="add_orderProduct_form"
+                        style="display:none">立即提交</a>
+                    <a class="layui-btn edit_orderProduct_form" lay-submit lay-filter="edit_orderProduct_form"
+                        style="display:none">立即提交</a>
+                    <a class="layui-btn" id='addimg'>立即添加</a>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 材料弹框 -->
+<div id="material" style="display: none">
+    <div class="add_material">
+        <table id="material_lst" lay-filter="material_lst"></table>
+    </div>
+</div>
+<script type="text/html" id="toolbarmaterial">
+    <div class="materialtoolbar">
+        <div class="layui-form-item">
+            <label class="layui-form-label del" lay-event="del">删除</label>
+            <label class="layui-form-label" lay-event="add">增加</label>
+            <div class="layui-input-inline">
+                <select name="type" class="sparetype">
+                    <option value="">请选择类型</option>
+                    <option value="外发">外发</option>
+                    <option value="采购">采购</option>
+                    <option value="客户提供">客户提供</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!-- 编辑人工成本 -->
+<div id="cost_labor" style="display: none">
+    <div class="add_cost_labor add_material" style="width: 70%;margin: 0 auto;padding-top: 20px;float: left;">
+        <table id="cost_labor_lst" lay-filter="cost_labor_lst"></table>
+        <div class="layui-collapse" lay-accordion id="collapse">
+            <foreach name='dailyprice' item="vo" key="k">
+                <div class="layui-colla-item">
+                    <h2 class="layui-colla-title">
+                        <switch name='$k'>
+                            <case value="1">裁床</case>
+                            <case value="2">车位</case>
+                            <case value="3">木工</case>
+                            <case value="4">开棉</case>
+                            <case value="5">打底</case>
+                            <case value="6">贴棉</case>
+                            <case value="7">扪工</case>
+                            <case value="8">包装</case>
+                        </switch>
+                    </h2>
+                    <div class="layui-colla-content">
+                        <table class="layui-table">
+                            <thead>
+                                <tr>
+                                    <th>规格</th>
+                                    <th>单价</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <foreach name='vo' item="voo">
+                                    <tr>
+                                        <td>{$voo.standard}</td>
+                                        <td>{$voo.price}</td>
+                                    </tr>
+                                </foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </foreach>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="toolbarcost_labor">
+    <div class="cost_labortoolbar materialtoolbar">
+        <div class="layui-form-item">
+            <label class="layui-form-label del" lay-event="del">删除</label>
+            <div class="layui-input-inline" style='width:100px;'>
+                <select name="type_id" class="cost_labortype" lay-filter="cost_labortype_form">
+                    <option value="">工种</option>
+                    <foreach name='cost_labor' item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline" style='width:120px;'>
+                <select name="standard" id="type_standard">
+                    <option value="">请选择规格</option>
+                </select>
+            </div>
+            <label class="layui-form-label" lay-event="add">增加</label>
+
+            <div class="layui-input-inline" style='width:120px;margin-left: 10px;'>
+                <select name="standard" id="add_normal">
+                    <option value="">选择规格</option>
+                    <option value="1">单位沙发</option>
+                    <option value="2">二位沙发</option>
+                    <option value="3">三位沙发</option>
+                    <option value="4">餐椅</option>
+                    <option value="5">贵妃</option>
+                    <option value="6">脚踏</option>
+                    <option value="7">床架</option>
+                </select>
+            </div>
+            <label class="layui-form-label" lay-event="add_normal"
+                style='width:100px;background-color: #FF5722'>增加常规</label>
+
+        </div>
+    </div>
+</script>
+
+<!-- 编辑用料 -->
+<div id="cost_material" style="display: none">
+    <div class="add_cost_material add_material">
+        <table id="cost_material_lst" lay-filter="cost_material_lst"></table>
+        <div class="count_cost">
+            <label class="layui-form-label del" lay-event="del">总计</label>
+            <div class="layui-input-inline">
+                <input id="material_cost" autocomplete="off" class="layui-input" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="toolbarcost_material">
+    <div class="cost_materialtoolbar materialtoolbar">
+        <div class="layui-form-item">
+            <form class="layui-form" action="" lay-filter="cost_materialtype_form">
+                <label class="layui-form-label del" lay-event="del">删除</label>
+                <label class="layui-form-label" lay-event="add">增加</label>
+                <div class="layui-input-inline">
+                    <select name="type_id" id="cost_materialtype" lay-filter="cost_materialtype">
+                        <option value="">请选择类型</option>
+                        <foreach name='material' item="vo">
+                            <option value="{$vo}">{$vo}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="standard" id="standard">
+                        <option value="">请选择规格</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+
+<div id="produce" style="display: none">
+    <div class="add_material">
+        <table id="produce_lst" lay-filter="produce_lst"></table>
+    </div>
+</div>
+<!-- 生产记录工具栏模板 -->
+<script type="text/html" id="producetoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_produce' lay-event="add_produce">添加记录</button>
+</script>
+
+<!-- 生产记录操作模板 -->
+<script type="text/html" id="producebar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 编辑生产记录 -->
+<div class="add_form" id="add_produce_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="produce_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="product_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="product_data" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required' id="produce_time">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_produce_form" lay-submit lay-filter="add_produce_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_produce_form" lay-submit lay-filter="edit_produce_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- 出货记录 -->
+<div id="shipment" style="display: none">
+    <div class="add_material">
+        <table id="shipment_lst" lay-filter="shipment_lst"></table>
+    </div>
+</div>
+<!-- 出货记录 -->
+<script type="text/html" id="shipmenttoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_shipment' lay-event="add_shipment">添加记录</button>
+</script>
+
+<!-- 出货记录 -->
+<script type="text/html" id="shipmentbar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 出货记录 -->
+<div class="add_form" id="add_shipment_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="shipment_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shipment_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shipment_data" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required' id="shipment_time">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_shipment_form" lay-submit lay-filter="add_shipment_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_shipment_form" lay-submit lay-filter="edit_shipment_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="p_worker" style="display: none">
+    <div class="add_material">
+        <form class="layui-form" style="margin-top: 10px;">
+            <include file="public/worker" />
+            <a class="layui-btn layui-btn-normal" id="add_people">添加人员</a>
+            <a class="layui-btn layui-btn-normal" id="people_next">打印任务表</a>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset" style="display: none;">重置</button>
+        </form>
+        <table id="p_worker_lst" lay-filter="p_worker_lst"></table>
+    </div>
+</div>
+<script type="text/html" id="pworker">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>

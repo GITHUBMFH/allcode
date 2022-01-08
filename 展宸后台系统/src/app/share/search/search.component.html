@@ -1,0 +1,204 @@
+<form nz-form>
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="12" *ngIf="type.num">
+      <nz-form-item>
+        <nz-form-label nzFor="ordername">项目名称</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            name="ordername"
+            nzMode="multiple"
+            nzPlaceHolder="选择项目名称"
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            [(ngModel)]="searchlist.ordername"
+            [nzShowArrow]="true"
+            (nzOnSearch)="onSearch($event)"
+            (ngModelChange)="searchchange()"
+          >
+            <ng-container *ngFor="let o of optionList">
+              <nz-option
+                *ngIf="!isLoading"
+                [nzValue]="o"
+                [nzLabel]="o"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+              <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+              Data...
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="10" *ngIf="type.num">
+      <nz-form-item>
+        <nz-form-label nzFor="ordernum">工令号</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            nzShowSearch
+            nzAllowClear
+            name="ordernum"
+            nzPlaceHolder="选择工令号"
+            nzMode="multiple"
+            [nzShowArrow]="true"
+            nzServerSearch
+            [(ngModel)]="searchlist.ordernum"
+            (nzOnSearch)="getfilternum($event)"
+            [nzAutoClearSearchValue]="false"
+            (ngModelChange)="fromchange()"
+          >
+            <ng-container *ngFor="let o of numList">
+              <nz-option [nzValue]="o" [nzLabel]="o"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="8" *ngIf="type.date">
+      <nz-form-item>
+        <nz-form-label nzFor="orderdate">下单时间</nz-form-label>
+        <nz-form-control>
+          <nz-range-picker
+            name="orderdate"
+            [(ngModel)]="searchlist.orderdtae"
+            (ngModelChange)="fromchange()"
+          ></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div nz-col [nzSpan]="10" *ngIf="type.orderstate">
+      <nz-form-item>
+        <nz-form-label nzFor="orderstate">订单状态</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group
+            name="orderstate"
+            [(ngModel)]="searchlist.orderstate"
+            (ngModelChange)="fromchange()"
+          >
+            <label nz-radio-button nzValue="0">全部</label>
+            <label
+              *ngFor="let tags of tag; index as i"
+              nz-radio-button
+              nzValue="{{ i+1 }}"
+            >
+              {{ tags }}
+            </label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- 人员名称 -->
+    <div nz-col [nzSpan]="12" *ngIf="type.peopelname">
+      <nz-form-item>
+        <nz-form-label nzFor="ordername">姓名</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            name="peoplename"
+            nzMode="multiple"
+            nzPlaceHolder="选择姓名"
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            [(ngModel)]="searchlist.peopelname"
+            [nzShowArrow]="true"
+            (nzOnSearch)="peopleonSearch($event)"
+            (ngModelChange)="fromchange()"
+          >
+            <ng-container *ngFor="let o of peoplelst">
+              <nz-option
+                *ngIf="!isLoading"
+                [nzValue]="o"
+                [nzLabel]="o"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+              <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+              Data...
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- 人员部门 -->
+    <div nz-col [nzSpan]="24" *ngIf="type.peopleclass">
+      <nz-form-item>
+        <nz-form-label nzFor="orderstate">部门</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group
+            name="peopleclass"
+            [(ngModel)]="searchlist.peopleclass"
+            (ngModelChange)="fromchange()"
+          >
+            <label nz-radio-button nzValue="0">全部</label>
+            <label nz-radio-button nzValue="1">板式</label>
+            <label nz-radio-button nzValue="2">实木</label>
+            <label nz-radio-button nzValue="3">油漆</label>
+            <label nz-radio-button nzValue="4">沙发</label>
+            <label nz-radio-button nzValue="5">包装</label>
+            <label nz-radio-button nzValue="6">办公室</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- 人员状态 -->
+    <div nz-col [nzSpan]="6" *ngIf="type.peoplestate">
+      <nz-form-item>
+        <nz-form-label nzFor="orderstate">状态</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group
+            name="peoplestate"
+            [(ngModel)]="searchlist.peoplestate"
+            (ngModelChange)="fromchange()"
+          >
+            <label nz-radio-button nzValue="0">全部</label>
+            <label nz-radio-button nzValue="1">在职</label>
+            <label nz-radio-button nzValue="2">离职</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- 供应商 -->
+    <div nz-col [nzSpan]="12" *ngIf="type.supplier">
+      <nz-form-item>
+        <nz-form-label nzFor="ordername">姓名</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            name="supplier"
+            nzMode="multiple"
+            nzPlaceHolder="选择姓名"
+            nzAllowClear
+            nzShowSearch
+            nzServerSearch
+            [(ngModel)]="searchlist.supplier"
+            [nzShowArrow]="true"
+            (nzOnSearch)="supplieronSearch($event)"
+            (ngModelChange)="fromchange()"
+          >
+            <ng-container *ngFor="let o of supplierlst">
+              <nz-option
+                *ngIf="!isLoading"
+                [nzValue]="o"
+                [nzLabel]="o"
+              ></nz-option>
+            </ng-container>
+            <nz-option *ngIf="isLoading" nzDisabled nzCustomContent>
+              <i nz-icon nzType="loading" class="loading-icon"></i> Loading
+              Data...
+            </nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="2">
+      <button nz-button nzType="primary" (click)="resetSearch()">重置</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <style>
+        span{
+            background: blue;
+            border: 10px;
+            color: aliceblue;
+            display:inline-block;
+            width: 60px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            cursor: pointer;
+        }
+        .bg{
+            width: 100%;
+            height: 100%;
+            position:fixed;
+            top:0;
+            display:none;
+            
+        }
+        .bg .div_bg{
+            width: 100px;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            background-color: #00000075;
+            color: red;
+            margin: 0 auto;
+            margin-top: 50%;
+            transform:translateY(-50%);
+            -ms-transform:translateY(-50%)
+            -moz-transform:translateY(-50%)
+            -webkit-transform:translateY(-50%)
+            -o-transform:translateY(-50%)
+        }
+    </style>
+</head>
+<body>
+    <div class="conent">  
+        <foreach name="product" item="vo">
+            <ul data-id={$vo.order_id}>
+                <li>生产单号：{$vo.order_num}</li>
+                <li>客户：{$vo.client}</li>
+                <li>序号：{$vo.num}</li>
+                <li>描述：{$vo.pro_dec}</li>
+                <li>图片：{$vo.pro_img}</li>
+                <span class="change">修改</span>
+                <span class="del">删除</span>
+            </ul>
+        </foreach>
+    </div>
+
+    <div>
+        <ul>
+            <li>生产单号：<input type="text"></li>
+            <li>客户：<input type="text"></li>
+            <li>序号：<input type="text"></li>
+            <li>描述：<input type="text"></li>
+            <li>图片：<input type="text"></li>
+        </ul>
+        <button>添加生产单号</button>
+    </div>
+
+    <div class="bg">
+        <div class="div_bg">
+            <p class="msg"></p>
+        </div>
+    </div>
+</body>
+</html>
+<script text="text/javascript">
+    $(function(){
+        function click_ajax(url,data,type,callback){
+            $.ajax({
+                type: type,                      //请求类型
+                url: url,           //URL
+                data: data,   //传递的参数
+                dataType: "json",                 //返回的数据类型
+                success: function (data) {          //data就是返回的json类型的数据
+                    box_show(data.msg);
+                    // if(callback){
+                    //     callback();
+                    // }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        function box_show(data){
+            $(".bg").fadeIn();
+            $(".msg").text(data);
+            setTimeout(function(){
+                $(".bg").fadeOut();
+            },1500);
+        }
+
+        $("button").on('click',function(){
+            var data = {
+                order_num:$("input").eq(0).val(),
+                client:$("input").eq(1).val(),
+                num:$("input").eq(2).val(),
+                pro_dec:$("input").eq(3).val(),
+                pro_img:$("input").eq(4).val(),
+            };
+            $.ajax({
+                type: 'POST',                      //请求类型
+                url: 'Order/inset_order',           //URL
+                data: data,   //传递的参数
+                dataType: "json",                 //返回的数据类型
+                success: function (data) {   
+                    if(data.code!==0){
+                        $(".conent").prepend(
+                        '<ul data-id='+data.userId+'>'+
+                            '<li>生产单号：'+data.data.order_num+'</li>'+
+                            '<li>客户：'+data.data.client+'</li>'+
+                            '<li>序号：'+data.data.num+'</li>'+
+                            '<li>描述：'+data.data.pro_dec+'</li>'+
+                            '<li>图片：'+data.data.pro_img+'</li>'+
+                            '<span class="change">修改</span>'+
+                            '<span class="del">删除</span>'+
+                        '</ul>'
+                        )       //data就是返回的json类型的数据
+                    }
+                    box_show(data.msg);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+
+        $("ul .del").on('click',function(){
+            var data= {id:$(this).parent("ul").attr("data-id")};
+            click_ajax('Order/del_order',data,'POST');
+            $(this).parent("ul").remove()
+        })
+    })
+
+</script>

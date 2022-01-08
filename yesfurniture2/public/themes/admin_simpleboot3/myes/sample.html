@@ -1,0 +1,105 @@
+<include file="public/header" />
+<style>
+    #card_body {
+        position: relative;
+        left: -8%;
+        padding-top: 20px;
+    }
+
+    #fixed_nav {
+        display: none;
+    }
+
+    #header_refresh {
+        display: none;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body" style="text-align: center;">
+        <table class="layui-table">
+            <tbody>
+                <tr>
+                    <td>图片</td>
+                    <td>
+                        <if condition="isset($product[0]['img'])">
+                            <img src="http://resource.yasfurniture.cn/{$product[0]['img']}??imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+                                alt="">
+                        </if>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>生产单号</td>
+                    <td colspan="3">
+                        {$product[0]['year']}-{$product[0]['num']}单
+                    </td>
+                </tr>
+                <tr>
+                    <td>项目名称</td>
+                    <td colspan="3">
+                        {$product[0]['project']}
+                    </td>
+                </tr>
+                <tr>
+                    <td>序号</td>
+                    <td>{$product[0]['pro_num']}</td>
+                </tr>
+                <tr>
+                    <td>产品名称</td>
+                    <td>{$product[0]['pro_name']}</td>
+                </tr>
+                <tr>
+                    <td>规格</td>
+                    <td>{$product[0]['size']}</td>
+                </tr>
+                <tr>
+                        <td>数量</td>
+                        <td>{$product[0]['amount']}</td>
+                    </tr>
+                <tr>
+                    <td>完成时间</td>
+                    <td>{$date}</td>
+                </tr>
+            </tbody>
+        </table>
+        <php>
+            if($sofa != 2){
+                echo '<button class="layui-btn layui-btn-normal" style="margin-top:10px;" id="add_match">完成打样</button>';
+            }
+        </php>
+    </div>
+</div>
+
+<include file="public/footer" />
+<script>
+    layui.use(['layer', 'jquery'], function () {
+        var layer = layui.layer;
+        var $ = layui.jquery;
+
+        $('#add_match').on('click', function () {
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/myes/index/sofa_sample', //URL
+                data: {
+                    product_id: '{$product_id}',
+                    sofa: 2
+                }, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    layer.msg(data.msg, {
+                        success: function () {
+                            setTimeout(function () {
+                                window.close();
+                                $(window).attr('location','/myes/index/getsuccess');
+                            }, 2000)
+                        }
+                    });
+                },
+                error: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+        })
+    })
+</script>

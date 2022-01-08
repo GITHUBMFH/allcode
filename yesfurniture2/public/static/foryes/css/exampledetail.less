@@ -1,0 +1,209 @@
+@import 'common.less';
+
+
+.inner-wrap {
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 80px;
+    // padding-bottom: 60px;
+}
+
+.product-details-init {
+    margin: 10px auto 0;
+    clear: both;
+    overflow: hidden;
+
+    .details-lt {
+        width: 810px;
+        padding: 0 30px;
+        float: left;
+
+        .pic {
+            margin-bottom: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+    }
+
+    .details-rt {
+        left: 66%;
+        top: 135px;
+        position: fixed;
+        float: left;
+        width: 240px;
+        padding: 0 30px;
+
+        .caption {
+            line-height: 30px;
+            font-size: 20px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .sub-city {
+            line-height: 18px;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .sub-date {
+            color: #999;
+            margin-bottom: 30px;
+            display: block;
+            overflow: hidden;
+        }
+
+        .preview-full-screen {
+            height: 20px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #71a2e2;
+            opacity: 1;
+            padding-right: 20px;
+            margin: 12px 0 18px;
+            float: left;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .preview-full-screen::after {
+            content: "";
+            position: absolute;
+            top: 3px;
+            right: 0;
+            background: url(https://files.mijwed.com/wed/template/icon/full-screen.png) no-repeat center center;
+            background-size: 100% 100%;
+            height: 14px;
+            width: 14px;
+        }
+
+        .btn-box {
+            display: block;
+            clear: both;
+            padding-bottom: 30px;
+            overflow: hidden;
+            width: 190px;
+
+            .btn {
+                line-height: 27px;
+                padding: 0 16px;
+                display: inline-block;
+                color: #DC1414;
+                background: #fff;
+                border: 1px solid #DC1414;
+                cursor: pointer;
+                font-size: 12px;
+                margin-right: 12px;
+                float: left;
+                border-radius: 0;
+            }
+
+            .btn-pay {
+                color: #fff;
+                background: #DC1414;
+            }
+        }
+
+        .back {
+            line-height: 20px;
+            font-size: 14px;
+            color: #999;
+            clear: both;
+
+            .icon {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                float: left;
+                margin-right: 10px;
+                font-size: 0;
+                background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAtFBMV…NNNHt5NGde7LQHWnZZE/YjcDKtEtGq5nRNZHLf+19E0DfrVJyN6y8GGQAAAABJRU5ErkJggg==') no-repeat;
+                background-size: cover;
+                font-style: normal;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .active {
+        position: fixed;
+        top: 135px;
+    }
+
+}
+
+.product-details-init.inner-wrap{
+    padding: 0;
+}
+.product-details-init {
+    margin: 10px auto 0;
+    clear: both;
+    overflow: hidden;
+
+    .details-lt {
+        width: 810px;
+        padding: 0 30px;
+        float: left;
+
+        .details-model {
+            margin-top: 70px;
+
+            .title {
+                line-height: 30px;
+                font-size: 20px;
+                font-weight: 600;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #eee;
+                display: block;
+            }
+
+            .list {
+                margin-bottom: 0;
+                // padding-bottom: 70px;
+                width: 850px;
+                margin: 20px -15px 70px;
+                overflow: hidden;
+                li {
+                    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.25);
+                    width: 249px;
+                    float: left;
+                    margin: 0 15px 30px;
+                    padding-bottom: 15px;
+                    -moz-transition: all .3s;
+                    transition: all .3s;
+                    .figure {
+                        width: 249px;
+                        height: 139px;
+                        overflow: hidden;
+                        display: -moz-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -moz-box-align: center;
+                        -ms-flex-align: center;
+                        align-items: center;
+                    }
+                    .sub {
+                        line-height: 24px;
+                        font-size: 12px;
+                        font-weight: 300;
+                        color: #999;
+                        padding: 20px 10px 0;
+                    }
+                    .text {
+                        min-height: 66px;
+                        line-height: 22px;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #666;
+                        padding: 0 10px;
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}

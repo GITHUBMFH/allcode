@@ -1,0 +1,124 @@
+<include file="public/header" />
+<style>
+    .layui-card-body .layui-table-body .layui-table-cell {
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .click_img {
+        width: 100%;
+        height: 100%;
+        left: 50%;
+        position: relative;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        /* IE 9 */
+        -moz-transform: translate(-50%, -50%);
+        /* Firefox */
+        -webkit-transform: translate(-50%, -50%);
+        /* Safari 和 Chrome */
+        -o-transform: translate(-50%, -50%);
+        overflow: hidden;
+    }
+
+    .click_img img {
+        height: 100%;
+    }
+
+    #confirm_num {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        display: none;
+        background: white;
+        z-index: 99999999;
+    }
+
+    #end_p_worker_lst {
+        position: fixed;
+        bottom: 20px;
+        right: 20%;
+    }
+
+    #cancel {
+        position: fixed;
+        bottom: 20px;
+        left: 20%;
+    }
+
+    .layui-inline {
+        width: 30%;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+
+    <!-- 表单 -->
+    <!-- 表单 -->
+    <div class="layui-card-header">产品列表</div>
+
+    <div class="layui-card-body">
+        <form class="layui-form" style="margin-top: 10px;">
+            <div class="layui-inline">
+                <select name="work_id" lay-search lay-filter="worker_name2" id="ad_worker_id2">
+                    <option value="">职位</option>
+                    <foreach name="work_type" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+
+            <div class="layui-inline">
+                <select name="worker_id" lay-search id="worker_name2" lay-filter="ad_price_form">
+                    <option value="">姓名</option>
+                    <foreach name="worker_name" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+
+            <a class="layui-btn layui-btn-normal" id='print_singer_sworker2'>下发单人任务</a>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset" style="display: none;">重置</button>
+        </form>
+        <table id="record_lst" lay-filter="record_lst"></table>
+    </div>
+
+    <div class="layui-card-body">
+        <table id="orderProduct_lst" lay-filter="orderProduct_lst"></table>
+    </div>
+    <hr>
+    <div class="layui-card-header">佛山市亚世家具有限公司</div>
+</div>
+
+<section id="confirm_num">
+    <div class="layui-card-header">数量确认</div>
+    <div class="layui-card-body">
+        <table id="end_orderProduct_lst" lay-filter="end_orderProduct_lst"></table>
+    </div>
+    <button class="layui-btn layui-btn-danger" id="cancel">取 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消</button>
+    <button class="layui-btn layui-btn-normal" id="end_p_worker_lst">下发任务</button>
+</section>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="progresstoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='print_singer_sworker' id='print_singer_sworker'
+        style='display:none;'>下发单人任务</button>
+</script>
+
+<!-- 图片模板 -->
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?	
+        imageView2/1/w/50/h/50/q/75|imageslim" alt="">
+        {{# } }}
+    </div>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/xadmin.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+<script src="__STATIC__/myes/js/orderproduct.js?{$csspass}"></script>

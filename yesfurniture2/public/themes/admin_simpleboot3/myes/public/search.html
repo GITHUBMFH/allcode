@@ -1,0 +1,26 @@
+<div class="layui-input-inline">
+  <select name="year" lay-search lay-filter="spare_year_form" id="spare_year_form">
+    <option value="">请选择年份</option>
+    <foreach name="year" item="vo">
+      <option value="{$vo.year}">{$vo.year}</option>
+    </foreach>
+  </select>
+</div>
+<div class="layui-input-inline">
+  <select name="client_id" lay-search lay-filter="spare_year_form" id="spare_client_form">
+    <option value="">请选择客户</option>
+    <foreach name="client" item="vo">
+      <option value="{$vo.id}">{$vo.s_name}</option>
+    </foreach>
+  </select>
+</div>
+<div class="layui-input-inline show-select">
+  <select name="order_id" lay-search lay-filter="spare_num_form" id='spare_num_form'>
+    <option value="">请选择生产单</option>
+  </select>
+</div>
+<div class="layui-input-inline">
+  <select name="product_id" lay-search id="spare_product_form">
+    <option value="">请选择产品序号</option>
+  </select>
+</div>

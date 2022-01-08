@@ -1,0 +1,84 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/foryes/css/contact.css?{$csspass}">
+
+<!-- 联系我们 -->
+<div id="contact" class="contact_area"
+    style="background-image: url(__STATIC__/foryes/img/bg/1.jpg); background-size:cover; background-position: center center;background-attachment:fixed">
+    <div class="contact_overlay section-padding">
+        <div class="container">
+            <div class="row">
+                <div class="section-title text-center">
+                    <h1 class="section-title-white">联系我们</h1>
+                    <p class="section-title-white">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+                        nonumy eirmod tempor.</p>
+                    <span></span>
+                </div>
+            </div><!-- END ROW -->
+            <div class="row text-center contact-address">
+                <div class="col-md-3 col-sm-6 wow fadeInLeft">
+                    <div class="single-address single-address-color wow fadeInLeft">
+                        <i class="fa fa-rocket"></i>
+                        <h2>Our Location</h2>
+                        <p>3481 Melrose Place, Beverly Hills <br> CA 90210</p>
+                    </div>
+                </div><!-- END COL -->
+                <div class="col-md-3 col-sm-6 wow fadeInLeft">
+                    <div class="single-address wow fadeInLeft">
+                        <i class="fa fa-phone"></i>
+                        <h2>Call us on</h2>
+                        <p>(+1) 517 397 7100 <br> (+1) 617 497 8200</p>
+                    </div>
+                </div><!-- END COL -->
+                <div class="col-md-3 col-sm-6 wow fadeInLeft">
+                    <div class="single-address wow fadeInLeft">
+                        <i class="fa fa-envelope"></i>
+                        <h2>Send your message</h2>
+                        <p>Info@dream.com.<br>admin@dream.com</p>
+                    </div>
+                </div><!-- END COL -->
+                <div class="col-md-3 col-sm-6 wow fadeInLeft">
+                    <div class="single-address single-address-color wow fadeInLeft">
+                        <i class="fa fa-clock-o"></i>
+                        <h2>Work Time</h2>
+                        <p>Mon - Fri: 08.00 - 16.00.<br>Sat: 10.00 - 14.00</p>
+                    </div>
+                </div><!-- END COL -->
+            </div><!-- END ROW -->
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12 " style="margin: 0 auto;">
+                    <div class="contact">
+                        <form class="form" name="enq" method="post" action="contact.php"
+                            onsubmit="return validation();">
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <input type="text" name="name" class="form-control" id="first-name"
+                                        placeholder="Name" required="required">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email"
+                                        required="required">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <textarea rows="6" name="message" class="form-control" id="description"
+                                        placeholder="Your Message Here ..." required="required"></textarea>
+                                </div>
+                                <div class="form-group col-md-12 mb0">
+                                    <div class="actions">
+                                        <input type="submit" value="Send Message" name="submit" id="submitButton"
+                                            class="btn btn-lg btn-contact-bg"
+                                            title="Click here to submit your message!" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- END COL -->
+            </div>
+            <!--- END ROW -->
+        </div>
+        <!--- END CONTAINER -->
+    </div><!-- END OVERLAY -->
+</div>
+<!-- 联系我们  -->
+<include file="public/footer" />
+<script src="__STATIC__/foryes/js/contact.js?{$csspass}"></script>

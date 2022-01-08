@@ -1,0 +1,40 @@
+<!-- 添加搜索 -->
+<app-search #ordersearch (getdata)="serchchange($event)" [item]="false" [type]="type"></app-search>
+
+<app-table
+  [tabledata]="tabledata"
+  [total]="total"
+  [tabletitle]="tabletitle"
+  (editclick)="edit($event)"
+  (additemclick)="additem($event)"
+  [post]="delpost"
+  [contex]="contex"
+  [tag]="tag"
+  (getdata)="pagechange($event)"
+  #ordertable
+></app-table>
+
+
+<!-- 编辑弹框 -->
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="editfromdata"
+  [post]="addpost"
+  [title]="editfromtitle"
+  [Width]="'600px'"
+  [self]="true"
+  (selfsubmit)="eidtsublimt($event)"
+  #drawereditfrom
+></app-drawer-from>
+
+<!-- 添加新项目 -->
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="addfromdata"
+  [post]="addpost"
+  [Width]="'600px'"
+  [title]="addfromtitle"
+  [self]="true"
+  (selfsubmit)="addsubmit($event)"
+  #draweraddfrom
+></app-drawer-from>

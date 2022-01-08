@@ -1,0 +1,146 @@
+<include file="public/header" />
+<style>
+    #header_refresh {
+        display: none;
+    }
+</style>
+<style media="print">
+    @page {
+        size: auto;
+        /* auto is the initial value */
+        margin-top: 10mm;
+        /* this affects the margin in the printer settings */
+        margin-bottom: 0mm;
+    }
+</style>
+<foreach name="result" item="vo">
+    <div class="layui-card">
+        <!-- <hr class="layui-bg-black"> -->
+        <table class="layui-table">
+            <tbody style="text-align: center;">
+                <tr>
+                    <td rowspan="6" colspan="2">
+                        <img src="http://resource.yasfurniture.cn/{$vo.img}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+                            alt="">
+                    </td>
+                    <td colspan="1">生产单</td>
+                    <td colspan="3">{$vo.year}-{$vo.num}单&nbsp;&nbsp;&nbsp;&nbsp;项目名称:{$vo.project}</td>
+                </tr>
+                <tr>
+                    <td>序号</td>
+                    <td colspan="2">{$vo.pro_num}</td>
+                    <td rowspan="5" colspan="2">
+                        <div class="qrcode"
+                            data-url="http://www.yasfurniture.cn/myes/index/sample/product_id/{$vo['id']}">
+                        </div>
+                    </td>
+                    <!-- <td rowspan="4" colspan="2">
+                        <div class="qrcode"
+                            data-url="http://thinkphp5-1:8888/myes/index/sample/product_id/{$vo['id']}">
+                        </div>
+                    </td> -->
+                </tr>
+                <tr>
+                    <td>产品名称</td>
+                    <td colspan="2">{$vo.pro_name}</td>
+                </tr>
+                <tr>
+                    <td>规格</td>
+                    <td colspan="2">{$vo.size}</td>
+                </tr>
+                <tr>
+                    <td>数量</td>
+                    <td colspan="2">{$vo.amount}</td>
+                </tr>
+                <tr>
+                    <td>实际尺寸</td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 70px;">描述</td>
+                    <td colspan="4">{$vo.product_dec}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 70px;">备注</td>
+                    <td colspan="4">{$vo.remark}</td>
+                </tr>
+                <tr>
+                    <php>
+                        if(count($result,COUNT_NORMAL)>1){
+                        echo '<td colspan="2" style="height: 421px;">用料</td>';
+
+                        }else{
+                        echo '<td colspan="2" style="height: 410px;">用料</td>';
+                        }
+                    </php>
+                    <td colspan="4"></td>
+                </tr>
+
+                <tr>
+                    <td rowspan="3" colspan="2">人工成本</td>
+                    <td>裁床</td>
+                    <td></td>
+                    <td>车位</td>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>开棉</td>
+                    <td></td>
+                    <td>木工</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>打底贴棉</td>
+                    <td></td>
+                    <td>扪工</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="3">下发时间</td>
+                    <td>{$date}</td>
+                    <td colspan="1">下发人</td>
+                    <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3">完成时间</td>
+                    <td></td>
+                    <td colspan="1">负责人签名</td>
+                    <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+        <php>
+            if(count($result,COUNT_NORMAL)>1){
+            echo '<br>';
+            }
+        </php>
+
+    </div>
+</foreach>
+<!-- 工具栏模板 -->
+<script type="text/html" id="orderProducttoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_orderProduct'>添加产品</button>
+</script>
+
+<include file="public/footer" />
+<script src="__STATIC__/myes/js/jquery-1.10.2.min.js?{$csspass}"></script>
+<script src="__STATIC__/myes/js/jquery.qrcode.min.js?{$csspass}"></script>
+<script>
+    window.onload = function () {
+        window.print()
+    }
+
+    function getqrcode() {
+        $('.qrcode').each(function () {
+            var url = $(this).attr('data-url');
+            $(this).qrcode({
+                render: "canvas",
+                width: 130,
+                height: 130,
+                text: url,
+            });
+        })
+    }
+    getqrcode();
+</script>

@@ -1,0 +1,214 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/orderproduct.css?{$csspass}">
+<style>
+    #table_file .layui-form {
+        width: auto;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <div class="layui-card-body">
+            <form class="layui-form layui-input-inline search_lst">
+                <div class="layui-input-inline">
+                    <select name="type_id" lay-search>
+                        <option value="">请选择产品类型</option>
+                        <option value="1">单人沙发</option>
+                        <option value="2">双人沙发</option>
+                        <option value="3">多人沙发</option>
+                        <option value="4">沙发床</option>
+                        <option value="5">贵妃椅</option>
+                        <option value="6">餐椅</option>
+                    </select>
+                </div>
+                <!-- 引入产品搜索 -->
+                <include file="public/search" />
+                <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+                <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+            </form>
+        </div>
+    </div>
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="productlst_lst" lay-filter="productlst_lst"></table>
+    </div>
+</div>
+
+<script type="text/html" id="productlsttoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_productlst'>添加产品</button>
+</script>
+
+<script type="text/html" id="productlstbar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 图片模板 -->
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img_url[0]!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img_url[0]}}??imageMogr2/auto-orient/format/webp/blur/1x0/quality/75" alt="">
+        {{# } }}
+    </div>
+</script>
+
+<script type="text/html" id="typetem">
+    {{# if(d.type_id=='1') { }}
+    单人沙发
+    {{# }else if(d.type_id=='2') { }}
+    双人沙发
+    {{# }else if(d.type_id=='3') { }}
+    多人沙发
+    {{# }else if(d.type_id=='4') { }}
+    沙发床
+    {{# }else if(d.type_id=='5') { }}
+    贵妃椅
+    {{# }else if(d.type_id=='6') { }}
+    餐椅
+    {{# } }}
+</script>
+
+<script type="text/html" id="filebar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="down">下载</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<a href="" id="downfile" style="display: none"></a>
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/xadmin.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/productlst.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+<!-- 表单 -->
+<div class="add_form" id="productlst_form" style="display: none;padding-bottom: 40px;height: auto;padding-top: 40px">
+    <div class="add_cont">
+        <form class="layui-form" action="" lay-filter='productlst_form'>
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" placeholder="id" autocomplete="off" class="layui-input" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <select name="type_id" lay-search lay-verify="required">
+                        <option value="">请选择产品类型</option>
+                        <option value="1">单人沙发</option>
+                        <option value="2">双人沙发</option>
+                        <option value="3">多人沙发</option>
+                        <option value="4">沙发床</option>
+                        <option value="5">贵妃椅</option>
+                        <option value="6">餐椅</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-block">
+                    <select name="year" lay-search lay-filter="produce_year_form" id="produce_year_form">
+                        <option value="">请选择年份</option>
+                        <foreach name="year" item="vo">
+                            <option value="{$vo.year}">{$vo.year}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户</label>
+                <div class="layui-input-block">
+                    <select name="client_id" lay-search lay-filter="produce_year_form" id="produce_client_form">
+                        <option value="">请选择客户</option>
+                        <foreach name="client" item="vo">
+                            <option value="{$vo.id}">{$vo.s_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产单号</label>
+                <div class="layui-input-block">
+                    <select name="num" lay-search lay-filter="produce_num_form" id='produce_num_form'>
+                        <option value="">请选择生产单</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品序号</label>
+                <div class="layui-input-block">
+                    <select name="product_id" lay-search lay-search id="produce_product_form">
+                        <option value="">请选择产品序号</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" placeholder="请输入标题" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">尺寸</label>
+                <div class="layui-input-block">
+                    <input type="text" name="size" placeholder="请输入尺寸" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="price" placeholder="请输入价格" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">描述</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pro_dec" placeholder="请输入描述" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text uploadbox">
+                <label class="layui-form-label">上传文件</label>
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn layui-btn-normal" id="other_file">选择多文件</button>
+                    <div class="layui-upload-list" id="table_file">
+                        <table id="otherfile" lay-filter="otherfile"></table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item uploadbox">
+                <label class="layui-form-label">上传图片</label>
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" id="otherimg">图片上传</button>
+                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                        预览图：
+                        <div class="layui-upload-list" id="other_img">
+
+                        </div>
+                    </blockquote>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_productlst_form" lay-submit
+                        lay-filter="add_productlst_form">立即提交</button style="display: none">
+                    <button class="layui-btn edit_productlst_form" lay-submit
+                        lay-filter="edit_productlst_form">立即提交</button style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

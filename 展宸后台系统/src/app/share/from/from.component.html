@@ -1,0 +1,136 @@
+<form nz-form [formGroup]="formcontent">
+  <ng-container *ngFor="let data of formdata">
+    <ng-container [ngSwitch]="data.type">
+      <!-- 常规 -->
+      <nz-form-item *ngSwitchCase="0">
+        <nz-form-label [nzSpan]="5" nzRequired>{{ data.title }}</nz-form-label>
+        <nz-form-control
+          nzHasFeedback
+          [nzSpan]="18"
+          [nzErrorTip]="ErrorTpl"
+          nzValidatingTip="Validating..."
+        >
+          <input
+            nz-input
+            [formControlName]="data.value"
+            [placeholder]="data.placeholder"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 文本框 -->
+      <nz-form-item *ngSwitchCase="1">
+        <nz-form-label [nzSpan]="5">{{ data.title }}</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-textarea-count [nzMaxCharacterCount]="100">
+            <textarea
+              rows="4"
+              [formControlName]="data.value"
+              [placeholder]="data.placeholder"
+              nz-input
+            ></textarea>
+          </nz-textarea-count>
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 隐藏 -->
+      <nz-form-item *ngSwitchCase="2" hidden>
+        <nz-form-label [nzSpan]="4" nzRequired>{{ data.title }}</nz-form-label>
+        <nz-form-control
+          nzHasFeedback
+          [nzSpan]="19"
+          [nzErrorTip]="ErrorTpl"
+          nzValidatingTip="Validating..."
+        >
+          <input
+            nz-input
+            [formControlName]="data.value"
+            [placeholder]="data.placeholder"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 非必填 -->
+      <nz-form-item *ngSwitchCase="3">
+        <nz-form-label [nzSpan]="5">{{ data.title }}</nz-form-label>
+        <nz-form-control
+          nzHasFeedback
+          [nzSpan]="18"
+          [nzErrorTip]="ErrorTpl"
+          nzValidatingTip="Validating..."
+        >
+          <input
+            nz-input
+            [formControlName]="data.value"
+            [placeholder]="data.placeholder"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 常规提示2 -->
+      <nz-form-item *ngSwitchCase="4">
+        <nz-form-label [nzSpan]="5" nzRequired>{{ data.title }}</nz-form-label>
+        <nz-form-control
+          nzHasFeedback
+          [nzSpan]="18"
+          [nzErrorTip]="ErrorTpl2"
+          nzValidatingTip="Validating..."
+        >
+          <input
+            nz-input
+            [formControlName]="data.value"
+            [placeholder]="data.placeholder"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 非必填提示2-->
+      <nz-form-item *ngSwitchCase="5">
+        <nz-form-label [nzSpan]="5">{{ data.title }}</nz-form-label>
+        <nz-form-control
+          nzHasFeedback
+          [nzSpan]="18"
+          [nzErrorTip]="ErrorTpl2"
+          nzValidatingTip="Validating..."
+        >
+          <input
+            nz-input
+            [formControlName]="data.value"
+            [placeholder]="data.placeholder"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <!-- 单选框 -->
+      <nz-form-item *ngSwitchCase="6">
+        <nz-form-label [nzSpan]="5" nzRequired>{{ data.title }}</nz-form-label>
+        <nz-form-control
+          nzHasFeedback
+          [nzSpan]="18"
+          [nzErrorTip]="ErrorTpl"
+          nzValidatingTip="Validating..."
+        >
+          <nz-radio-group [formControlName]="data.value" nzButtonStyle="solid">
+            <label
+              *ngFor="let item of data.tag; index as i"
+              nz-radio-button
+              nzValue="{{ i + 1 }}"
+            >
+              {{ item }}
+            </label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </ng-container>
+  </ng-container>
+</form>
+
+<ng-template #ErrorTpl let-control>
+  <ng-container *ngIf="control.hasError('required')"> 必填 </ng-container>
+  <ng-container *ngIf="control.hasError('pattern')"> 必须是数字 </ng-container>
+  <ng-container *ngIf="control.hasError('minlength')">
+    最少要填3个字
+  </ng-container>
+</ng-template>
+
+<ng-template #ErrorTpl2 let-control>
+  <ng-container *ngIf="control.hasError('required')"> 必填 </ng-container>
+  <ng-container *ngIf="control.hasError('pattern')"> 必须是数字 </ng-container>
+  <ng-container *ngIf="control.hasError('minlength')">
+    最少要填4个字
+  </ng-container>
+</ng-template>

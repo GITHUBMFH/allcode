@@ -1,0 +1,324 @@
+<include file="public/header" />
+<style>
+    .materialtoolbar .layui-btn {
+        margin: 0;
+    }
+
+    .materialtoolbar .layui-form-label {
+        background-color: #1E9FFF;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        width: 60px;
+        padding: 8px 15px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 4px 0 0 4px;
+        text-align: center;
+        overflow: hidden;
+        box-sizing: border-box;
+        border-color: #e6e6e6;
+    }
+
+    .materialtoolbar .del {
+        margin-right: 10px;
+        border-radius: 4px 4px;
+    }
+
+    .materialtoolbar .layui-input-inline {
+        margin-left: -1px;
+        margin-right: 0px;
+        width: 40%;
+    }
+
+    .layui-table-tool-temp {
+        padding-right: 0px;
+    }
+
+    .layui-table-tool-temp .layui-input-inline {
+        float: left;
+        display: inline;
+        margin: 10px 10px 0 0;
+    }
+
+    #card_body {
+        position: relative;
+        left: -8%;
+        padding-top: 20px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+
+    <!-- 表单 -->
+    <div class="layui-card-body layui-text-center">
+        <div id="card_body">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">客户</label>
+                    <div class="layui-input-inline">
+                        <input type="text" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                            value="{$result['client_name']}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生产单</label>
+                    <div class="layui-input-inline">
+                        <input type="text" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                            value="{$result['year']}{$result['num']}-{$result['pro_num']}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-inline">
+                        <textarea name="product_dec" placeholder="请输入规格" class="layui-textarea"
+                            readonly>{$result['product_dec']}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规格</label>
+                    <div class="layui-input-inline">
+                        <textarea name="size" placeholder="请输入规格" class="layui-textarea"
+                            readonly>{$result['size']}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="amount" required lay-verify="required" placeholder="请输入标题"
+                            autocomplete="off" class="layui-input" value="{$result['amount']}" readonly>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea"
+                            readonly>{$result.remark}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主图</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id='getimg' placeholder="请输入" autocomplete="off" class="layui-input"
+                            style="display: none" id="upload_img">
+                        <div class="layui-upload">
+                            <div class="img_box" id="uploadimg" style="height: 100px;">
+                                <if condition="$result['img']!='' ">
+                                    <img class="layui-upload-img" style="display: layui-input-inline;height:100px;"
+                                        src="http://resource.yasfurniture.cn/{$result['img']}" id='preimg'
+                                        style="display: layui-input-inline;" alt="">
+                                    <else />
+                                    <img class="layui-upload-img" id='preimg'>
+                                </if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+            其他图片
+            <div class="layui-upload-list" id="other_img">
+                <if condition="!empty($img)">
+                    <foreach name="img" item="vo">
+                        <div class="lst_box">
+                            <img src="http://resource.yasfurniture.cn/{$vo.file_url}"
+                                style="display: layui-input-inline;height:100px;" class="layui-upload-img"
+                                data-id="{$vo.id}" data-key='{$vo.file_url}'>
+                        </div>
+                    </foreach>
+                </if>
+            </div>
+        </blockquote>
+    </div>
+
+
+
+    <div class="layui-form-item">
+        <blockquote class="layui-elem-quote" style="margin-bottom: 0px">人工费用</blockquote>
+        <div id="cost_labor">
+            <div class="add_cost_labor add_material">
+                <table id="cost_labor_lst" lay-filter="cost_labor_lst"></table>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <blockquote class="layui-elem-quote" style="margin-bottom: 0px">材料预算</blockquote>
+        <div class="add_cost_material add_material" id="costmaterial">
+            <table id="cost_material_lst" lay-filter="cost_material_lst"></table>
+        </div>
+    </div>
+</div>
+
+<!-- 出货模板 -->
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+            alt="">
+        {{# } }}
+    </div>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/myes/js/product.js?{$csspass}"></script>
+
+<script type="text/html" id="toolbarcost_labor">
+    <div class="cost_labortoolbar materialtoolbar">
+        <div class="layui-form-item">
+            <label class="layui-form-label del" lay-event="del">删除</label>
+            <label class="layui-form-label" lay-event="add">增加</label>
+            <div style="clear:both"></div>
+            <div class="layui-input-inline">
+                <select name="type_id" class="cost_labortype" lay-filter="cost_labortype_form">
+                    <option value="">请选择类型</option>
+                    <foreach name='cost_labor' item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="standard" id="type_standard">
+                    <option value="">请选择规格</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="toolbarcost_material">
+    <div class="cost_materialtoolbar materialtoolbar">
+        <div class="layui-form-item">
+            <form class="layui-form" action="" lay-filter="cost_materialtype_form">
+                <label class="layui-form-label del" lay-event="del">删除</label>
+                <label class="layui-form-label" lay-event="add">增加</label>
+                <div style="clear:both"></div>
+                <div class="layui-input-inline">
+                    <select name="type_id" id="cost_materialtype" lay-filter="cost_materialtype">
+                        <option value="">请选择类型</option>
+                        <foreach name='material' item="vo">
+                            <option value="{$vo}">{$vo}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="standard" id="standard">
+                        <option value="">请选择规格</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
+
+
+<script src="__STATIC__/myes/js/task.js?{$csspass}"></script>
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery', 'element'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var element = layui.element;
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        $(function () {
+            function geturlname(str, cha, num) {
+                var x = str.indexOf(cha);
+                for (var i = 0; i < num; i++) {
+                    x = str.indexOf(cha, x + 1);
+                }
+                return x;
+            }
+            var data = {};
+            var url = window.location.href;
+            var lastDigits = url.substring(url.lastIndexOf("/") + 1).match(/[0-9]*$/)[0];
+            data.product_id = lastDigits;
+            data.detail = '1';
+            table.render({
+                elem: '#task_lst',
+                url: '/yes/task/tasksearchlst',
+                where: data,
+                method: 'post',
+                loading: true,
+                id: 'task',
+                toolbar: '#deltaskall',
+                cols: [
+                    [{
+                        field: 'id',
+                        title: 'ID',
+                        hide: true
+                    }, {
+                        type: 'checkbox',
+                        title: '排序',
+                        fixed: 'left',
+                    }, {
+                        field: 'work_name',
+                        title: '工种',
+                        align: 'center',
+                        width: '28%',
+                    }, {
+                        field: 'name',
+                        title: '姓名',
+                        align: 'center',
+                        width: '28%',
+                        templet: function (d) {
+                            return "<span lay-event='open'>" + d.name +"</span>"
+                        },
+                    }, {
+                        field: 'num',
+                        title: '下发',
+                        align: 'center',
+                        edit: 'text'
+                    }, {
+                        field: 'match',
+                        title: '完成',
+                        align: 'center',
+                        templet: function (d) {
+                            if (d.amount - d.match < 0) {
+                                return "<span style='color:red' lay-event='match'>" +
+                                    d.match + "</span>"
+                            } else {
+                                return "<span lay-event='match'>" + d.match +
+                                    "</span>"
+                            }
+                        }
+                    }, {
+                        field: 'amount',
+                        title: '总数',
+                        align: 'center',
+                    }, {
+                        field: 'state',
+                        title: '状态',
+                        align: 'center',
+                        width: '23%',
+                        templet: function (d) {
+                            if (d.state == '1') {
+                                return '<button class="layui-btn layui-btn-xs">已完成</button>';
+                            } else {
+                                return '<button class="layui-btn layui-btn-xs layui-btn-danger">未完成</button>';
+                            }
+                        }
+                    }, {
+                        field: 'date',
+                        width: '35%',
+                        title: '时间',
+                        align: 'center'
+                    }]
+                ],
+                done: function () {
+                    element.render();
+                }
+            });
+        })
+    })
+</script>

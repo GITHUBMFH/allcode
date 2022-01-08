@@ -1,0 +1,100 @@
+<include file="public/header" />
+<style>
+
+</style>
+<div id="getserachbox"><i class="layui-icon">&#xe615;</i> </div>
+
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body" id="getserach" style="display: none">
+        <form class="layui-form">
+            <!-- 引入产品搜索 -->
+            <div class="layui-input-block">
+                <select name="year" lay-filter="spare_year_form" id="spare_year_form">
+                    <option value="">请选择年份</option>
+                    <foreach name="year" item="vo">
+                        <option value="{$vo.year}">{$vo.year}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-block">
+                <select name="client_id" lay-filter="spare_year_form" id="spare_client_form" lay-search>
+                    <option value="">请选择客户</option>
+                    <foreach name="client" item="vo">
+                        <option value="{$vo.id}">{$vo.s_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-block show-select">
+                <select name="order_id" id='spare_num_form'>
+                    <option value="">请选择生产单</option>
+                </select>
+            </div>
+            <div class="layui-input-block show-select">
+                <select name="pro_progress">
+                    <option value="">完成状态</option>
+                    <option value="1">未完成</option>
+                    <option value="100">已完成</option>
+                </select>
+            </div>
+
+            <div class="layui-input-block show-select">
+                <select name="ship_progress">
+                    <option value="">出货状态</option>
+                    <option value="1">未出完</option>
+                    <option value="100">已出完</option>
+                </select>
+            </div>
+            <button class="layui-btn layui-btn-normal btn-left" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset btn-right">重置</button>
+        </form>
+    </div>
+
+    <!-- 表单 -->
+    <div class="layui-card-header">生产单列表</div>
+    <div class="layui-card-body">
+        <table id="order_lst" lay-filter="order_lst"></table>
+    </div>
+    <hr>
+    <div class="layui-card-header">佛山市亚世家具有限公司</div>
+</div>
+
+
+<!-- 生产进度模板 -->
+<script type="text/html" id="pro_progress">
+    {{# if(d.pro_progress>100){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-red" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# } else if(d.pro_progress == 100 ){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# } }}
+</script>
+
+<!-- 出货进度模板 -->
+<script type="text/html" id="ship_progress">
+    {{# if(d.ship_progress>100){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-red" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# } else if(d.ship_progress == 100 ){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# } }}
+</script>
+
+
+<include file="public/footer" />
+<script src="__STATIC__/myes/js/order.js?{$csspass}"></script>
+<script src="__STATIC__/myes/js/search.js?{$csspass}"></script>

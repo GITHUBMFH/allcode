@@ -1,0 +1,25 @@
+<nz-drawer
+  [nzBodyStyle]="{ overflow: 'hideen' }"
+  [nzMaskClosable]="true"
+  [nzWidth]="Width"
+  [nzVisible]="visible"
+  [nzTitle]="title"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="drawerstate()"
+>
+  <app-from [formdata]="formdata" #from></app-from>
+
+  <ng-template #footerTpl>
+    <div style="float: right">
+      <button nz-button style="margin-right: 8px" (click)='drawerstate()'>取消</button>
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="from.formcontent.invalid"
+        (click)="Submit($event)"
+      >
+        发布
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>

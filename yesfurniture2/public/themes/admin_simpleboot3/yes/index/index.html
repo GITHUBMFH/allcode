@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>佛山市亚世家具有限公司</title>
+  <link rel="stylesheet" href="__STATIC__/yes/layui/css/layui.css">
+  <link rel="stylesheet" href="__STATIC__/yes/admin.css">
+  <link rel="stylesheet" href="__STATIC__/yes/change_layui.css">
+  <link rel="stylesheet" href="__STATIC__/yes/css/common.css?{$csspass}">
+  <script>
+    // 是否开启刷新记忆tab功能
+    var is_remember = true;
+  </script>
+</head>
+
+<body class="layui-layout-body">
+  <!-- 项目主体 -->
+  <div class="layui-layout-admin container">
+
+    <!-- 底部导航 -->
+    <div class="layui-header">
+      <!-- 顶部左边 -->
+      <ul class="layui-nav layui-layout-left">
+        <!-- <li class="layui-nav-item layadmin-flexible" lay-unselect="">
+          <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩" class="left_open">
+            <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+          </a>
+        </li> -->
+        <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+          <a href="/" target="_blank" title="前台">
+            <i class="layui-icon layui-icon-website"></i>
+          </a>
+        </li>
+        <li class="layui-nav-item" lay-unselect="">
+          <a href="javascript:;" layadmin-event="refresh" title="刷新" onclick="location.reload()">
+            <i class="layui-icon layui-icon-refresh-3"></i>
+          </a>
+        </li>
+        <li class="layui-nav-item" lay-unselect="">
+          <a href="javascript:;" layadmin-event="refresh" title="清除缓存" onclick="clearCache()">
+            <i class="layui-icon layui-icon-fire"></i>
+          </a>
+        </li>
+      </ul>
+
+      <!-- 顶部右边 -->
+      <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+        <li class="layui-nav-item" lay-unselect="">
+          <a href="javascript:;">
+            <cite>{$admin}</cite>
+            <span class="layui-nav-more"></span></a>
+          <ul class="layui-nav-child">
+            <li><a id="change_password" style="cursor: pointer;">修改密码</a></li>
+            <hr>
+            <li layadmin-event="logout" id="logout" style="text-align: center;"><a href="{:url('login/logout')}">退出</a></li>
+          </ul>
+        </li>
+        <li class="layui-nav-item layui-hide-xs" lay-unselect="">
+          <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 侧边菜单 -->
+    <div class="layui-side layui-side-menu left-nav">
+      <div class="layui-side-scroll" id="side-nav">
+
+        <!-- 公司logo -->
+        <div class="layui-logo" lay-href="">
+          <span>亚世家具有限公司</span>
+        </div>
+
+        <!-- 左边菜单导航 -->
+        <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="nav" lay-filter="layadmin-system-side-menu">
+          <foreach name="menus" item="vo">
+            <li class="layui-nav-item">
+              <a href="javascript:;" lay-tips="{$vo.name}">
+                <i class="layui-icon layui-icon-component"></i>
+                <cite>{$vo.name}</cite>
+                <span class="layui-nav-more"></span>
+              </a>
+              <ul class="layui-nav-child">
+                <if condition="isset($vo.items)">
+                  <foreach name="$vo.items" item="ch">
+                    <li><a href="javascript:;" onclick="xadmin.add_tab('{$ch.name}','{$ch.url}')">{$ch.name}</a></li>
+                  </foreach>
+                </if>
+              </ul>
+            </li>
+          </foreach>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 页面标签 -->
+    <div class="layadmin-pagetabs" id="LAY_app_tabs">
+      <!-- 左右按钮 -->
+      <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+      <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+
+      <!-- 下拉选中关闭 -->
+      <div class="layui-icon layadmin-tabs-control layui-icon-down">
+        <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+          <li class="layui-nav-item" lay-unselect="">
+            <a href="javascript:;"><span class="layui-nav-more"></span></a>
+            <ul class="layui-nav-child layui-anim-fadein" id="tab_right">
+              <li layadmin-event="closeThisTabs"><a href="javascript:;" data-type="this">关闭当前标签页</a></li>
+              <li layadmin-event="closeOtherTabs"><a href="javascript:;" data-type="other">关闭其它标签页</a></li>
+              <li layadmin-event="closeAllTabs"><a href="javascript:;" data-type="all">关闭全部标签页</a></li>
+            </ul>
+          </li>
+      </div>
+
+      <!-- 标签页 -->
+      <div class="layui-tab" lay-unauto="" lay-allowclose="true" lay-filter="xbs_tab">
+        <ul class="layui-tab-title" id="LAY_app_tabsheader">
+          <li lay-attr="" class="layui-this layui-home" lay-id="1">
+            <span class="layui-icon layui-icon-home">&nbsp;</span>
+          </li>
+        </ul>
+
+        <!-- 主体内容 -->
+        <div class="layui-tab-content layui-body">
+          <div class="layui-tab-item layui-show">
+            <iframe src="/yes/order/index" frameborder="0" scrolling="yes" class="x-iframe layadmin-iframe"></iframe>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="page-content-bg"></div>
+
+  <script src="__STATIC__/yes/layui/layui.js"></script>
+  <script src="__STATIC__/yes/xadmin.js?{$csspass}"></script>
+</body>
+
+</html>
+
+<div class="add_form" id="change_password_box">
+  <div class="add_cont">
+    <form class="layui-form" lay-filter="password_form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">旧密码</label>
+        <div class="layui-input-block">
+          <input type="password" name="old_password" placeholder="请输入密码" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">新密码</label>
+        <div class="layui-input-block">
+          <input type="text" name="new_password" placeholder="请输入新密码" autocomplete="off" class="layui-input"
+            lay-verify='required|pass' id='com_password'>
+        </div>
+      </div>
+      <div class="layui-form-item">
+          <label class="layui-form-label">确认密码</label>
+          <div class="layui-input-block">
+            <input type="text" name="com_password" placeholder="确认密码" autocomplete="off" class="layui-input"
+              lay-verify='required|com_password' >
+          </div>
+        </div>
+      <div class="layui-form-item">
+        <div class="layui-input-block">
+          <button class="layui-btn add_password_form" lay-submit lay-filter="add_password_form">立即提交</button>
+          <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

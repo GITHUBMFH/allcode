@@ -1,0 +1,13 @@
+<div class="layui-inline">
+    <select name="work_id" lay-search lay-filter="worker_name">
+        <option value="">请选择职位</option>
+        <foreach name="work_type" item="vo">
+            <option value="{$vo.id}">{$vo.name}</option>
+        </foreach>
+    </select>
+</div>
+<div class="layui-inline">
+    <select name="worker_id" lay-search id="worker_name">
+        <option value="">请选择姓名</option>
+    </select>
+</div>

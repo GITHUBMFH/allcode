@@ -1,0 +1,19 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">职位</label>
+    <div class="layui-input-block">
+        <select name="work_id" lay-search lay-filter="add_worker_name" id="worker_name_add">
+            <option value="">请选择职位</option>
+            <foreach name="work_type" item="vo">
+                <option value="{$vo.id}">{$vo.name}</option>
+            </foreach>
+        </select>
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">姓名</label>
+    <div class="layui-input-block">
+        <select name="worker_id" lay-search lay-verify="required" id="add_worker_name">
+            <option value="">请选择姓名</option>
+        </select>
+    </div>
+</div>

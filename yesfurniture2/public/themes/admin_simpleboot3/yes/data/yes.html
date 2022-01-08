@@ -1,0 +1,66 @@
+<include file="public/header" />
+
+<style>
+    .layui-card-header {
+        font-size: 18px;
+    }
+
+    .float {
+        float: right;
+        margin-left: 0;
+
+    }
+
+    .label {
+        margin-left: 10px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-col-md12">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">产值表</div>
+                <div id="main" style="max-width:1800px;min-width: 1100px;max-height: 1200px;min-height: 560px;"></div>
+                <div class="layui-card-body">
+                    <div style="width: 64%;margin:0 auto;">
+                        <a href="javascript:;" class='layui-btn layui-btn-normal' id='thirty'>最近30天</a>
+                        <a href="javascript:;" class='layui-btn layui-btn-normal' id='seven'>最近7天</a>
+                        <div class="layui-input-inline">
+                            <form class="layui-form">
+                                <label class="layui-btn label layui-btn-normal layui-input-inline" lay-submit
+                                    lay-filter="getechats">月份</label>
+                                <div class="layui-input-block float">
+                                    <input name='num' type="text" class="layui-input layui-input-inline"
+                                        id="search_time1" placeholder='选择日期' readonly>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="layui-input-inline">
+                            <form class="layui-form">
+                                <label class="layui-btn label layui-btn-normal layui-input-inline" lay-submit
+                                    lay-filter="getyear">查看全年</label>
+                                <div class="layui-input-block float">
+                                    <input name='num' type="text" class="layui-input layui-input-inline" id="year_time"
+                                        placeholder='选择日期' readonly>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">客户生产明细 <span id="together"></span></div>
+                <div id="client" style="max-width:1800px;min-width: 1100px;max-height: 2500px;min-height: 500px;"></div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">生产单明细</div>
+                <div id="order" style="max-width:1800px;min-width: 1100px;max-height: 2500px;min-height: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<include file="public/footer" />
+<script src="__STATIC__/yes/js/echarts.min.js"></script>
+<script src="__STATIC__/yes/js/yes.js?{$csspass}"></script>

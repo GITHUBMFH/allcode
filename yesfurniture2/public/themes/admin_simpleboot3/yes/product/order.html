@@ -1,0 +1,105 @@
+<include file="public/header" />
+<link rel="stylesheet" href="__STATIC__/yes/css/order.css?{$csspass}">
+
+<!-- 内容 -->
+<div class="layui-card">
+    <!-- 面包屑导航 -->
+    <div class="layui-card-header">
+        <span class="layui-breadcrumb">
+            <a onclick="location.reload()" title="刷新">
+                刷新
+            </a>
+        </span>
+    </div>
+
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="order_lst" lay-filter="order_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="ordertoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_order'>添加生产单</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="orderbar">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看详情</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="pro_progress">
+    <div class="layui-progress" lay-showPercent="yes" style="margin-top:12%">
+        <div class="layui-progress-bar" lay-percent={{d.pro_sc}}%></div>
+    </div>
+</script>
+
+<script type="text/html" id="ship_progress">
+    <div class="layui-progress" lay-showPercent="yes" style="margin-top:12%">
+        <div class="layui-progress-bar" lay-percent={{d.pro_sc}}%></div>
+    </div>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/order.js?{$csspass}"></script>
+
+<div class="add_order_form" id="add_order_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="order_form">
+
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户</label>
+                <div class="layui-input-block">
+                    <input type="text" name="order_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pro_sc" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">下单时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pro_ch" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="pro_ch" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">完成时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="time" placeholder="请输入" autocomplete="off" class="layui-input" id="time"
+                        lay-verify='required|date'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="add_order_form">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

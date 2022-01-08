@@ -1,0 +1,38 @@
+<div class="layui-form-item">
+    <label class="layui-form-label">年份</label>
+    <div class="layui-input-inline">
+        <select name="year" lay-filter="produce_year_form" id="produce_year_form">
+            <option value="">请选择年份</option>
+            <foreach name="year" item="vo">
+                <option value="{$vo.year}">{$vo.year}</option>
+            </foreach>
+        </select>
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">客户</label>
+    <div class="layui-input-inline">
+        <select name="client_id" lay-search lay-filter="produce_year_form" id="produce_client_form">
+            <option value="">请选择客户</option>
+            <foreach name="client" item="vo">
+                <option value="{$vo.id}">{$vo.s_name}</option>
+            </foreach>
+        </select>
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">生产单号</label>
+    <div class="layui-input-inline">
+        <select name="num" lay-filter="produce_num_form" id='produce_num_form'>
+            <option value="">请选择生产单</option>
+        </select>
+    </div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">产品序号</label>
+    <div class="layui-input-inline">
+        <select name="product_id" lay-verify="required" id="produce_product_form">
+            <option value="">请选择产品序号</option>
+        </select>
+    </div>
+</div>

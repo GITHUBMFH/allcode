@@ -1,0 +1,93 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <div class="layui-inline" style="width: 200px;">
+                <select name="type_id">
+                    <option value="">请选择类型</option>
+                    <option value="999">材料</option>
+                    <foreach name="type" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="dailyprice_lst" lay-filter="dailyprice_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="dailypricetoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_dailyprice'>添加参考价格</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="dailypricebar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+<input type="text" style="display: none" id="getinformation">
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/dailyprice.js?{$csspass}"></script>
+
+<div class="add_form" id="add_dailyprice_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="dailyprice_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <select name="type_id" lay-verify='required' lay-filter="choose_type">
+                        <option value="">请选择类型</option>
+                        <option value="999">材料</option>
+                        <foreach name="type" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required' id="price_name">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">规格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="standard" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">价格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="price" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_dailyprice_form" lay-submit
+                        lay-filter="add_dailyprice_form">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

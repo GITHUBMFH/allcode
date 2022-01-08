@@ -1,0 +1,243 @@
+<include file="public/header" />
+<style>
+    #fixed_nav {
+        display: none;
+    }
+
+    #getout {
+        position: fixed;
+        left: 40px;
+        bottom: 26px;
+        z-index: 9999999;
+        color: #2F9688;
+        display: block;
+        font-size: 24px;
+        z-index: 9999;
+    }
+
+    .layui-table-cell {
+        height: 80px;
+        line-height: 80px;
+    }
+
+    #getserachbox2 {
+        display: none;
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        z-index: 9999999;
+        transform: translate(-50%, 0);
+        -ms-transform: translate(-50%, 0);
+        -moz-transform: translate(-50%, 0);
+        -webkit-transform: translate(-50%, 0);
+        -o-transform: translate(-50%, 0);
+    }
+
+    #getserachbox2 i {
+        font-size: 300%;
+        color: #2F9688;
+    }
+
+    #match_lst {
+        display: none;
+    }
+    #changge{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 80px;
+        right: 10%;
+        z-index: 99;
+        background: #dc1414;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+    }
+</style>
+<div id="changge">计件</div>
+<div id="getserachbox2"><i class="layui-icon">&#xe615;</i> </div>
+<div id="getserachbox"><i class="layui-icon">&#xe615;</i> </div>
+<a href="{:url('login/macthlogout')}" id="getout">退出</a>
+
+<!-- 内容 -->
+<div class="layui-card-body" id="getserach2" style="display: none">
+    <form class="layui-form">
+        <!-- 引入产品搜索 -->
+        <div class="layui-input-block">
+            <select name="year" lay-search lay-filter="spare_year_form" class="spare_year_form">
+                <option value="">请选择年份</option>
+                <foreach name="year" item="vo">
+                    <option value="{$vo.year}">{$vo.year}</option>
+                </foreach>
+            </select>
+        </div>
+        <div class="layui-input-block show-select">
+            <select name="order_id" lay-search lay-filter="spare_num_form" class='spare_num_form'>
+                <option value="">请选择生产单</option>
+            </select>
+        </div>
+        <div class="layui-input-block">
+            <select name="product_id" lay-search class="spare_product_form" lay-filter="ad_price_form">
+                <option value="">请选择产品序号</option>
+            </select>
+        </div>
+
+        <div class="layui-input-block">
+            <input type="number" name="time" placeholder="输入时间如:202001,代表2020年1月" class="layui-input password">
+        </div>
+
+        <button class="layui-btn layui-btn-normal btn-left" lay-submit lay-filter="search_lst_from2">搜索</button>
+        <button type="reset" class="layui-btn layui-btn-primary fromreset btn-right">重置</button>
+    </form>
+</div>
+
+<div class="layui-card-body" id="getserach" style="display: none">
+    <form class="layui-form">
+        <!-- 引入产品搜索 -->
+        <div class="layui-input-block">
+            <select name="state">
+                <option value="0">未完成</option>
+                <option value="1">已完成</option>
+            </select>
+        </div>
+        <div class="layui-input-block">
+            <select name="year" lay-filter="spare_year_form" class="spare_year_form">
+                <option value="">请选择年份</option>
+                <foreach name="year" item="vo">
+                    <option value="{$vo.year}">{$vo.year}</option>
+                </foreach>
+            </select>
+        </div>
+        <div class="layui-input-block show-select">
+            <select name="order_id" lay-search lay-filter="spare_num_form" class='spare_num_form'>
+                <option value="">请选择生产单</option>
+            </select>
+        </div>
+        <div class="layui-input-block">
+            <select name="product_id" class="spare_product_form" lay-filter="ad_price_form">
+                <option value="">请选择产品序号</option>
+            </select>
+        </div>
+
+        <button class="layui-btn layui-btn-normal btn-left" lay-submit lay-filter="search_lst_from">搜索</button>
+        <button type="reset" class="layui-btn layui-btn-primary fromreset btn-right">重置</button>
+    </form>
+</div>
+
+<div class="layui-card" style="display: none;" id="allmatch">
+    <div class="layui-card-header">计件查询</div>
+    <div class="layui-card-body">
+        <table id="order_lst" lay-filter="order_lst"></table>
+    </div>
+    <hr>
+    <div class="layui-card-header">佛山市亚世家具有限公司</div>
+</div>
+
+<!-- 任务列表 -->
+<section>
+    <div class="layui-card" id='alltask'>
+        <!-- 表单 -->
+        <div class="layui-card-header">任务列表</div>
+        <!-- 未完成列表 -->
+        <div class="layui-card-body">
+            <table id="task_lst" lay-filter="task_lst"></table>
+        </div>
+        <hr>
+        <div class="layui-card-header">佛山市亚世家具有限公司</div>
+    </div>
+    <!-- 操作模板 -->
+</section>
+<!-- 任务列表 -->
+
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?	
+            imageView2/1/w/50/h/50/q/75|imageslim" alt="">
+        {{# } }}
+    </div>
+</script>
+
+<include file="public/footer" />
+<script src="__STATIC__/myes/js/macth.js?{$csspass}"></script>
+
+<script>
+    // 加载表格元素
+    layui.use(['form', 'jquery'], function () {
+        var $ = layui.jquery;
+        var form = layui.form;
+
+        //生产单多级联动
+        form.on('select(spare_year_form)', function (data) {
+            var res = {};
+            res.year = $('.spare_year_form').val();
+            res.client_id = $('.spare_client_form').val();
+            getnum(res, '.spare_num_form', '.spare_product_form');
+        });
+
+        //产品多级联动
+        form.on('select(spare_num_form)', function (data) {
+            getproduct(data.value, '.spare_product_form');
+        });
+
+        //编辑生产单多级联动
+        form.on('select(produce_year_form)', function (data) {
+            var res = {};
+            res.year = $('.produce_year_form').val();
+            res.client_id = $('.produce_client_form').val();
+            getnum(res, '.produce_num_form', '.produce_product_form');
+        });
+
+        //编辑产品多级联动
+        form.on('select(produce_num_form)', function (data) {
+            getproduct(data.value, '.produce_product_form');
+        });
+
+        // 获取生产单
+        function getnum(value, option, option1) {
+            $.ajax({
+                type: 'POST',
+                url: '/myes/login/getordernum',
+                data: value,
+                dataType: "json",
+                success: function (data) {
+                    $(option).html($("<option>").val('').text('请选择生产单'));
+                    $(option1).html($("<option>").val('').text('请选择产品序号'));
+                    $.each(data, function (key, val) {
+                        var option1 = $("<option>").val(val.order_id).text(val.num);
+                        $(option).append(option1);
+                    });
+                    form.render('select');
+                },
+                error: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+        }
+
+        // 获取产品序号
+        function getproduct(value, option) {
+            $.ajax({
+                type: 'POST',
+                url: '/myes/login/getproductnum',
+                data: {
+                    id: value
+                },
+                dataType: "json",
+                success: function (data) {
+                    $(option).html($("<option>").val('').text('请选择产品序号'));
+                    $.each(data, function (key, val) {
+                        var option1 = $("<option>").val(val.product_id).text(val.pro_num);
+                        $(option).append(option1);
+                    });
+                    form.render('select');
+                },
+                error: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+        }
+
+    });
+</script>

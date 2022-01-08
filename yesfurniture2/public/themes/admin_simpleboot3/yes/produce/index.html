@@ -1,0 +1,83 @@
+<include file="public/header" />
+
+<style>
+    .search_lst .layui-input-inline {
+        width: 140px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <!-- 引入产品搜索 -->
+            <include file="public/search" />
+            
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="produce_lst" lay-filter="produce_lst"></table>
+    </div>
+
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="producetoolbar">
+    <button class="layui-btn layui-btn-normal" id='add_produce' lay-event="add_produce">添加记录</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="producebar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/produce.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+<div class="add_form" id="add_produce_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="produce_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <!-- 引入产品搜索 -->
+            <include file="public/search_add" />
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">数量</label>
+                <div class="layui-input-block">
+                    <input type="text" name="product_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产日期</label>
+                <div class="layui-input-block">
+                    <input type="text" name="product_data" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required' id="produce_time">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_produce_form" lay-submit lay-filter="add_produce_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_produce_form" lay-submit lay-filter="edit_produce_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<app-search #ordersearch (getdata)="serchchange($event)" [item]="true" [type]="type"></app-search>
+<app-table
+  [tabledata]="tabledata"
+  [total]="total"
+  [tabletitle]="tabletitle"
+  (editclick)="edit($event)"
+  [post]="delpost"
+  [contex]="contex"
+  (db)="dbclick($event)"
+  (getdata)="pagechange($event)"
+  #ordertable
+></app-table>
+
+
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="editfromdata"
+  [post]="addpost"
+  [title]="editfromtitle"
+  #drawereditfrom
+></app-drawer-from>
+
+<app-product #productlist></app-product>

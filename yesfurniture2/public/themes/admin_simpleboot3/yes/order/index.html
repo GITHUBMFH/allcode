@@ -1,0 +1,247 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <!-- 引入产品搜索 -->
+            <div class="layui-input-inline" style="width: 80px">
+                <select name="year" lay-search lay-filter="spare_year_form" id="spare_year_form">
+                    <option value="">年份</option>
+                    <foreach name="year" item="vo">
+                        <option value="{$vo.year}">{$vo.year}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline" style="width: 100px">
+                <select name="client_id" lay-search lay-filter="spare_year_form" id="spare_client_form">
+                    <option value="">客户</option>
+                    <foreach name="client" item="vo">
+                        <option value="{$vo.id}">{$vo.s_name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline show-select" style="width: 126px">
+                <select name="order_id" lay-search id='spare_num_form'>
+                    <option value="">生产单</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="pro_progress" lay-search>
+                    <option value="">完成状态</option>
+                    <option value="1">未完成</option>
+                    <option value="100">已完成</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 100px">
+                <select name="ship_progress" lay-search>
+                    <option value="">出货状态</option>
+                    <option value="1">未出完</option>
+                    <option value="100">已出完</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 70px">
+                <select name="cloth" lay-search>
+                    <option value="">布料</option>
+                    <option value="2">已备</option>
+                    <option value="1">未备</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 70px">
+                <select name="package" lay-search>
+                    <option value="">包装</option>
+                    <option value="2">已备</option>
+                    <option value="1">未备</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 70px">
+                <select name="paint" lay-search>
+                    <option value="">油漆</option>
+                    <option value="2">已备</option>
+                    <option value="1">未备</option>
+                </select>
+            </div>
+
+            <div class="layui-input-inline show-select" style="width: 70px">
+                <select name="hardware" lay-search>
+                    <option value="">五金</option>
+                    <option value="2">已备</option>
+                    <option value="1">未备</option>
+                </select>
+            </div>
+
+            <div class="layui-inline" style="width: 180px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="order_lst" lay-filter="order_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="ordertoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_attend'>添加生产单</button>
+</script>
+
+<!-- 生产模板 -->
+<script type="text/html" id="orderbar">
+    <!-- <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看详情</a> -->
+<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<!-- 出货模板 -->
+<script type="text/html" id="pro_progress">
+    {{# if(d.pro_progress>100){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-red" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# } else if(d.pro_progress == 100 ){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent={{d.pro_progress}}%></div>
+    </div>
+    {{# } }}
+</script>
+
+<!-- 消耗时间的计算 -->
+<script type="text/html" id="ship_progress">
+    {{# if(d.ship_progress>100){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-red" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# } else if(d.ship_progress == 100 ){ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# }else{ }}
+    <div class="layui-progress layui-progress-big" lay-showPercent="yes" style="margin-top:4%">
+        <div class="layui-progress-bar layui-bg-blue" lay-percent={{d.ship_progress}}%></div>
+    </div>
+    {{# } }}
+</script>
+
+<include file="public/footer" />
+<script src="__STATIC__/yes/xadmin.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/order.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+<!-- 材料跟单描述 -->
+<div class="add_form" id="material_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="material_form" style="width: 96%;height: 80%;">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">name</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="height: 80%;">
+                <textarea id='getcontent' style="height: 100%;" name="content" placeholder="请输入内容" class="layui-textarea"></textarea >
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_material_form" lay-submit lay-filter="add_material_form">立即提交</button>
+                    <a class="layui-btn layui-btn-normal" id="togettime">日期</a>
+                    <a class="layui-btn layui-btn-warm" id="getdone">完成</a>
+                    <a class="layui-btn layui-btn-danger" id="getdown">未完成</a>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                    <input type="text" id="gettime" class="layui-btn layui-input" style="display: hidden">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 添加生产单 -->
+<div class="add_form" id="order_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="order_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">客户</label>
+                <div class="layui-input-block">
+                    <select name="s_name" lay-verify="required" lay-search>
+                        <option value="">请选择客户</option>
+                        <foreach name="client" item="vo">
+                            <option value="{$vo.id}">{$vo.s_name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">工程名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="project" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">年份</label>
+                <div class="layui-input-block">
+                    <input type="text" name="year" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number' id='year' readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产单号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">下单时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="order_time" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|date' id="order_time" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="remark" placeholder="请输入备注" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <!-- <div class="layui-form-item">
+                <label class="layui-form-label">完成时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="complete_time" placeholder="请输入" autocomplete="off" class="layui-input"
+                        id="complete_time" readonly>
+                </div>
+            </div> -->
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn edit_order_form" lay-submit lay-filter="edit_order_form"
+                            style="display:none">立即提交</button>
+                        <button class="layui-btn add_order_form" lay-submit lay-filter="add_order_form"
+                            style="display:none">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>

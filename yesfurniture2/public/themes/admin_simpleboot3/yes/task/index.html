@@ -1,0 +1,68 @@
+<include file="public/header" />
+<style>
+    .layui-table-cell {
+        height: 60px;
+        line-height: 60px;
+    }
+
+    .click_img img {
+        height: 100%;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <!-- 引入产品搜索 -->
+            <include file="public/search" />
+            <include file="public/worker" />
+            <div style="margin-top:10px"></div>
+            <div class="layui-inline">
+                <select name="state">
+                    <option value="0">未完成</option>
+                    <option value="1">已完成</option>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="task_lst" lay-filter="task_lst"></table>
+    </div>
+</div>
+
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer;height: 100%;">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?	
+        imageView2/1/w/50/h/50/q/75|imageslim" alt="">
+        {{# } }}
+    </div>
+</script>
+
+<div id="taskbox" style="display: none">
+    <div class="add_material">
+        <table id="match_lst" lay-filter="match_lst"></table>
+    </div>
+</div>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/task.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+
+<script type="text/html" id="deltaskall">
+    <button class="layui-btn" lay-event='state_all' id='state_all'>切换完成</button>
+    <button class="layui-btn layui-btn-danger" lay-event='deltask_all' id='deltask_all'>批量删除</button>
+</script>
+
+<script type="text/html" id="taskbar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>

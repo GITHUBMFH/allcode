@@ -1,0 +1,134 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="recorddetails_lst" lay-filter="recorddetails_lst"></table>
+    </div>
+
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="recorddetailstoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event="add_recorddetails">添加进账细节</button>
+</script>
+
+<script type="text/html" id="recorddetailsbar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/recorddetails.js?{$csspass}"></script>
+<div class="add_form" id="add_recorddetails_form">
+    <div class="add_cont" style="height: auto;padding-top:20px">
+        <form class="layui-form" lay-filter="recorddetails_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">分类</label>
+                <div class="layui-input-block">
+                    <select name="type_id" lay-search lay-search>
+                        <option value=""></option>
+                        <foreach name="type" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">数量</label>
+                <div class="layui-input-block">
+                    <input id="details_number" type="text" name="number" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">单位</label>
+                <div class="layui-input-block">
+                    <select name="unit" lay-search lay-search>
+                        <option value=""></option>
+                        <foreach name="unit" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">单价</label>
+                <div class="layui-input-block">
+                    <input id="details_oneprice" type="text" name="oneprice" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">总金额</label>
+                <div class="layui-input-block">
+                    <input id="details_price" type="text" name="price" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">规格</label>
+                <div class="layui-input-block">
+                    <input type="text" name="size" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产单年份</label>
+                <div class="layui-input-block">
+                    <select name="year" lay-search lay-filter="produce_year_form">
+                        <option value=""></option>
+                        <foreach name="year" item="vo">
+                            <option value="{$vo.year}">{$vo.year}</option>
+                        </foreach>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产单号</label>
+                <div class="layui-input-block">
+                    <select name="order_id" lay-search lay-filter="produce_num_form" id='produce_num_form'>
+                        <option value="">请选择生产单</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">产品序号</label>
+                <div class="layui-input-block">
+                    <select name="product_id" lay-search lay-search id="produce_product_form">
+                        <option value="">请选择产品序号</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_recorddetails_form" lay-submit
+                        lay-filter="add_recorddetails_form">立即提交</button style="display: none">
+                    <button class="layui-btn edit_recorddetails_form" lay-submit
+                        lay-filter="edit_recorddetails_form">立即提交</button style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

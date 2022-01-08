@@ -1,0 +1,184 @@
+<include file="public/header" />
+<style>
+    #card_body {
+        position: relative;
+        left: -3%;
+        padding-top: 20px;
+    }
+</style>
+<div id="getserachbox"><i class="layui-icon">&#xe640;</i> </div>
+<!-- 内容 -->
+<div class="layui-card" style="padding-top: 40px;">
+    <div class="add_form" id="add_produce_form">
+        <div class="add_cont" id="card_body">
+            <form class="layui-form" lay-filter="produce_form">
+                <div class="layui-form-item" style="display: none">
+                    <label class="layui-form-label">ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <!-- 引入产品搜索 -->
+                <include file="public/search_add" />
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="product_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                            lay-verify='required|number'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生产日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="product_data" placeholder="请输入" autocomplete="off" class="layui-input"
+                            lay-verify='required' id="produce_time" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <button class="layui-btn add_produce_form" lay-submit lay-filter="add_produce_form"
+                            style="display: none">立即提交</button>
+                        <button class="layui-btn edit_produce_form" lay-submit lay-filter="edit_produce_form"
+                            style="display: none">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<include file="public/footer" />
+<script src="__STATIC__/myes/js/search.js?{$csspass}"></script>
+
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery', 'element', 'laydate'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var element = layui.element;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#produce_time',
+            showBottom: false
+        });
+
+        var url = window.location.href;
+        var lastDigits = url.substring(url.lastIndexOf("/") + 1).match(/[0-9]*$/)[0];
+
+        if (lastDigits == '') {
+            $('.add_produce_form').show();
+            $('#getserachbox').hide();
+        } else {
+            $('.edit_produce_form').show();
+            $('#produce_num_form').html($("<option>").val('{$result.order_id}').text('{$result.num}'));
+            $('#produce_product_form').html($("<option>").val('{$result.product_id}').text(
+                '{$result.product_num}'));
+            form.val("produce_form", {
+                "id": '{$result.id}',
+                "year": '{$result.year}',
+                "num": '{$result.order_id}',
+                "product_id": '{$result.product_id}',
+                "product_num": '{$result.product_num}',
+                "product_data": '{$result.product_data}',
+                "client_id": '{$result.client_id}',
+            });
+        }
+
+        // 监听客户添加
+        form.on('submit(add_produce_form)', function (data) {
+            var data = data.field;
+            delete data.id;
+            delete data.year;
+            delete data.client_id;
+            delete data.client_name;
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/yes/produce/addPost', //URL
+                data: data, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            success: function () {
+                                setTimeout(function () {
+                                    $(location).attr('href',
+                                        '/myes/index/produce');
+                                }, 500)
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+        form.on('submit(edit_produce_form)', function (data) {
+            var data = data.field;
+            delete data.year;
+            delete data.client_id;
+            delete data.client_name;
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/yes/produce/editPost', //URL
+                data: data, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            success: function () {
+                                setTimeout(function () {
+                                    $(location).attr('href',
+                                        '/myes/index/produce');
+                                }, 500)
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('#getserachbox').on('click', function () {
+            layer.confirm('确定删除么？', function (index) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/yes/produce/delPost',
+                    data: {
+                        id: lastDigits
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        layer.close(index);
+                        if (data.code == 1) {
+                            layer.msg(data.msg, {
+                                success: function () {
+                                    setTimeout(function () {
+                                        $(location).attr('href',
+                                            '/myes/index/produce'
+                                            );
+                                    }, 500)
+                                }
+                            });
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    },
+                    error: function (data) {
+                        layer.msg(data.msg);
+                    }
+                });
+            });
+        })
+
+    })
+</script>

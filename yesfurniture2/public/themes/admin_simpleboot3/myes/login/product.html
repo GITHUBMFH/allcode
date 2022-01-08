@@ -1,0 +1,161 @@
+<include file="public/header" />
+<style>
+    .materialtoolbar .layui-btn {
+        margin: 0;
+    }
+
+    #fixed_nav{
+        display: none;
+    }
+    .materialtoolbar .layui-form-label {
+        background-color: #1E9FFF;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        width: 60px;
+        padding: 8px 15px;
+        height: 38px;
+        line-height: 20px;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 4px 0 0 4px;
+        text-align: center;
+        overflow: hidden;
+        box-sizing: border-box;
+        border-color: #e6e6e6;
+    }
+
+    .materialtoolbar .del {
+        margin-right: 10px;
+        border-radius: 4px 4px;
+    }
+
+    .materialtoolbar .layui-input-inline {
+        margin-left: -1px;
+        margin-right: 0px;
+        width: 40%;
+    }
+
+    .layui-table-tool-temp {
+        padding-right: 0px;
+    }
+
+    .layui-table-tool-temp .layui-input-inline {
+        float: left;
+        display: inline;
+        margin: 10px 10px 0 0;
+    }
+
+    #card_body {
+        position: relative;
+        left: -8%;
+        padding-top: 20px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+
+    <!-- 表单 -->
+    <div class="layui-card-body layui-text-center">
+        <div id="card_body">
+            <form class="layui-form" action="">
+                <!-- <div class="layui-form-item">
+                    <label class="layui-form-label">客户</label>
+                    <div class="layui-input-inline">
+                        <input type="text" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                            value="{$result['client_name']}" readonly>
+                    </div> -->
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生产单</label>
+                    <div class="layui-input-inline">
+                        <input type="text" placeholder="请输入标题" autocomplete="off" class="layui-input"
+                            value="{$result['year']}{$result['num']}-{$result['pro_num']}" readonly>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-inline">
+                        <textarea name="product_dec" placeholder="请输入规格" class="layui-textarea"
+                            readonly>{$result['product_dec']}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">规格</label>
+                    <div class="layui-input-inline">
+                        <textarea name="size" placeholder="请输入规格" class="layui-textarea"
+                            readonly>{$result['size']}</textarea>
+                    </div>
+                </div>
+
+                <!-- <div class="layui-form-item">
+                    <label class="layui-form-label">数量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="amount" required lay-verify="required" placeholder="请输入标题"
+                            autocomplete="off" class="layui-input" value="{$result['amount']}" readonly>
+                    </div>
+                </div> -->
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea"
+                            readonly>{$result.remark}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">主图</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id='getimg' placeholder="请输入" autocomplete="off" class="layui-input"
+                            style="display: none" id="upload_img">
+                        <div class="layui-upload">
+                            <div class="img_box" id="uploadimg" style="height: 100px;">
+                                <if condition="$result['img']!='' ">
+                                    <img class="layui-upload-img" style="display: layui-input-inline;height:100px;"
+                                        src="http://resource.yasfurniture.cn/{$result['img']}" id='preimg'
+                                        style="display: layui-input-inline;" alt="">
+                                    <else />
+                                    <img class="layui-upload-img" id='preimg'>
+                                </if>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+            其他图片
+            <div class="layui-upload-list" id="other_img">
+                <if condition="!empty($img)">
+                    <foreach name="img" item="vo">
+                        <div class="lst_box">
+                            <img src="http://resource.yasfurniture.cn/{$vo.file_url}"
+                                style="display: layui-input-inline;height:100px;" class="layui-upload-img"
+                                data-id="{$vo.id}" data-key='{$vo.file_url}'>
+                        </div>
+                    </foreach>
+                </if>
+            </div>
+        </blockquote>
+    </div>
+    <hr>
+    <div class="layui-card-header">佛山市亚世家具有限公司</div>
+</div>
+
+<!-- 出货模板 -->
+<script type="text/html" id="clickimg">
+    <div class="click_img" lay-event="clickimg" style="cursor: pointer">
+        {{# if(d.img!=='') { }}
+        <img src="http://resource.yasfurniture.cn/{{d.img}}?imageMogr2/auto-orient/format/webp/blur/1x0/quality/75"
+            alt="">
+        {{# } }}
+    </div>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/myes/js/product.js?{$csspass}"></script>

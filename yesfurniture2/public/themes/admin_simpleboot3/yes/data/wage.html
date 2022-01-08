@@ -1,0 +1,161 @@
+<include file="public/header" />
+
+<style>
+    .add_material {
+        padding: 20px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+
+            <include file="public/worker" />
+            <div class="layui-inline">
+                <select name="state">
+                    <option value="">请选择状态</option>
+                    <option value="1">未发放</option>
+                    <option value="2">已发放</option>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 表单 -->
+    <div class="layui-card-body">
+        <table id="wage_lst" lay-filter="wage_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="wagetoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_wage'>添加工资记录</button>
+</script>
+
+<!-- 生产模板 -->
+<script type="text/html" id="wagebar">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="borrow">添加借款</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/wage.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+
+<script type="text/html" id="borrowbar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!-- 借款记录表 -->
+<div id="borrowlst" style="display: none">
+    <div class="add_material">
+        <table id="borrow_lst" lay-filter="borrow_lst"></table>
+    </div>
+</div>
+
+<!-- 添加工资记录 -->
+<div class="add_form" id="wage_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="wage_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <include file="public/addworker" />
+            
+            <div class="layui-form-item salary" style="display: none">
+                <label class="layui-form-label">底薪</label>
+                <div class="layui-input-block">
+                    <input readonly type="text" id="salary" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item allowance" style="display: none">
+                <label class="layui-form-label">补贴</label>
+                <div class="layui-input-block">
+                    <input readonly type="text" id="allowance" placeholder="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">罚款</label>
+                <div class="layui-input-block">
+                    <input type="text" name="deduct" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">奖金</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bonus" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">应发工资</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wage" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea placeholder="请输入内容" name="remark" autocomplete="off" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="month" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|date' id="wage_time" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn edit_wage_form" lay-submit lay-filter="edit_wage_form"
+                        style="display:none">立即提交</button>
+                    <button class="layui-btn add_wage_form" lay-submit lay-filter="add_wage_form"
+                        style="display:none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 添加借款 -->
+<div class="add_form" id="borrow_form" style="display: none">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="borrow_form" style="margin-right: 10%;width: 80%;margin-top: 4%;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">金额</label>
+                <div class="layui-input-block">
+                    <input type="text" name='price' placeholder="请输入金额" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="data" placeholder="请选择时间" autocomplete="off" class="layui-input"
+                        lay-verify='required|date' id="borrow_time" readonly>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_borrow_form" lay-submit lay-filter="add_borrow_form">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

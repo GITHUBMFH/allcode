@@ -1,0 +1,76 @@
+<div>
+  <div nz-row [nzGutter]="8">
+    <div nz-col [nzSpan]="6" *ngFor="let item of geticon; let key = index">
+      <nz-card>
+        <div nz-row>
+          <div nz-col="18">
+            <div style="border-radius: 50%; padding: 6px" [style]="item.bg">
+              <button
+                [style]="item.color"
+                class="icon"
+                nzBlock
+                nz-button
+                nzType="primary"
+                nzShape="circle"
+              >
+                <i nz-icon [nzType]="item.icon"></i>
+              </button>
+            </div>
+          </div>
+          <div nz-col="3" nzOffset="3">
+            <nz-statistic
+              [nzValue]="item.number"
+              [nzTitle]="item.title"
+            ></nz-statistic>
+          </div>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</div>
+<br>
+<!-- <h3>采购列表</h3> -->
+<!-- 添加搜索 -->
+<app-search
+  #ordersearch
+  (getdata)="serchchange($event)"
+  [item]="true"
+  [type]="type"
+  [tag]="tag"
+></app-search>
+
+<!-- 表格数据 -->
+<app-table
+  [tabledata]="tabledata"
+  [total]="total"
+  [tabletitle]="tabletitle"
+  [post]="delpost"
+  (editclick)="edit($event)"
+  [contex]="contex"
+  (additemclick)="addclick($event)"
+  (getdata)="pagechange($event)"
+  [tag]="tag"
+  #producttable
+></app-table>
+
+<!-- 编辑弹框 -->
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="editfromdata"
+  [post]="addpost"
+  [title]="editfromtitle"
+  [self]="true"
+  (selfsubmit)="eidtsublimt($event)"
+  #drawereditfrom
+></app-drawer-from>
+
+<!-- 添加新项目 -->
+<app-drawer-from
+  (parent)="gettabledata()"
+  [formdata]="addfromdata"
+  [post]="addpost"
+  [title]="addfromtitle"
+  [self]="true"
+  (selfsubmit)="addsubmit($event)"
+  #draweraddfrom
+></app-drawer-from>

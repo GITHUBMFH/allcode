@@ -1,0 +1,116 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <!-- 引入产品搜索 -->
+            <include file="public/worker" />
+
+            <div class="layui-inline">
+                <select name="type" lay-search>
+                    <option value="">请选择类型</option>
+                    <option value="请假">请假</option>
+                    <option value="迟到">迟到</option>
+                    <option value="漏卡">漏卡</option>
+                    <option value="早退">早退</option>
+                    <option value="旷工">旷工</option>
+                    <option value="加班">加班</option>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>\
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="attend_lst" lay-filter="attend_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="attendtoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_attend'>添加考勤记录</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="attendbar">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/attend.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+<div class="add_form" id="add_attend_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="attend_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <include file="public/addworker" />
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <select name="type" lay-search lay-verify='required'>
+                        <option value=""></option>
+                        <option value="请假">请假</option>
+                        <option value="迟到">迟到</option>
+                        <option value="漏卡">漏卡</option>
+                        <option value="早退">早退</option>
+                        <option value="旷工">旷工</option>
+                        <option value="加班">加班</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">时长</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="duration" placeholder="请输入" autocomplete="off" class="layui-input"  lay-verify='required'>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="unit" lay-verify='required'>
+                        <option value="分">分</option>
+                        <option value="时">时</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">时间</label>
+                <div class="layui-input-block">
+                    <input type="text" lay-search name="data" placeholder="时间" autocomplete="off" class="layui-input" id="get_time" lay-verify='required'>
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_attend_form" lay-submit lay-filter="add_attend_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_attend_form" lay-submit lay-filter="edit_attend_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 编辑成本 -->
+<div id="bank" style="display: none">
+    <div class="add_bank add_material">
+        <table id="bank_lst" lay-filter="bank_lst"></table>
+    </div>
+</div>

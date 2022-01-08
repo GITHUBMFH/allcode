@@ -1,0 +1,171 @@
+<include file="public/header" />
+
+<style>
+    .add_material {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .layui-form-item .layui-input-inline {
+        width: 120px;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <include file="public/worker" />
+            <div class="layui-input-inline">
+                <select name="state" lay-search >
+                    <option value="">请选择状态</option>
+                    <option value="1">在职</option>
+                    <option value="2">离职</option>
+                </select>
+            </div>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset2">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="worker_lst" lay-filter="worker_lst"></table>
+    </div>
+</div>
+
+<!-- 工具栏模板 -->
+<script type="text/html" id="workertoolbar">
+    <button class="layui-btn layui-btn-normal" lay-event='add_worker'>添加人员信息</button>
+</script>
+
+<!-- 操作模板 -->
+<script type="text/html" id="workerbar">
+    <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check_salary">薪资</a> -->
+<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check_bank">其他信息</a>
+<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<input type="text" style="display: none" id="getinformation">
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/worker.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>
+
+<div class="add_form" id="add_worker_form">
+    <div class="add_cont">
+        <form class="layui-form" lay-filter="worker_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">姓名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required'>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">必选</label>
+                <div class="layui-input-inline">
+                    <select name="work_id" lay-search>
+                        <option value="">工种</option>
+                        <foreach name="work_type" item="vo">
+                            <option value="{$vo.id}">{$vo.name}</option>
+                        </foreach>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="tyep_id" lay-search>
+                        <option value="1">计件</option>
+                        <option value="2">计时</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="state" lay-search>
+                        <option value="1">在职</option>
+                        <option value="2">离职</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">电话</label>
+                <div class="layui-input-block">
+                    <input type="text" name="phone" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">身份证</label>
+                <div class="layui-input-block">
+                    <input type="text" name="idcard" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">银行号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank_card" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">银行种类</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bank_type" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">开户行</label>
+                <div class="layui-input-block">
+                    <input type="text" name="band_address" placeholder="请输入" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">入职时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="get_time" placeholder="入职时间" autocomplete="off" class="layui-input"
+                        readonly id="get_time">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">离职时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="out_time" placeholder="离职时间" autocomplete="off" class="layui-input"
+                        readonly id="out_time">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn add_worker_form" lay-submit lay-filter="add_worker_form">立即提交</button
+                        style="display: none">
+                    <button class="layui-btn edit_worker_form" lay-submit lay-filter="edit_worker_form">立即提交</button
+                        style="display: none">
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 编辑成本 -->
+<div id="bank" style="display: none">
+    <div class="add_bank add_material">
+        <table id="bank_lst" lay-filter="bank_lst"></table>
+    </div>
+</div>

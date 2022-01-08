@@ -1,0 +1,77 @@
+<include file="public/header" />
+<style>
+    #header_refresh {
+        display: none;
+    }
+</style>
+<!-- 内容 -->
+<div class="layui-card" style="font-size: 16px;">
+    <div class="title">
+        <H2 style="text-align: center;">佛山市亚世家具有限公司对账单</h2>
+        <div style="width: 100%;margin-top: 30px;margin-bottom: 30px;">
+            <div style="float: left;margin-left: 20px;">
+                <p>收货方：佛山市亚世家具有限公司</p>
+                <p>联系方式：0757-23870545</p>
+                <p>对账范围：{$max_data} 到 {$min_data}</p>
+            </div>
+            <div style="float: right; margin-right: 20px;">
+                <p>供货方：{$result[0]['supplier_name']}</p>
+                <p>联系方式：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </p>
+            </div>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+    <table class="layui-table" style="text-align: center;">
+        <thead>
+            <tr>
+                <th style="text-align: center;">单号</th>
+                <th style="text-align: center;">日期</th>
+                <th style="text-align: center;">名称</th>
+                <th style="text-align: center;">规格</th>
+                <th style="text-align: center;">数量</th>
+                <th style="text-align: center;">单位</th>
+                <th style="text-align: center;">单价</th>
+                <th style="text-align: center;">总金额(RMB)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <foreach name="result" item="vo" key="k">
+                <tr>
+                    <td>{$vo['number']}</td>
+                    <td>{$vo['data']}</td>
+                    <td>{$vo['name']}</td>
+                    <td>{$vo['size']}</td>
+                    <td>{$vo['num']}</td>
+                    <td>{$vo['unit']}</td>
+                    <td>{$vo['oneprice']}</td>
+                    <td>{$vo['price']}</td>
+                </tr>
+            </foreach>
+            <tr>
+                <td colspan="7">合计：</td>
+                <td>{$amount}元</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="float: right; margin-right: 30px;margin-top: 30px;">
+        <p>对账日期：{$date}</p>
+        <p>制单人：</p>
+    </div>
+    <div style="clear: both;"></div>
+    <div style="margin-top: 30px;">
+        <h2>开票资料</h2>
+        <p>名称：佛山市亚世家具有限公司</p>
+        <p>纳税人识别号：91440606066657523N</p>
+        <p>地址：佛山市顺德区龙江镇龙江社区居民委员会扒头工业区10-9地块1号楼</p>
+        <p>开户行及帐号：中国农业银行股份有限公司顺德龙峰支行</p>
+        <p>帐号：44485501040008196</p>
+
+    </div>
+</div>
+<include file="public/footer" />
+<script>
+    // window.onload = function () {
+    //     window.print()
+    // }
+</script>

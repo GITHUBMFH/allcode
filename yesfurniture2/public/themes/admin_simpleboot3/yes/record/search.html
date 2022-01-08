@@ -1,0 +1,65 @@
+<include file="public/header" />
+
+<!-- 内容 -->
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form layui-input-inline search_lst">
+            <div class="layui-input-inline">
+                <select name="supplier" lay-search lay-filter="spare_year_form">
+                    <option value="">请选择供应商</option>
+                    <foreach name="supplier" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="state" lay-search lay-filter="spare_year_form">
+                    <option value="">请选择状态</option>
+                    <option value="5">现金结清</option>
+                    <option value="1">未结现金</option>
+                    <option value="2">未对账</option>
+                    <option value="3">已对账</option>
+                    <option value="4">月结结清</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="number" placeholder="请输入订单号" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="name" placeholder="请输入名称" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <select name="type_id" lay-search lay-filter="spare_year_form">
+                    <option value="">请选择供应商</option>
+                    <foreach name="type" item="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </foreach>
+                </select>
+            </div>
+            <div class="layui-inline" style="width: 200px;">
+                <input name='time' type="text" class="layui-input" id="search_time1" placeholder='选择日期' readonly>
+            </div>
+
+            <div style="margin-top: 10px"></div>
+            <include file="public/search" />
+
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="search_lst_from">搜索</button>
+            <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+        </form>
+    </div>
+    <!-- 数据表单 -->
+    <div class="layui-card-body">
+        <table id="recordsearch_lst" lay-filter="recordsearch_lst"></table>
+    </div>
+
+</div>
+
+<script type="text/html" id="recordsearchbar">
+    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<include file="public/footer" />
+
+<script src="__STATIC__/yes/js/recordsearch.js?{$csspass}"></script>
+<script src="__STATIC__/yes/js/search.js?{$csspass}"></script>

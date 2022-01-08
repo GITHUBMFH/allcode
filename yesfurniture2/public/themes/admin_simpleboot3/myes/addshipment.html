@@ -1,0 +1,183 @@
+<include file="public/header" />
+<style>
+    #card_body {
+        position: relative;
+        left: -3%;
+        padding-top: 20px;
+    }
+</style>
+<div id="getserachbox"><i class="layui-icon">&#xe615;</i> </div>
+
+<!-- 内容 -->
+<div class="layui-card" style="padding: 40px 0;">
+    <div class="add_cont" id="card_body">
+        <form class="layui-form" lay-filter="shipment_form">
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <include file="public/search_add" />
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="shipment_num" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required|number'>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">生产日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="shipment_data" placeholder="请输入" autocomplete="off" class="layui-input"
+                        lay-verify='required' id="shipment_time" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <button class="layui-btn add_shipment_form" lay-submit lay-filter="add_shipment_form"
+                        style="display: none">立即提交</button>
+                    <button class="layui-btn edit_shipment_form" lay-submit lay-filter="edit_shipment_form"
+                        style="display: none">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary fromreset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<include file="public/footer" />
+<script src="__STATIC__/myes/js/search.js?{$csspass}"></script>
+
+<script>
+    layui.use(['form', 'layer', 'table', 'jquery', 'element', 'laydate'], function () {
+        var table = layui.table;
+        var layer = layui.layer;
+        var element = layui.element;
+        var $ = layui.jquery;
+        var form = layui.form;
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#shipment_time',
+            showBottom: false
+        });
+
+        var url = window.location.href;
+        var lastDigits = url.substring(url.lastIndexOf("/") + 1).match(/[0-9]*$/)[0];
+
+        if (lastDigits == '') {
+            $('.add_shipment_form').show();
+            $('#getserachbox').hide();
+        } else {
+            $('.edit_shipment_form').show();
+            $('#produce_num_form').html($("<option>").val('{$result.order_id}').text('{$result.num}'));
+            $('#produce_product_form').html($("<option>").val('{$result.product_id}').text(
+                '{$result.pro_num}'));
+            form.val("shipment_form", {
+                "id": '{$result.id}',
+                "year": '{$result.year}',
+                "num": '{$result.order_id}',
+                "product_id": '{$result.product_id}',
+                "shipment_num": '{$result.shipment_num}',
+                "shipment_data": '{$result.shipment_data}',
+                "client_id": '{$result.client_id}',
+            });
+        }
+
+        // 监听客户添加
+        form.on('submit(add_shipment_form)', function (data) {
+            var data = data.field;
+            delete data.id;
+            delete data.year;
+            // delete data.num;
+            delete data.client_id;
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/yes/shipment/addPost', //URL
+                data: data, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            success: function () {
+                                setTimeout(function () {
+                                    $(location).attr('href',
+                                        '/myes/index/shipment');
+                                }, 500)
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+        // 监听顶级菜单修改
+        form.on('submit(edit_shipment_form)', function (data) {
+            var data = data.field;
+            // delete data.num;
+            delete data.year;
+            delete data.client_id;
+            $.ajax({
+                type: 'POST', //请求类型
+                url: '/yes/shipment/editPost', //URL
+                data: data, //传递的参数
+                dataType: "json", //返回的数据类型
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg(data.msg, {
+                            success: function () {
+                                setTimeout(function () {
+                                    $(location).attr('href',
+                                        '/myes/index/shipment');
+                                }, 500)
+                            }
+                        });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('#getserachbox').on('click', function () {
+            layer.confirm('确定删除么？', function (index) {
+                obj.del();
+                layer.close(index);
+                $.ajax({
+                    type: 'POST',
+                    url: '/yes/shipment/delPost',
+                    data: {
+                        id: lastDigits
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg, {
+                                success: function () {
+                                    setTimeout(function () {
+                                        $(location).attr('href',
+                                            '/myes/index/shipment'
+                                        );
+                                    }, 500)
+                                }
+                            });
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    },
+                    error: function (data) {
+                        layer.msg(data.msg);
+                    }
+                });
+            });
+        })
+
+    })
+</script>

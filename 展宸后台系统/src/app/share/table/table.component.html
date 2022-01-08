@@ -1,0 +1,223 @@
+<!-- 数据展示 -->
+<nz-table
+  #orderlst
+  [nzData]="tabledata"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzPageSize]="pageSize"
+  [(nzPageIndex)]="pageIndex"
+  nzShowQuickJumper="true"
+  [nzShowTotal]="totalTemplate"
+  [nzTotal]="total"
+  [nzShowPagination]="nzShowPagination"
+  [nzHideOnSinglePage]="false"
+  (nzPageIndexChange)="indexchange($event)"
+  (nzPageSizeChange)="sizechange($event)"
+  (nzCurrentPageDataChange)="onCurrentPageDataChange($event)"
+  nzTableLayout="fixed"
+  nzShowSizeChanger
+  [nzSize]="'small'"
+  [nzNoResult]="nzNoResult"
+  [nzBordered]="nzBordered"
+  [nzPageSizeOptions]="pagelst"
+  id='report'
+>
+  <ng-template #totalTemplate let-total> 共 {{ total }} 条数据 </ng-template>
+  <ng-template #nzNoResult let-total>
+    <nz-result
+      nzStatus="404"
+      nzTitle="找不到数据"
+      nzSubTitle="暂无数据，请添加数据"
+    >
+      <div nz-result-extra>
+        <button nz-button nzType="primary" (click)="additem()">添加数据</button>
+        <nz-upload *ngIf="contex.putin" [(nzFileList)]="fileList" [nzLimit]='1' [nzMultiple]="true" [nzBeforeUpload]="beforeUpload">
+          <button nz-button nzType="default" nzDanger>
+            <i nz-icon nzType="upload"></i>
+            <span>导入表格</span>
+          </button>
+        </nz-upload>
+      </div>
+    </nz-result>
+  </ng-template>
+  <thead>
+    <tr>
+      <th
+        nzWidth="60px"
+        [nzChecked]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+        *ngIf="ischeck"
+      ></th>
+      <ng-container *ngFor="let data of tabletitle">
+        <ng-container [ngSwitch]="data.type">
+          <!-- 常规 -->
+          <th
+            nzBreakWord
+            nzAlign="center"
+            *ngSwitchCase="1"
+            [nzWidth]="data.width"
+          >
+            {{ data.value }}
+          </th>
+          <!-- 排序 -->
+          <th
+            [nzShowSort]="nzShowSort"
+            [(nzSortOrder)]="data.nzSortOrder"
+            [nzSortDirections]="SortDirections"
+            nzAlign="center"
+            nzColumnKey="name"
+            *ngSwitchCase="2"
+            (click)="sortchange(data.value)"
+          >
+            {{ data.value }}
+          </th>
+        </ng-container>
+      </ng-container>
+    </tr>
+  </thead>
+  <tbody cdkDropList (cdkDropListDropped)="drop($event)">
+      <tr
+        (contextmenu)="contextMenu($event, menu, data)"
+        (dblclick)="dbclick(data[0].value)"
+        *ngFor="let data of tabledata" 
+        cdkDrag
+        [cdkDragDisabled]='!cdkDro'
+      >
+        <!-- 多选 -->
+        <td
+          [nzChecked]="setOfCheckedId.has(data[0].value)"
+          (nzCheckedChange)="onItemChecked(data[0].value, $event)"
+          *ngIf="ischeck"
+        ></td>
+        <ng-container *ngFor="let datalist of data">
+          <ng-container [ngSwitch]="datalist.type">
+            <!-- 常规 -->
+            <td nzAlign="center" [hidden]="datalist.hidden" *ngSwitchCase="0">
+              {{ datalist.value }}
+            </td>
+            <!-- 时间 -->
+            <td nzAlign="center" [hidden]="datalist.hidden" *ngSwitchCase="1">
+              {{ datalist.value | date: "yyyy-MM-dd" }}
+            </td>
+            <!-- 状态1 -->
+            <td  nzAlign="center" [hidden]="datalist.hidden" *ngSwitchCase="2">
+              <ng-container [ngSwitch]="datalist.value">
+                <nz-tag nzColor="error" *ngSwitchCase="1">
+                  <i nz-icon nzType="clock-circle"></i>
+                  <span>{{ tag[0] }}</span>
+                </nz-tag>
+                <nz-tag nzColor="processing" *ngSwitchCase="2">
+                  <i nz-icon nzType="send"></i>
+                  <span>{{ tag[1] }}</span>
+                </nz-tag>
+                <nz-tag nzColor="success" *ngSwitchCase="3">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag[2] }}</span>
+                </nz-tag>
+                <nz-tag [nzColor]="'magenta'" *ngSwitchCase="4">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag[3] }}</span>
+                </nz-tag>
+                <nz-tag [nzColor]="'lime'" *ngSwitchCase="5">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag[4] }}</span>
+                </nz-tag>
+                <nz-tag [nzColor]="'purple'" *ngSwitchCase="6">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag[5] }}</span>
+                </nz-tag>
+              </ng-container>
+            </td>
+            <!-- 状态2 -->
+            <td nzAlign="center" [hidden]="datalist.hidden" *ngSwitchCase="3">
+              <ng-container [ngSwitch]="datalist.value">
+                <nz-tag nzColor="error" *ngSwitchCase="1">
+                  <i nz-icon nzType="clock-circle"></i>
+                  <span>{{ tag2[0] }}</span>
+                </nz-tag>
+                <nz-tag nzColor="processing" *ngSwitchCase="2">
+                  <i nz-icon nzType="send"></i>
+                  <span>{{ tag2[1] }}</span>
+                </nz-tag>
+                <nz-tag nzColor="success" *ngSwitchCase="3">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag2[2] }}</span>
+                </nz-tag>
+                <nz-tag [nzColor]="'magenta'" *ngSwitchCase="4">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag2[3] }}</span>
+                </nz-tag>
+                <nz-tag [nzColor]="'lime'" *ngSwitchCase="5">
+                  <i nz-icon nzType="check-circle"></i>
+                  <span>{{ tag2[4] }}</span>
+                </nz-tag>
+              </ng-container>
+            </td>
+            <!-- 状态2 -->
+            <td nzAlign="center" [hidden]="datalist.hidden" *ngSwitchCase="4">
+              <ng-container [ngSwitch]="datalist.value">
+                <nz-tag nzColor="error" *ngSwitchCase="1">
+                  <i nz-icon nzType="clock-circle"></i>
+                  <span>{{ tag3[0] }}</span>
+                </nz-tag>
+                <nz-tag nzColor="processing" *ngSwitchCase="2">
+                  <i nz-icon nzType="send"></i>
+                  <span>{{ tag3[1] }}</span>
+                </nz-tag>
+              </ng-container>
+            </td>
+            <!-- 图片 -->
+            <td nzAlign="center" [hidden]="datalist.hidden" *ngSwitchCase="5">
+              <nz-badge
+                [nzCount]="datalist.count"
+                [nzStyle]="{ backgroundColor: '#52c41a' }"
+              >
+                <img
+                  nz-image
+                  width="60px"
+                  height="60px"
+                  [(nzSrc)]="datalist.value"
+                  [nzFallback]="fallback"
+                  [nzDisablePreview]="true"
+                  (click)="upimg(data[0].value)"
+                  *ngIf="
+                    datalist.value != null &&
+                    datalist.value != '' &&
+                    datalist.value != undefined
+                  "
+                />
+                <img
+                  nz-image
+                  width="60px"
+                  height="60px"
+                  [nzFallback]="fallback"
+                  [nzDisablePreview]="true"
+                  (click)="upimg(data[0].value)"
+                  *ngIf="
+                    datalist.value === null ||
+                    datalist.value === '' ||
+                    datalist.value === undefined
+                  "
+                />
+              </nz-badge>
+            </td>
+          </ng-container>
+        </ng-container>
+      </tr>
+  </tbody>
+</nz-table>
+
+<nz-dropdown-menu #menu>
+  <ul nz-menu>
+    <li nz-menu-item (click)="edit()" *ngIf="contex.edit" >编辑</li>
+    <li nz-menu-item (click)="additem()" *ngIf="contex.add">添加</li>
+    <li nz-menu-item (click)="addorder()" *ngIf="contex.order">添加新订单</li>
+    <li nz-menu-item (click)="alldel()" *ngIf="contex.alldel" >批量删除</li>
+    <li nz-menu-item (click)="del()" *ngIf="contex.del">删除</li>
+    <li nz-menu-item *ngIf="contex.putin">导入表格</li>
+    <li nz-menu-item *ngIf="contex.putin" (click)="emptyexcel()">下载模板</li>
+    <li nz-menu-item (click)="printpage()">打印当前表格</li>
+    <li nz-menu-item>导出当前表格</li>
+  </ul>
+</nz-dropdown-menu>
