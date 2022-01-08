@@ -1,0 +1,331 @@
+<van-tabbar
+ active="{{ tagnum }}"
+ wx:if="{{issupplier}}"
+ active-color="#ee0a24"
+ bind:change="tagchange"
+>
+	<van-tabbar-item icon="search">报销单</van-tabbar-item>
+	<van-tabbar-item icon="home-o">采购单</van-tabbar-item>
+</van-tabbar>
+
+<van-button
+ class="addnewsupplier"
+ type="warning"
+ wx:if='{{!issupplier}}'
+ round
+ bindtap="addexpenseurl"
+>添加报销单
+</van-button>
+
+<!-- 提示节点 -->
+<van-toast id="van-toast" />
+
+<!-- 多选 -->
+<van-transition show="{{ allselect }}" name="slide-up">
+	<van-tabbar z-index='99999' bind:change="getall">
+		<van-tabbar-item>
+			<view style="font-size:30rpx">
+				{{textall}}
+			</view>
+		</van-tabbar-item>
+		<van-tabbar-item>
+			<view style="font-size:30rpx">
+				已选择({{result.length}})
+			</view>
+		</van-tabbar-item>
+		<van-tabbar-item>
+			<view style="color:#ee0a24;font-size:30rpx">
+				提交报销
+			</view>
+		</van-tabbar-item>
+	</van-tabbar>
+</van-transition>
+
+<view wx:if="{{isshop}}">
+	<!-- 搜索框 -->
+	<van-sticky>
+		<van-search
+		 model:value="{{ searchvalue }}"
+		 placeholder="请输入采购名称"
+		 shape='round'
+		 clearable
+		 show-action
+		 action-text="取消"
+		 bind:change="searchchange"
+		/>
+	</van-sticky>
+
+	<!-- 列表 -->
+	<van-tabs
+	 model:active="{{active}}"
+	 bind:change="onChange"
+	 animated
+	 swipeable
+	 sticky
+	 offset-top="{{ 50 }}"
+	>
+		<van-tab
+		 wx:for="{{tag}}"
+		 title="{{item.value}}"
+		 wx:key="item"
+		 info="{{item.count}}"
+		>
+			<scroll-view
+			 style="height:{{height}}px"
+			 scroll-y="true"
+			 enable-back-to-top="true"
+			 bindscrolltolower="getdown"
+			 refresher-enabled="{{true}}"
+			 refresher-triggered="{{refresher}}"
+			 bindrefresherrefresh="gettop"
+			>
+				<block wx:if="{{item.value==='未报账'}}">
+					<block wx:if="{{shopdata.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:if="{{shopdata.length>0}}">
+						<block wx:for="{{shopdata}}" wx:for-item='value' wx:key="id">
+							<van-checkbox-group value="{{ result }}" bind:change="selectChange">
+								<van-cell-group>
+									<template is="shoplst2" data="{{...value,selectshop:selectshop}}" />
+								</van-cell-group>
+							</van-checkbox-group>
+						</block>
+						<template is="loading-tel" data="{{load:loading}}" />
+					</block>
+				</block>
+				<block wx:elif="{{item.value==='已报账'}}">
+					<block wx:if="{{shopdata1.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:if="{{shopdata1.length>0}}">
+						<block wx:for="{{shopdata1}}" wx:for-item='value' wx:key="name">
+							<template is="shoplst" data="{{...value,selectshop:selectshop}}" />
+						</block>
+						<template is="loading-tel" data="{{load:loading1}}" />
+					</block>
+
+				</block>
+			</scroll-view>
+		</van-tab>
+	</van-tabs>
+</view>
+
+<!-- 列表模板 -->
+<template name='shoplst'>
+	<view class="box" />
+	<van-cell
+	 use-label-slot
+	 custom-class="cu-cell"
+	 data-index="{{id}}"
+	 bindtap="gotourl"
+	>
+		<view slot="icon">
+			<van-icon
+			 custom-class="cu-icon"
+			 name="cart-o"
+			 color="#ee0a24"
+			 size="large"
+			/>
+		</view>
+		<view slot="title">
+			<view>
+				<text space="nbsp"> 名称:{{name}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 规格:{{size}}</text>
+				<text space="nbsp">    数量:{{num}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 备注:<text class="remark">{{remark}}</text>
+				</text>
+			</view>
+			<view>
+				<text space="nbsp"> 关联订单:<text>{{relate}}</text>
+				</text>
+			</view>
+		</view>
+		<view slot="label">
+			<view>
+				<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+			</view>
+			<view>
+				<text space="nbsp">下单人:{{people}}</text>
+				<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+				<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+			</view>
+		</view>
+	</van-cell>
+</template>
+
+<!-- 列表模板2 -->
+<template name='shoplst2'>
+	<view class="box" />
+	<van-cell
+	 use-label-slot
+	 custom-class="cu-cell"
+	 bind:click="toggle"
+	 data-index="{{ id }}"
+	 clickable
+	 value-class="value-class"
+	 bindlongpress='changeselect'
+	 data-name='tap'
+	 bindtap="gotourl"
+	>
+		<view slot="icon">
+			<van-icon
+			 custom-class="cu-icon"
+			 name="cart-o"
+			 color="#ee0a24"
+			 size="large"
+			/>
+		</view>
+		<view slot="title">
+			<view>
+				<text space="nbsp"> 名称:{{name}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 规格:{{size}}</text>
+				<text space="nbsp">    数量:{{num}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 备注:<text class="remark">{{remark}}</text>
+				</text>
+			</view>
+			<view>
+				<text space="nbsp"> 关联订单:<text>{{relate}}</text>
+				</text>
+			</view>
+		</view>
+		<view slot="label">
+			<view>
+				<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+			</view>
+			<view>
+				<text space="nbsp">下单人:{{people}}</text>
+				<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+				<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+			</view>
+		</view>
+		<van-transition show="{{ selectshop }}" custom-class="block" name='fade-right'>
+			<van-checkbox
+			 catch:tap="noop"
+			 checked-color="#ee0a24"
+			 class="checkboxes-{{ id }}"
+			 name="{{ id }}"
+			/>
+		</van-transition>
+
+	</van-cell>
+</template>
+
+<!-- 加载模板 -->
+<template name='loading-tel'>
+	<van-loading
+	 wx:if="{{load}}"
+	 size="24px"
+	 custom-class='loading'
+	 vertical
+	>加载中...
+	</van-loading>
+	<view class="no-more" wx:if="{{!load}}">
+		暂无数据...
+	</view>
+</template>
+
+<view wx:if="{{isexpense}}">
+	<!-- 列表 -->
+	<van-tabs
+	 model:active="{{expense_active}}"
+	 bind:change="expense_onChange"
+	 animated
+	 swipeable
+	 sticky
+	>
+		<van-tab
+		 wx:for="{{expense_tag}}"
+		 title="{{item.value}}"
+		 wx:key="item"
+		 info="{{item.count}}"
+		>
+			<scroll-view
+			 style="height:{{height}}px"
+			 scroll-y="true"
+			 enable-back-to-top="true"
+			 bindscrolltolower="expense_getdown"
+			 refresher-enabled="{{true}}"
+			 refresher-triggered="{{refresher}}"
+			 bindrefresherrefresh="expense_gettop"
+			>
+				<block wx:if="{{item.value==='审核中'}}">
+					<block wx:if="{{expense_data.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:if="{{expense_data.length>0}}">
+						<block wx:for="{{expense_data}}" wx:for-item='value' wx:key="id">
+							<template is="expense_lst" data="{{...value}}" />
+						</block>
+						<template is="loading-tel" data="{{load:expense_loading}}" />
+					</block>
+				</block>
+				<block wx:elif="{{item.value==='已报销'}}">
+					<block wx:if="{{expense_data1.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:if="{{expense_data1.length>0}}">
+						<block wx:for="{{expense_data1}}" wx:for-item='value' wx:key="name">
+							<template is="expense_lst" data="{{...value}}" />
+						</block>
+						<template is="loading-tel" data="{{load:expense_loading1}}" />
+					</block>
+
+				</block>
+			</scroll-view>
+		</van-tab>
+	</van-tabs>
+</view>
+
+<!-- 列表模板 -->
+<template name='expense_lst'>
+	<view class="box" />
+	<van-cell-group bindtap="gotoexpenseurl" data-index="{{id}}">
+		<van-cell use-label-slot custom-class="cu-cell" data-index="{{id}}">
+			<view slot="title">
+				<view>
+					<text space="nbsp">{{supplier_name}}
+					</text>
+				</view>
+			</view>
+			<view>
+				<text space="nbsp">{{proof_data}}-{{proof_num}}</text>
+			</view>
+		</van-cell>
+		<van-cell use-label-slot center>
+			<view slot="title">
+				<text space="nbsp">{{result}}
+				</text>
+			</view>
+			<view>
+				<text style="color:red" space="nbsp">{{num}}元</text>
+			</view>
+			<view slot="label">
+				<view>
+					<text space="nbsp">关联订单:{{order_name}}</text>
+				</view>
+			</view>
+		</van-cell>
+		<van-cell use-label-slot custom-class="cu-cell" data-index="{{id}}">
+			<view slot="label">
+				<view>
+					<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+				</view>
+				<view>
+					<text space="nbsp">申请人:{{name}}</text>
+					<!-- <text space="nbsp" class="mg-r">审核1:{{passpeople}}</text>
+					<text space="nbsp" class="mg-l">审核2:{{getpeople}}</text> -->
+				</view>
+			</view>
+		</van-cell>
+	</van-cell-group>
+</template>
+

@@ -1,0 +1,34 @@
+<block wx:for="{{peoplelst}}" wx:for-item='value' wx:key="num">
+	<van-cell
+	 value="{{value.iphone}}"
+	 size="large"
+	 center
+	 bindtap="callPhone"
+	 data-num="{{value.iphone}}"
+	>
+		<view slot="title">
+			<block wx:if="{{value.class==1}}">
+				<van-tag type="primary" plain>板式部门</van-tag>
+			</block>
+			<block wx:if="{{value.class==2}}">
+				<van-tag type="success" plain>实木部门</van-tag>
+			</block>
+			<block wx:if="{{value.class==3}}">
+				<van-tag type="warning" plain>油漆部门</van-tag>
+			</block>
+			<block wx:if="{{value.class==4}}">
+				<van-tag type="danger" plain>沙发部门</van-tag>
+			</block>
+			<block wx:if="{{value.class==5}}">
+				<van-tag color="#f2826a" plain>包装部门</van-tag>
+			</block>
+			<block wx:if="{{value.class==6}}">
+				<van-tag color="#7232dd" plain>办公室部门</van-tag>
+			</block>
+		</view>
+		<view slot="icon">
+			<view class="van-cell-text">{{value.name}}</view>
+		</view>
+	</van-cell>
+</block>
+

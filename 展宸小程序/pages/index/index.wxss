@@ -1,0 +1,40 @@
+.van-checkbox{
+  width: 100%;
+}
+.van-swipe-cell__right {
+  display: inline-block;
+  width: 65px;
+  height: 44px;
+  font-size: 15px;
+  line-height: 44px;
+  color: #fff;
+  text-align: center;
+  background-color: #f44;
+}
+
+.cu-cell{
+  margin-top: 20rpx;
+}
+.cu-cell .cu-icon{
+  margin-top: 10rpx;
+}
+
+/* page{
+margin-bottom: 170rpx;
+} */
+
+.loading{
+  margin-top: 20rpx;
+  margin-bottom: 200rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.no-more{
+  margin-top: 20rpx;
+  margin-bottom: 200rpx;
+  text-align: center;
+  color:darkgray;
+}

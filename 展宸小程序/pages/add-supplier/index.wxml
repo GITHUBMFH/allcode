@@ -1,0 +1,48 @@
+<view class="box" />
+<van-field
+ model:value="{{ name }}"
+ label="供应商名称:"
+ placeholder="请输入供应商名称"
+ size='large'
+ center
+ bind:change="checkname"
+ right-icon="shop-o"
+ input-align='right'
+ required
+ error-message-align='right'
+/>
+<van-field
+ model:value="{{ address }}"
+ label="地址:"
+ placeholder="请输入供应商地址"
+ type='number'
+ size='large'
+ center
+ maxlength="11"
+ bind:change="checkphone"
+ right-icon='free-postage'
+ input-align='right'
+ error-message-align='right'
+/>
+
+<van-field
+ model:value="{{ contact }}"
+ label="联系方式:"
+ placeholder="请输入供应商联系方式"
+ size='large'
+ center
+ right-icon="phone-o"
+ bindtap="toggleAction"
+ input-align='right'
+ error-message-align='right'
+/>
+
+<van-button
+ round
+ type="danger"
+ class="wbtn"
+ block
+ bind:click="submit"
+>提交
+</van-button>
+

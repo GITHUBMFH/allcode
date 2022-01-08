@@ -1,0 +1,108 @@
+<view class="box" />
+<van-field
+ model:value="{{ name }}"
+ label="真实姓名:"
+ placeholder="请输入用户名"
+ size='large'
+ error-message="{{namemsg}}"
+ maxlength="4"
+ center
+ bind:change="checkname"
+ right-icon="friends-o"
+ input-align='right'
+ required
+ error-message-align='right'
+/>
+<van-field
+ model:value="{{ phone }}"
+ label="手机号:"
+ placeholder="请输入手机号"
+ type='number'
+ size='large'
+ center
+ maxlength="11"
+ bind:change="checkphone"
+ error-message="{{phonemsg}}"
+ right-icon="phone-o"
+ input-align='right'
+ required
+ error-message-align='right'
+/>
+<van-field
+ model:value="{{ sclass }}"
+ label="岗位:"
+ placeholder="请选择岗位"
+ size='large'
+ error-message="{{sclassmsg}}"
+ center
+ right-icon='flag-o'
+ readonly
+ bindtap="toggleAction"
+ input-align='right'
+ required
+ error-message-align='right'
+/>
+
+<view class="box" />
+<van-field
+ model:value="{{ idcard }}"
+ label="身份证:"
+ placeholder="请输入身份证"
+ type='idcard'
+ size='large'
+ center
+ right-icon="idcard"
+ input-align='right'
+/>
+
+<van-field
+ model:value="{{ bank }}"
+ label="银行名称:"
+ placeholder="请输入银行名称,如农业银行"
+ size='large'
+ center
+ right-icon="edit"
+ input-align='right'
+/>
+
+<van-field
+ model:value="{{ bank_num }}"
+ label="银行卡号:"
+ placeholder="请输入银行卡号"
+ type="number"
+ size='large'
+ center
+ right-icon="flag-o"
+ input-align='right'
+/>
+
+<van-field
+ model:value="{{ bank_name }}"
+ label="开户人:"
+ placeholder="请输入开户人姓名"
+ size='large'
+ center
+ right-icon="flag-o"
+ input-align='right'
+/>
+
+<van-button
+ round
+ type="danger"
+ class="wbtn"
+ block
+ bind:click="submit"
+>修改
+</van-button>
+
+<!-- 选择部门 -->
+<van-action-sheet
+ show="{{ show }}"
+ actions="{{ actions }}"
+ bind:close="toggleAction"
+ bind:select="onSelect"
+ cancel-text="取消"
+ description="选择部门"
+/>
+<van-notify id="van-notify" />
+

@@ -1,0 +1,44 @@
+/* pages/login/index.wxss */
+page{
+    background: #eef0f4;
+    font-size: 40rpx;
+}
+.box{
+    width: 100%;
+    /* height: 500rpx; */
+    background:#fff;
+    border-radius: 10rpx;
+    padding: 50rpx 0;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between; */
+}
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+  } 
+.title{
+    margin: 50rpx 0;
+}
+/* 设置按钮 */
+.wbtn{
+    margin-top: 50rpx;
+    width: 80%;
+    border-radius: 80rpx;
+}
+.van-button{
+    width: 100%;
+}
+
+.van-icon:before{
+    color:#ee0a24;
+}
+
+.van-cell__value {
+text-align: left;
+}

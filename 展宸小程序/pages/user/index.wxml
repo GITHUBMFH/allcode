@@ -1,0 +1,115 @@
+<van-notice-bar
+ color="#1989fa"
+ background="#ecf9ff"
+ left-icon="smile-o"
+ speed="40"
+ text="今天的不开心就止于此吧！明天依旧光芒万丈！加油！{{username}}"
+/>
+<van-cell
+ use-label-slot
+ title-width="400rpx"
+ custom-class="cu-cell"
+ is-link
+ class="head"
+ url="/pages/people/index"
+>
+	<view slot="title">
+		<view>
+			<text space="nbsp" style="font-weight:600;font-size:40rpx"> {{username}}</text>
+		</view>
+	</view>
+	<view slot="label">
+		<view>
+			<text space="nbsp" style="font-size:25rpx"> 岗位:{{class}}</text>
+		</view>
+		<view>
+			<text space="nbsp" style="font-size:25rpx"> 电话:{{iphone}}</text>
+		</view>
+		<view>
+			<text space="nbsp" style="font-size:25rpx"> 状态:最棒的！</text>
+		</view>
+	</view>
+	<view slot="icon">
+		<view class="imgbox">
+			<van-image width="80" height="80" src="{{userimg}}" />
+		</view>
+	</view>
+	<!-- 今天的不开心就止于此吧！明天依旧光芒万丈！加油！ -->
+</van-cell>
+
+<view class="box" />
+<van-cell-group>
+	<van-cell
+	 title="我的采购单"
+	 is-link
+	 size="large"
+	 url="/pages/purchase/index"
+	>
+		<view slot="icon" class="iconbox" style="color:#ee0a24">
+			<van-icon name="shopping-cart-o" />
+		</view>
+	</van-cell>
+	<van-cell
+	 title="我的报销单"
+	 is-link
+	 size="large"
+	 url="/pages/claim/index"
+	>
+		<view slot="icon" class="iconbox" style="color:#07c160">
+			<van-icon name="gold-coin-o" />
+		</view>
+	</van-cell>
+</van-cell-group>
+
+<view class="box" />
+<van-cell-group>
+	<van-cell title="材料价格查询" is-link size="large">
+		<view slot="icon" class="iconbox" style="color:#1989fa">
+			<van-icon name="certificate" />
+		</view>
+	</van-cell>
+	<van-cell
+	 title="供应商列表"
+	 is-link
+	 size="large"
+	 url="/pages/supplier/index"
+	>
+		<view slot="icon" class="iconbox" style="color:#1989fa">
+			<van-icon name="orders-o" />
+		</view>
+	</van-cell>
+</van-cell-group>
+
+<view class="box" />
+<van-cell-group>
+	<van-cell
+	 title="公司开票资料"
+	 is-link
+	 size="large"
+	 url="/pages/ticket/index"
+	>
+		<view slot="icon" class="iconbox" style="color:rgb(114, 50, 221)">
+			<van-icon name="desktop-o" />
+		</view>
+	</van-cell>
+	<van-cell
+	 title="公司通讯录"
+	 is-link
+	 size="large"
+	 url="/pages/contacts/index"
+	>
+		<view slot="icon" class="iconbox" style="color:#ff976a">
+			<van-icon name="contact" />
+		</view>
+	</van-cell>
+</van-cell-group>
+
+<view class="box" />
+<van-cell-group>
+	<van-cell title="产值统计" is-link size="large">
+		<view slot="icon" class="iconbox" style="color:#ee0a24">
+			<van-icon name="discount" />
+		</view>
+	</van-cell>
+</van-cell-group>
+

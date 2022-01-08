@@ -1,0 +1,260 @@
+<view class="box" />
+<van-cell-group border="{{false}}">
+	<van-cell use-label-slot>
+		<view slot="label">
+			<view>
+				<van-steps steps="{{steps }}" active="{{state-1 }}" />
+			</view>
+			<view>
+				<text space="nbsp">下单人:{{people}}</text>
+				<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+				<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+			</view>
+		</view>
+	</van-cell>
+</van-cell-group>
+
+<view class="box" />
+<van-cell-group>
+	<van-field
+	 model:value="{{ name }}"
+	 label="名称:"
+	 placeholder="请输入采购物品"
+	 clearable
+	 center
+	>
+		<view class="require" wx:if="{{!name}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{size }}"
+	 label="规格:"
+	 placeholder="请输入规格"
+	 clearable
+	 center
+	>
+		<view class="require" wx:if="{{!size}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{a_num }}"
+	 label="数量:"
+	 placeholder="请输入数量"
+	 clearable
+	 center
+	 type='number'
+	>
+		<view class="require" wx:if="{{!a_num}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{unit }}"
+	 label="单位:"
+	 placeholder="请输入单位"
+	 clearable
+	 center
+	>
+		<view class="require" wx:if="{{!unit}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{remark }}"
+	 label="备注:"
+	 placeholder="请输入备注"
+	 type='textarea'
+	 clearable
+	 center
+	 autosize
+	/>
+</van-cell-group>
+
+<view class="box" />
+<van-cell-group>
+	<van-field
+	 model:value="{{type }}"
+	 label="类型:"
+	 placeholder="请选择采购类型"
+	 center
+	 bindtap="showselect"
+	 readonly
+	 is-link
+	 id='showtype'
+	>
+		<view class="require" wx:if="{{!type}}" slot="right-icon">*必填</view>
+	</van-field>
+	<van-field
+	 model:value="{{relate}}"
+	 label="关联订单:"
+	 placeholder="请选择关联订单"
+	 center
+	 type='textarea'
+	 readonly
+	 bindtap="showselect"
+	 id='showorder'
+	 is-link
+	>
+		<view class="require" wx:if="{{!relate}}" slot="right-icon">*必填</view>
+	</van-field>
+</van-cell-group>
+
+<!-- 收货信息 -->
+<view class="box" wx:if="{{!nohasid}}" />
+<van-cell-group wx:if="{{!nohasid}}">
+	<van-field
+	 model:value="{{act_num }}"
+	 label="收货数量:"
+	 placeholder="请输入收货数量"
+	 clearable
+	 center
+	 type='number'
+	>
+		<view class="require" wx:if="{{!act_num}}" slot="right-icon">*收货必填</view>
+	</van-field>
+	<van-field
+	 model:value="{{act_unit}}"
+	 label="单位:"
+	 placeholder="请输入单位"
+	 clearable
+	 center
+	>
+		<view class="require" wx:if="{{!act_unit}}" slot="right-icon">*收货必填</view>
+	</van-field>
+</van-cell-group>
+
+<view class="box" wx:if="{{!nohasid}}" />
+<view class="getsame" wx:if="{{!nohasid}}">
+	<van-button
+	 type="warning"
+	 bind:click='setsame'
+	 block
+	 round
+	>收货数量和采购单一致
+	</van-button>
+</view>
+
+<!-- 上传图片 -->
+<view class="box" />
+<van-cell-group border="{{false}}">
+	<van-cell use-label-slot title="采购附件:">
+		<view class="" slot='label'>
+			<van-uploader
+			 file-list="{{ fileList }}"
+			 deletable="{{ true }}"
+			 multiple="{{ true }} "
+			 bind:after-read="afterRead"
+			 bind:delete="delimg"
+			/>
+		</view>
+	</van-cell>
+</van-cell-group>
+
+<!-- 上传采购图片 -->
+<view class="box" wx:if="{{!nohasid}}" />
+<van-cell-group border="{{false}}" wx:if="{{!nohasid}}">
+	<van-cell use-label-slot title="采购物品图片:">
+		<view class="" slot='label'>
+			<van-uploader
+			 file-list="{{ shopimg }}"
+			 deletable="{{ true }}"
+			 multiple="{{ true }} "
+			 bind:after-read="afterReadshop"
+			 bind:delete="delimgshop"
+			/>
+		</view>
+	</van-cell>
+</van-cell-group>
+<view class="box" />
+<view class="box" />
+<view class="box" />
+<view class="box" />
+
+<!-- 点击按钮 -->
+<van-tabbar active="{{ active }}" bind:change="changedata">
+	<van-tabbar-item wx:if="{{nohasid}}">
+		<van-button
+		 type="primary"
+		 block
+		 round
+		 color="#ee0a24"
+		 style="width:500rpx;display: block;margin-top:20px"
+		>提交
+		</van-button>
+	</van-tabbar-item>
+	<van-tabbar-item wx:if="{{hasid}}">
+		<van-button
+		 type="primary"
+		 block
+		 round
+		 color="#ee0a24"
+		 style="width:500rpx;display: block;margin-top:20px"
+		>保存
+		</van-button>
+	</van-tabbar-item>
+	<van-tabbar-item wx:if="{{isget}}">
+		<van-button
+		 type="primary"
+		 block
+		 round
+		 color="#ee0a24"
+		 style="width:500rpx;display: block;margin-top:20px"
+		>确认收货
+		</van-button>
+	</van-tabbar-item>
+</van-tabbar>
+
+<!-- 选择类型 -->
+<van-action-sheet
+ show="{{ selecttypeshow }}"
+ actions="{{ actions }}"
+ bind:close="onClose"
+ bind:select="onSelect"
+ close-on-click-overlay="{{true}}"
+ overlay="{{true}}"
+ title="请选择采购类型"
+/>
+
+<!-- 选择关联订单 -->
+<van-action-sheet
+ show="{{ selectordershow }}"
+ bind:close="onClose"
+ overlay="{{true}}"
+ close-on-click-overlay="{{true}}"
+ overlay="{{true}}"
+ title="请选择关联订单"
+ cancel-text="确定"
+ bind:cancel="getordername"
+>
+	<van-picker
+	 class="labelPicker"
+	 model:columns="{{ columns }}"
+	 bind:change="selectorder"
+	 visible-item-count="6"
+	/>
+</van-action-sheet>
+
+<van-toast id="van-toast" />
+
+<!-- 签名 -->
+<van-transition show="{{ signshow }}" name="slide-up">
+	<view class="signName">
+		<canvas
+		 class="canvas"
+		 id="canvas"
+		 canvas-id="canvas"
+		 disable-scroll="true"
+		 bindtouchstart="canvasStart"
+		 bindtouchmove="canvasMove"
+		 bindtouchend="canvasEnd"
+		 touchcancel="canvasEnd"
+		 binderror="canvasIdErrorCallback"
+		/>
+		<view class="CList flex">
+			<van-tabbar active="{{ 2 }}" bind:change="singname">
+				<van-tabbar-item icon="arrow-left">退出</van-tabbar-item>
+				<van-tabbar-item icon="delete-o">清除签名</van-tabbar-item>
+				<van-tabbar-item icon="back-top">上传签名</van-tabbar-item>
+			</van-tabbar>
+		</view>
+	</view>
+</van-transition>
+

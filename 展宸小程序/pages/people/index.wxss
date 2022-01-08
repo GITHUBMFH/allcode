@@ -1,0 +1,7 @@
+.wbtn button{
+    margin-top: 400rpx !important;
+    width: 80%;
+}
+.box{
+    margin-top: 40rpx;
+}

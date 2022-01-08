@@ -1,0 +1,244 @@
+<van-tabbar active="{{ active }}" bind:change="onChange" active-color="#ee0a24">
+	<van-tabbar-item icon="home-o">生产单</van-tabbar-item>
+	<van-tabbar-item icon="search" info="{{notshop}}">采购单</van-tabbar-item>
+	<van-tabbar-item icon="friends-o">料单</van-tabbar-item>
+</van-tabbar>
+
+<view wx:if="{{isproduct}}">
+	<scroll-view
+	 style="height:{{height}}px"
+	 scroll-y="true"
+	 enable-back-to-top="true"
+	 bindscrolltolower="getdown"
+	 refresher-enabled="{{true}}"
+	 refresher-triggered="{{refresher}}"
+	 bindrefresherrefresh="gettop"
+	>
+		<van-cell-group>
+			<block wx:for="{{productdata}}" wx:for-item='value' wx:key="id">
+				<template is="orderlst" data="{{...value,imgulr:imgulr}}" />
+			</block>
+		</van-cell-group>
+	</scroll-view>
+</view>
+
+<!-- 产品图片 -->
+<template name='orderlst'>
+	<van-cell use-label-slot title-width="400rpx" custom-class="cu-cell">
+		<view slot="title">
+			<view>
+				<text space="nbsp" style="font-weight:600"> 名称:{{name}}</text>
+			</view>
+			<view>
+				<text space="nbsp" style="font-weight:600"> 数量:{{num}}{{unit}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 尺寸:{{size}}</text>
+			</view>
+		</view>
+		<view slot="label">
+			<view>
+				<text space="nbsp"> 序号:{{order}}</text>
+				<text space="nbsp">      编号:{{m_num}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 楼层区域:{{area}}</text>
+			</view>
+			<view class="textover">
+				备注：{{remark}}
+			</view>
+		</view>
+		<view slot="icon">
+			<view class="imgbox">
+				<van-tag type="danger" size="medium" round>{{pic.length}}
+				</van-tag>
+				<van-image
+				 width="80"
+				 height="80"
+				 lazy-load
+				 src="{{imgulr}}{{pic[0]}}"
+				 bindtap='showimg'
+				 data-imglst='{{pic}}'
+				/>
+			</view>
+
+		</view>
+		<view>
+			<block wx:for="{{tag}}" wx:for-item='value' wx:key="id">
+				<van-tag type="primary" size="medium">{{value}}
+				</van-tag>
+			</block>
+		</view>
+	</van-cell>
+</template>
+
+<!-- 轮播图 -->
+<view class="showimg" wx:if="{{imgshow}}" bindtap="hideimg">
+	<swiper
+	 indicator-dots="{{true}}"
+	 indicator-color="#1989fa"
+	 indicator-active-color="#ee0a24"
+	 catchtap
+	>
+		<block wx:for="{{imglst}}" wx:for-item='item' wx:key="url">
+			<swiper-item>
+				<image src="{{imgulr}}{{item}}" class="slide-image" />
+			</swiper-item>
+		</block>
+	</swiper>
+</view>
+
+<view wx:if="{{isshop}}">
+	<!-- 列表 -->
+	<van-tabs
+	 model:active="{{shopactive}}"
+	 animated
+	 swipeable
+	 sticky
+	>
+		<van-tab
+		 wx:for="{{tag}}"
+		 title="{{item.value}}"
+		 wx:key="item"
+		 info="{{item.count}}"
+		>
+			<scroll-view
+			 style="height:{{height}}px"
+			 scroll-y="true"
+			 enable-back-to-top="true"
+			 bindscrolltolower="getdown"
+			 refresher-enabled="{{true}}"
+			 refresher-triggered="{{refresher}}"
+			 bindrefresherrefresh="gettop"
+			>
+				<block wx:if="{{item.value==='全部'}}">
+					<block wx:if="{{shoplst.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='板材'}}">
+					<block wx:if="{{shoplst1.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst1}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='石'}}">
+					<block wx:if="{{shoplst2.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst2}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='玻璃'}}">
+					<block wx:if="{{shoplst3.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst3}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='五金'}}">
+					<block wx:if="{{shoplst4.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst4}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='配件'}}">
+					<block wx:if="{{shoplst5.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst5}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='油漆'}}">
+					<block wx:if="{{shoplst6.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst6}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='面料'}}">
+					<block wx:if="{{shoplst7.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst7}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='纸箱'}}">
+					<block wx:if="{{shoplst8.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst8}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+				<block wx:if="{{item.value==='其他'}}">
+					<block wx:if="{{shoplst9.length<1}}">
+						<van-empty description="暂无数据" />
+					</block>
+					<block wx:for="{{shoplst9}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+				</block>
+			</scroll-view>
+		</van-tab>
+	</van-tabs>
+
+</view>
+
+<!-- 列表模板 -->
+<template name='shoplst'>
+	<van-cell use-label-slot custom-class="cu-cell" url="/pages/goods/index?id={{id}}&isget=true">
+		<view slot="icon">
+			<van-icon
+			 custom-class="cu-icon"
+			 name="cart-o"
+			 color="#ee0a24"
+			 size="large"
+			/>
+		</view>
+		<view slot="title">
+			<view>
+				<text space="nbsp"> 名称:{{name}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 规格:{{size}}</text>
+				<text space="nbsp">    数量:{{num}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 备注:<text class="remark">{{remark}}</text>
+				</text>
+			</view>
+			<view>
+				<text space="nbsp"> 关联订单:<text>{{relate}}</text>
+				</text>
+			</view>
+		</view>
+		<view slot="label">
+			<view>
+				<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+			</view>
+			<view>
+				<text space="nbsp">下单人:{{people}}</text>
+				<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+				<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+			</view>
+		</view>
+	</van-cell>
+</template>
+
+<view wx:if="{{iscut}}">
+	<van-empty description="暂无数据" />
+</view>
+

@@ -1,0 +1,282 @@
+<!-- 签名 -->
+<van-transition show="{{ signshow }}" name="slide-up">
+	<view class="signName">
+		<canvas
+		 class="canvas"
+		 id="canvas"
+		 canvas-id="canvas"
+		 disable-scroll="true"
+		 bindtouchstart="canvasStart"
+		 bindtouchmove="canvasMove"
+		 bindtouchend="canvasEnd"
+		 touchcancel="canvasEnd"
+		 binderror="canvasIdErrorCallback"
+		/>
+		<view class="CList flex">
+			<van-tabbar active="{{ 2 }}" bind:change="singname">
+				<van-tabbar-item icon="arrow-left">退出</van-tabbar-item>
+				<van-tabbar-item icon="delete-o">清除签名</van-tabbar-item>
+				<van-tabbar-item icon="back-top">上传签名</van-tabbar-item>
+			</van-tabbar>
+		</view>
+	</view>
+</van-transition>
+
+<!-- 搜索框 -->
+<van-sticky>
+	<van-search
+	 model:value="{{ searchvalue }}"
+	 placeholder="请输入采购名称"
+	 shape='round'
+	 clearable
+	 show-action
+	 action-text="取消"
+	 bind:change="searchchange"
+	/>
+</van-sticky>
+
+<!-- 提示节点 -->
+<van-toast id="van-toast" />
+
+<!-- 多选 -->
+<van-transition show="{{ allselect }}" name="slide-up">
+	<van-tabbar z-index='99999' bind:change="getall">
+		<van-tabbar-item>
+			<view style="font-size:30rpx">
+				{{textall}}
+			</view>
+		</van-tabbar-item>
+		<van-tabbar-item>
+			<view style="font-size:30rpx">
+				已选择({{result.length}})
+			</view>
+		</van-tabbar-item>
+		<van-tabbar-item>
+			<view wx:if="{{active===1}}" style="color:#ee0a24;font-size:30rpx">
+				同意采购
+			</view>
+			<view wx:if="{{active===2}}" style="color:#ee0a24;font-size:30rpx">
+				标记已采购
+			</view>
+			<view wx:if="{{active===3}}" style="color:#ee0a24;font-size:30rpx">
+				撤销已采购
+			</view>
+		</van-tabbar-item>
+	</van-tabbar>
+</van-transition>
+
+<!-- 列表 -->
+<van-tabs
+ model:active="{{active}}"
+ bind:change="onChange"
+ animated
+ swipeable
+ sticky
+ offset-top="{{ 50 }}"
+>
+	<van-tab
+	 wx:for="{{tag}}"
+	 title="{{item.value}}"
+	 wx:key="item"
+	 info="{{item.count}}"
+	>
+		<scroll-view
+		 style="height:{{height}}px"
+		 scroll-y="true"
+		 enable-back-to-top="true"
+		 bindscrolltolower="getdown"
+		 refresher-enabled="{{true}}"
+		 refresher-triggered="{{refresher}}"
+		 bindrefresherrefresh="gettop"
+		>
+			<block wx:if="{{item.value==='全部'}}">
+				<block wx:if="{{shopdata.length<1}}">
+					<van-empty description="暂无数据" />
+				</block>
+				<block wx:if="{{shopdata.length>0}}">
+					<block wx:for="{{shopdata}}" wx:for-item='value' wx:key="id">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+					<template is="loading-tel" data="{{load:loading}}" />
+				</block>
+			</block>
+			<block wx:elif="{{item.value==='审核'}}">
+				<block wx:if="{{shopdata1.length<1}}">
+					<van-empty description="暂无数据" />
+				</block>
+				<block wx:if="{{shopdata1.length>0}}">
+					<block wx:for="{{shopdata1}}" wx:for-item='value' wx:key="name">
+						<van-checkbox-group value="{{ result }}" bind:change="selectChange">
+							<van-cell-group>
+								<template is="shoplst2" data="{{...value,selectshop:selectshop}}" />
+							</van-cell-group>
+						</van-checkbox-group>
+					</block>
+					<template is="loading-tel" data="{{load:loading1}}" />
+				</block>
+			</block>
+			<block wx:elif="{{item.value==='待采购'}}">
+				<block wx:if="{{shopdata2.length<1}}">
+					<van-empty description="暂无数据" />
+				</block>
+				<block wx:if="{{shopdata2.length>0}}">
+					<block wx:for="{{shopdata2}}" wx:for-item='value' wx:key="num">
+						<van-checkbox-group value="{{ result }}" bind:change="selectChange">
+							<van-cell-group>
+								<template is="shoplst2" data="{{...value,selectshop:selectshop}}" />
+							</van-cell-group>
+						</van-checkbox-group>
+					</block>
+					<template is="loading-tel" data="{{load:loading2}}" />
+				</block>
+			</block>
+			<block wx:elif="{{item.value==='已采购'}}">
+				<block wx:if="{{shopdata3.length<1}}">
+					<van-empty description="暂无数据" />
+				</block>
+				<block wx:if="{{shopdata3.length>0}}">
+					<block wx:for="{{shopdata3}}" wx:for-item='value' wx:key="data">
+						<van-checkbox-group value="{{ result }}" bind:change="selectChange">
+							<van-cell-group>
+								<template is="shoplst2" data="{{...value,selectshop:selectshop}}" />
+							</van-cell-group>
+						</van-checkbox-group>
+					</block>
+					<template is="loading-tel" data="{{load:loading3}}" />
+				</block>
+			</block>
+			<block wx:elif="{{item.value==='已入库'}}">
+				<block wx:if="{{shopdata4.length<1}}">
+					<van-empty description="暂无数据" />
+				</block>
+				<block wx:if="{{shopdata4.length>0}}">
+					<block wx:for="{{shopdata4}}" wx:for-item='value' wx:key="data">
+						<template is="shoplst" data="{{...value}}" />
+					</block>
+					<template is="loading-tel" data="{{load:loading4}}" />
+				</block>
+			</block>
+		</scroll-view>
+	</van-tab>
+</van-tabs>
+
+<!-- 列表模板 -->
+<template name='shoplst'>
+	<van-cell
+	 use-label-slot
+	 custom-class="cu-cell"
+	 data-index="{{id}}"
+	 bindtap="gotourl"
+	>
+		<view slot="icon">
+			<van-icon
+			 custom-class="cu-icon"
+			 name="cart-o"
+			 color="#ee0a24"
+			 size="large"
+			/>
+		</view>
+		<view slot="title">
+			<view>
+				<text space="nbsp"> 名称:{{name}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 规格:{{size}}</text>
+				<text space="nbsp">    数量:{{num}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 备注:<text class="remark">{{remark}}</text>
+				</text>
+			</view>
+			<view>
+				<text space="nbsp"> 关联订单:<text>{{relate}}</text>
+				</text>
+			</view>
+		</view>
+		<view slot="label">
+			<view>
+				<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+			</view>
+			<view>
+				<text space="nbsp">下单人:{{people}}</text>
+				<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+				<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+			</view>
+		</view>
+	</van-cell>
+</template>
+
+<!-- 列表模板2 -->
+<template name='shoplst2'>
+	<van-cell
+	 use-label-slot
+	 custom-class="cu-cell"
+	 bind:click="toggle"
+	 data-index="{{ id }}"
+	 clickable
+	 value-class="value-class"
+	 bindlongpress='changeselect'
+	 data-name='tap'
+	 bindtap="gotourl"
+	>
+		<view slot="icon">
+			<van-icon
+			 custom-class="cu-icon"
+			 name="cart-o"
+			 color="#ee0a24"
+			 size="large"
+			/>
+		</view>
+		<view slot="title">
+			<view>
+				<text space="nbsp"> 名称:{{name}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 规格:{{size}}</text>
+				<text space="nbsp">    数量:{{num}}</text>
+			</view>
+			<view>
+				<text space="nbsp"> 备注:<text class="remark">{{remark}}</text>
+				</text>
+			</view>
+			<view>
+				<text space="nbsp"> 关联订单:<text>{{relate}}</text>
+				</text>
+			</view>
+		</view>
+		<view slot="label">
+			<view>
+				<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+			</view>
+			<view>
+				<text space="nbsp">下单人:{{people}}</text>
+				<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+				<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+			</view>
+		</view>
+		<van-transition show="{{ selectshop }}" custom-class="block" name='fade-right'>
+			<van-checkbox
+			 catch:tap="noop"
+			 checked-color="#ee0a24"
+			 class="checkboxes-{{ id }}"
+			 name="{{ id }}"
+			/>
+		</van-transition>
+
+	</van-cell>
+</template>
+
+<!-- 加载模板 -->
+<template name='loading-tel'>
+	<van-loading
+	 wx:if="{{load}}"
+	 size="24px"
+	 custom-class='loading'
+	 vertical
+	>加载中...
+	</van-loading>
+	<view class="no-more" wx:if="{{!load}}">
+		暂无数据...
+	</view>
+</template>
+

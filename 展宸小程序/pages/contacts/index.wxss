@@ -1,0 +1,6 @@
+.van-cell{
+    margin-top: 20rpx !important;
+}
+.van-cell-text{
+    margin-right: 40rpx;
+}

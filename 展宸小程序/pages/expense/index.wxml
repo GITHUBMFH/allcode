@@ -1,0 +1,289 @@
+<van-cell use-label-slot custom-class="cu-cell" data-index="{{id}}">
+	<view slot="label">
+		<view>
+			<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+		</view>
+		<view>
+			<text space="nbsp">申请人:{{people_name}}</text>
+		</view>
+	</view>
+</van-cell>
+
+<van-collapse value="{{ activeNames }}" bind:change="pullchange" wx:if='{{shoplst}}'>
+	<van-collapse-item title="采购单列表" name="1">
+		<view slot="value" style="color:#ee0a24">
+			<block wx:if="{{allcount}}">
+				合计：{{allcount}}元
+			</block>
+			<block wx:elif="{{!allcount}}">
+				合计：- -元
+			</block>
+		</view>
+		<block wx:for="{{shoplst}}" wx:for-item='value' wx:key="id">
+			<template is="shoplst" data="{{...value}}" />
+		</block>
+	</van-collapse-item>
+</van-collapse>
+
+<view class="box" />
+<van-cell-group>
+	<van-field
+	 model:value="{{ supplier }}"
+	 label="供应商名称:"
+	 placeholder=""
+	 clearable
+	 center
+	 bindtap="showsupplier"
+	 readonly
+	 is-link
+	>
+		<view class="require" wx:if="{{!supplier}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{proof_num }}"
+	 label="凭证后4位:"
+	 placeholder=""
+	 clearable
+	 center
+	>
+		<view class="require" wx:if="{{!proof_num}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{proof_data }}"
+	 label="凭证日期:"
+	 placeholder=""
+	 clearable
+	 center
+	 bindtap="dateshow"
+	>
+		<view class="require" wx:if="{{!proof_data}}" slot="right-icon">*必填</view>
+	</van-field>
+
+</van-cell-group>
+
+<view class="box" />
+<van-cell-group>
+	<van-field
+	 model:value="{{num }}"
+	 label="报销金额:"
+	 placeholder="请输入报销金额"
+	 clearable
+	 center
+	 type='number'
+	>
+		<view class="require" wx:if="{{!num}}" slot="right-icon">*必填</view>
+	</van-field>
+
+	<van-field
+	 model:value="{{result }}"
+	 label="报销原因:"
+	 placeholder="请输入原因"
+	 clearable
+	 center
+	 type='textarea'
+	 autosize
+	 wx:if='{{!shoplst}}'
+	>
+		<view class="require" wx:if="{{!result}}" slot="right-icon">*必填</view>
+	</van-field>
+</van-cell-group>
+
+<view class="box" wx:if='{{!shoplst}}' />
+<van-cell-group wx:if='{{!shoplst}}'>
+	<van-field
+	 model:value="{{orderrelate}}"
+	 label="关联订单:"
+	 placeholder="请选择关联订单"
+	 center
+	 type='textarea'
+	 readonly
+	 bindtap="showselect"
+	 id='showorder'
+	 is-link
+	>
+		<view class="require" wx:if="{{!orderrelate}}" slot="right-icon">*必填</view>
+	</van-field>
+</van-cell-group>
+
+<!-- 上传图片 -->
+<view class="box" />
+<van-cell-group border="{{false}}">
+	<van-cell use-label-slot title="上传凭证图片:">
+		<view class="" slot='label'>
+			<van-uploader
+			 file-list="{{ fileList }}"
+			 deletable="{{ true }}"
+			 multiple="{{ true }} "
+			 bind:after-read="afterRead"
+			 bind:delete="delimg"
+			/>
+		</view>
+	</van-cell>
+</van-cell-group>
+
+<!-- 列表模板 -->
+<template name='shoplst'>
+	<van-cell-group bindtap="getprice" data-id='{{id}}'>
+		<view class="box" />
+		<van-cell use-label-slot title-width="500rpx">
+			<view slot="title">
+				收货:{{act_num}}{{act_unit}}
+				<text space="nbsp" style="margin-left:130rpx;color:#ee0a24;">单价(*):<text space="nbsp">
+					<block wx:if="{{price}}">{{price}}元</block>
+					<block wx:if="{{!price}}"> -  -元</block>
+				</text>
+				</text>
+			</view>
+			<view style="color:#ee0a24">
+				{{act_num*price}}元
+			</view>
+		</van-cell>
+		<van-cell use-label-slot custom-class="cu-cell">
+			<view slot="icon">
+				<van-icon
+				 custom-class="cu-icon"
+				 name="cart-o"
+				 color="#ee0a24"
+				 size="large"
+				/>
+			</view>
+			<view slot="title">
+				<view>
+					<text space="nbsp"> 名称:{{name}}</text>
+				</view>
+				<view>
+					<text space="nbsp"> 规格:{{size}}</text>
+					<text space="nbsp">    数量:{{num}}</text>
+				</view>
+				<view>
+					<text space="nbsp"> 备注:<text class="remark">{{remark}}</text>
+					</text>
+				</view>
+				<view>
+					<text space="nbsp"> 关联订单:<text>{{relate}}</text>
+					</text>
+				</view>
+			</view>
+			<view slot="label">
+				<view>
+					<van-steps steps="{{ steps }}" active="{{ state-1 }}" />
+				</view>
+				<view>
+					<text space="nbsp">下单人:{{people}}</text>
+					<text space="nbsp" class="mg-r">审核:{{passpeople}}</text>
+					<text space="nbsp" class="mg-l">签收人:{{getpeople}}</text>
+				</view>
+			</view>
+		</van-cell>
+	</van-cell-group>
+</template>
+
+<!-- 选择关联订单 -->
+<van-action-sheet
+ show="{{ selectshow }}"
+ bind:close="showselect"
+ overlay="{{true}}"
+ close-on-click-overlay="{{true}}"
+ overlay="{{true}}"
+ title="请选择关联订单"
+ cancel-text="确定"
+ bind:cancel="getordername"
+>
+	<van-picker
+	 class="labelPicker"
+	 model:columns="{{ columns }}"
+	 bind:change="selectorder"
+	 visible-item-count="6"
+	/>
+</van-action-sheet>
+
+<!-- 选择日期 -->
+<van-calendar show="{{ dateshow }}" bind:close="dateshow" bind:confirm="datesure" />
+
+<!-- 供应商 -->
+<van-popup
+ class='supplierbox'
+ show="{{ suppliershow }}"
+ position="right"
+ custom-style="height: 100%;width:100%"
+>
+	<van-search
+	 model:value="{{ searchvalue }}"
+	 placeholder="请输入供应商名称"
+	 shape='round'
+	 clearable
+	 show-action
+	 action-text="取消"
+	 bind:cancel="showsupplier"
+	 bind:change="getsupplierlst"
+	/>
+
+	<block wx:if="{{supplierdata.length>0}}">
+		<block wx:for="{{supplierdata}}" wx:for-item='value' wx:key="id">
+			<template is="supplierlst" data="{{...value}}" />
+		</block>
+	</block>
+	<block wx:if="{{supplierdata.length<1}}">
+		<van-empty description="暂无数据,请输入有效关键词" />
+	</block>
+
+	<van-button
+	 class="addnewsupplier"
+	 bindtap="addsupplier"
+	 type="primary"
+	 round
+	>添加新供应商
+	</van-button>
+</van-popup>
+
+<!-- 单价 -->
+<van-popup
+ show="{{ priceshow }}"
+ position="top"
+ close-on-click-overlay
+ bind:close="closeprice"
+>
+	<van-search
+	 model:value="{{ shopprice }}"
+	 placeholder="请输入单价"
+	 shape='round'
+	 clearable
+	 left-icon='bill-o'
+	 bind:blur='changeprice'
+	/>
+</van-popup>
+
+<template name='supplierlst'>
+	<van-cell
+	 use-label-slot
+	 is-link
+	 title="{{name}}"
+	 bindtap="suppliertopage"
+	 data-index="{{id}}"
+	 data-name="{{name}}"
+	/>
+</template>
+
+<van-button
+ class="addnewsupplier"
+ type="danger"
+ wx:if='{{!expenseid}}'
+ round
+ bindtap="changedata"
+>提交报销单
+</van-button>
+
+<van-button
+ class="addnewsupplier"
+ type="warning"
+ wx:if='{{expenseid}}'
+ round
+ bindtap="changedata"
+>修改报销单
+</van-button>
+
+<!-- 提示节点 -->
+<van-toast id="van-toast" />
+

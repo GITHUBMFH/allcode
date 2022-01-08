@@ -1,0 +1,44 @@
+.van-swipe-cell__right {
+    display: inline-block;
+    width: 65px;
+    height: 44px;
+    font-size: 15px;
+    line-height: 44px;
+    color: #fff;
+    text-align: center;
+    background-color: #f44;
+}
+
+.cu-cell {
+    margin-top: 20rpx;
+}
+
+.cu-cell .cu-icon {
+    margin-top: 10rpx;
+}
+
+.imgbox {
+    position: relative;
+    margin-right: 40rpx;
+}
+
+.imgbox van-tag {
+    position: absolute;
+    top: -10px;
+    right: -10rpx;
+    z-index: 10;
+}
+.head .van-cell__right-icon-wrap{
+    margin-top: 60rpx;
+    margin-left: 60rpx !important;
+}
+.head .van-icon-arrow:before{
+    font-size: 40rpx;
+}
+.box{
+    height: 40rpx;
+}
+.iconbox{
+    margin-right: 20rpx;
+    font-size: 40rpx;
+}

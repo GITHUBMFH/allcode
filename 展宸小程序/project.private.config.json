@@ -1,0 +1,114 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "登录注册",
+          "pathName": "pages/login/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "采购首页",
+          "pathName": "pages/shop/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "产品",
+          "pathName": "pages/product/index",
+          "query": "id=84",
+          "scene": null
+        },
+        {
+          "name": "采购详情",
+          "pathName": "pages/goods/index",
+          "query": "id=18&isget=true",
+          "scene": null
+        },
+        {
+          "name": "个人中心",
+          "pathName": "pages/user/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "个人资料",
+          "pathName": "pages/people/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "我的采购单",
+          "pathName": "pages/purchase/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "开票资料",
+          "pathName": "pages/ticket/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "通讯录",
+          "pathName": "pages/contacts/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "我的报销单",
+          "pathName": "pages/claim/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "报销细节",
+          "pathName": "pages/expense/index",
+          "query": "shopid=18,14",
+          "scene": null
+        },
+        {
+          "name": "报销细节2",
+          "pathName": "pages/expense/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "关联采购单",
+          "pathName": "pages/expense/index",
+          "query": "id=2",
+          "scene": null
+        },
+        {
+          "name": "采购单报销单",
+          "pathName": "pages/expense/index",
+          "query": "id=1",
+          "scene": null
+        },
+        {
+          "name": "添加报销单",
+          "pathName": "pages/add-supplier/index",
+          "query": "id=3",
+          "scene": null
+        },
+        {
+          "name": "供应商列表",
+          "pathName": "pages/supplier/index",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

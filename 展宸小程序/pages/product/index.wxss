@@ -1,0 +1,124 @@
+.van-swipe-cell__right {
+    display: inline-block;
+    width: 65px;
+    height: 44px;
+    font-size: 15px;
+    line-height: 44px;
+    color: #fff;
+    text-align: center;
+    background-color: #f44;
+}
+
+.cu-cell {
+    margin-top: 20rpx;
+}
+
+.cu-cell .cu-icon {
+    margin-top: 10rpx;
+}
+
+/* page{
+  margin-bottom: 170rpx;
+  } */
+
+.loading {
+    margin-top: 20rpx;
+    margin-bottom: 200rpx;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.no-more {
+    margin-top: 20rpx;
+    margin-bottom: 200rpx;
+    text-align: center;
+    color: darkgray;
+}
+
+.imgbox {
+    position: relative;
+    margin-top: 40rpx;
+    margin-right: 40rpx;
+}
+
+.imgbox van-tag {
+    position: absolute;
+    top: -10px;
+    right: -10rpx;
+    z-index: 10;
+}
+
+.textover {
+    text-overflow: ellipsis;
+    word-wrap: break-word
+}
+
+.showimg {
+    width: 100%;
+    height: 100%;
+    background: rgb(0 0 0 / 44%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    line-height: -200rpx;
+    z-index: 99999;
+}
+
+.showimg swiper {
+    position: relative;
+    top: 40%;
+    transform: translate(0%, -50%);
+    -ms-transform: translate(0%, 50%);
+    /* -moz-transform: translate(0%, 50%);
+    -webkit-transform: translate(0%, 50%);
+    -o-transform: translate(0%, 50%); */
+}
+
+.showimg swiper swiper-item {
+    width: 100% !important;
+}
+
+.showimg swiper swiper-item image {
+    width: 100% !important;
+}
+
+.van-sidebar-item {
+    background: rgb(255, 255, 255) !important;
+}
+
+.van-sidebar-item--selected .van-sidebar-item__text {
+    color: #ee0a24;
+}
+
+.shoplst {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 75%;
+}
+
+.cu-cell {
+    margin-top: 20rpx;
+}
+
+.cu-cell .cu-icon {
+    margin-top: 10rpx;
+}
+
+.mg-l {
+    /* margin-left: 250rpx; */
+    float: right;
+    margin-right: 10rpx;
+}
+
+.mg-r {
+    /* margin-left: 250rpx; */
+    margin-left: 100rpx;
+}
+
+.remark {
+    color: var(--color);
+}
