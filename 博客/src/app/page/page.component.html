@@ -1,0 +1,570 @@
+<nz-layout *ngIf="pagedata.content.length > 0">
+  <nz-layout>
+    <nz-sider nzWidth="200px" nzTheme="light">
+      <!-- <app-pagebg></app-pagebg> -->
+    </nz-sider>
+    <nz-content
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      style="padding-right: 20px; padding-left: 20px"
+    >
+      <!-- 标题 -->
+       <div style="text-align: center;margin-top: 40px;">
+         <h3
+           nz-typography
+           [nzEditable]="cdkDro"
+           [nzEditIcon]="title"
+           [(nzContent)]="pagedata.title"
+           style="display:inline;"
+         >
+           {{ pagedata.title }}
+         </h3>
+         <i
+         nz-icon
+         nzType="plus"
+         nzTheme="outline"
+         nz-popover
+         nzPopoverTrigger="click"
+         [nzPopoverContent]="contentTemplate"
+         nzPopoverPlacement="top"
+         style="color: #1890ff; font-size: 18px; cursor: pointer"
+         *ngIf="cdkDro"
+       ></i>
+       <ng-template #contentTemplate>
+         <nz-tag
+           style="cursor: pointer"
+           (click)="addpart(1, -1)"
+           [nzColor]="'magenta'"
+           ><i nz-icon nzType="plus" nzTheme="outline"></i>标题</nz-tag
+         >
+         <nz-tag
+           style="cursor: pointer"
+           (click)="addpart(2, -1)"
+           [nzColor]="'purple'"
+           ><i nz-icon nzType="plus" nzTheme="outline"></i>段落</nz-tag
+         >
+         <nz-tag
+           style="cursor: pointer"
+           (click)="addpart(3, -1)"
+           [nzColor]="'gold'"
+           ><i nz-icon nzType="plus" nzTheme="outline"></i>代码</nz-tag
+         >
+         <nz-tag
+           style="cursor: pointer"
+           (click)="addpart(4, -1)"
+           [nzColor]="'green'"
+           ><i nz-icon nzType="plus" nzTheme="outline"></i>列表</nz-tag
+         >
+         <nz-upload [nzBeforeUpload]="beforeUpload">
+           <nz-tag
+             style="cursor: pointer"
+             [nzColor]="'red'"
+             (click)="fileid = -1"
+             ><i nz-icon nzType="plus" nzTheme="outline" nzType="upload"></i
+             >图片</nz-tag
+           >
+         </nz-upload>
+       </ng-template>
+       </div>
+      <div *ngFor="let data of pagedata.content; let key = index">
+        <!-- 小标题 -->
+        <div
+          *ngIf="data.type == 1"
+          cdkDrag
+          [cdkDragDisabled]="!move"
+          style="margin-bottom: 10px"
+        >
+          <nz-tag [nzColor]="'volcano'">#</nz-tag>
+          <h5
+            id="id-{{ key }}"
+            nz-typography
+            [nzEditable]="cdkDro"
+            [nzEditIcon]="title"
+            [(nzContent)]="data.value"
+            (nzContentChange)="savedata()"
+            style="display: inline"
+          ></h5>
+          <i
+            nz-icon
+            nzType="plus"
+            nzTheme="outline"
+            nz-popover
+            nzPopoverTrigger="click"
+            [nzPopoverContent]="contentTemplate"
+            nzPopoverPlacement="top"
+            style="color: #1890ff; font-size: 18px; cursor: pointer"
+            *ngIf="cdkDro"
+          ></i>
+          <ng-template #contentTemplate>
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(1, key)"
+              [nzColor]="'magenta'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>标题</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(2, key)"
+              [nzColor]="'purple'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>段落</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(3, key)"
+              [nzColor]="'gold'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>代码</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(4, key)"
+              [nzColor]="'green'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>列表</nz-tag
+            >
+            <nz-upload [nzBeforeUpload]="beforeUpload">
+              <nz-tag
+                style="cursor: pointer"
+                [nzColor]="'red'"
+                (click)="fileid = key"
+                ><i nz-icon nzType="plus" nzTheme="outline" nzType="upload"></i
+                >图片</nz-tag
+              >
+            </nz-upload>
+          </ng-template>
+          <i
+            nz-popconfirm
+            nzPopconfirmTitle="确定删除？？?"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="dellst(key)"
+            nz-icon
+            nzType="close"
+            nzTheme="outline"
+            style="color: #1890ff; font-size: 18px; cursor: pointer"
+            *ngIf="cdkDro"
+          ></i>
+        </div>
+        <!-- 段落 -->
+        <div
+          *ngIf="data.type == 2"
+          cdkDrag
+          [cdkDragDisabled]="!move"
+          style="margin-bottom: 10px"
+        >
+          <span style="margin-left: 10px"></span>
+          <nz-tag [nzColor]="'lime'">-</nz-tag>
+          <p
+            nz-typography
+            [nzEditable]="cdkDro"
+            [(nzContent)]="data.value"
+            (nzContentChange)="savedata()"
+            style="display: inline"
+          ></p>
+          <i
+            nz-icon
+            nzType="plus"
+            nzTheme="outline"
+            nz-popover
+            nzPopoverTrigger="click"
+            [nzPopoverContent]="contentTemplate"
+            nzPopoverPlacement="top"
+            style="color: #1890ff; font-size: 18px; cursor: pointer"
+            *ngIf="cdkDro"
+          ></i>
+          <ng-template #contentTemplate>
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(1, key)"
+              [nzColor]="'magenta'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>标题</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(2, key)"
+              [nzColor]="'purple'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>段落</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(3, key)"
+              [nzColor]="'gold'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>代码</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(4, key)"
+              [nzColor]="'green'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>列表</nz-tag
+            >
+            <nz-upload [nzBeforeUpload]="beforeUpload">
+              <nz-tag
+                style="cursor: pointer"
+                [nzColor]="'red'"
+                (click)="fileid = key"
+                ><i nz-icon nzType="plus" nzTheme="outline" nzType="upload"></i
+                >图片</nz-tag
+              >
+            </nz-upload>
+          </ng-template>
+          <i
+            nz-popconfirm
+            nzPopconfirmTitle="确定删除？？?"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="dellst(key)"
+            nz-icon
+            nzType="close"
+            nzTheme="outline"
+            style="color: #1890ff; font-size: 18px; cursor: pointer"
+            *ngIf="cdkDro"
+          ></i>
+        </div>
+        <!-- 代码 -->
+        <div
+          *ngIf="data.type == 3"
+          class="editbox"
+          cdkDrag
+          [cdkDragDisabled]="!move"
+        >
+          <div style="clear: both"></div>
+          <div class="libox" nz-typography>
+            <ul>
+              <li *ngFor="let item of getcount(data.value); let key = index">
+                {{ key + 1 }}
+              </li>
+            </ul>
+          </div>
+          <div
+            [hidden]="data.edit"
+            id="pre{{ key }}"
+            (dblclick)="cdkDro ? editcode(key) : null"
+            class="codebox"
+          >
+            <pre><code>{{data.value}}</code></pre>
+            <i
+              nz-popconfirm
+              nzPopconfirmTitle="确定删除？？?"
+              nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="dellst(key)"
+              nz-icon
+              nzType="close"
+              nzTheme="outline"
+              style="
+                color: #1890ff;
+                font-size: 18px;
+                position: absolute;
+                top: 0;
+                right: 0px;
+                cursor: pointer;
+              "
+              *ngIf="cdkDro"
+            ></i>
+            <i
+              nz-icon
+              nzType="plus"
+              nzTheme="outline"
+              nz-popover
+              nzPopoverTrigger="click"
+              [nzPopoverContent]="contentTemplate"
+              nzPopoverPlacement="top"
+              style="
+                color: #1890ff;
+                font-size: 18px;
+                cursor: pointer;
+                position: absolute;
+                top: 0;
+                right: 20px;
+              "
+              *ngIf="cdkDro"
+            ></i>
+            <ng-template #contentTemplate>
+              <nz-tag
+                style="cursor: pointer"
+                (click)="addpart(1, key)"
+                [nzColor]="'magenta'"
+                ><i nz-icon nzType="plus" nzTheme="outline"></i>标题</nz-tag
+              >
+              <nz-tag
+                style="cursor: pointer"
+                (click)="addpart(2, key)"
+                [nzColor]="'purple'"
+                ><i nz-icon nzType="plus" nzTheme="outline"></i>段落</nz-tag
+              >
+              <nz-tag
+                style="cursor: pointer"
+                (click)="addpart(3, key)"
+                [nzColor]="'gold'"
+                ><i nz-icon nzType="plus" nzTheme="outline"></i>代码</nz-tag
+              >
+              <nz-tag
+                style="cursor: pointer"
+                (click)="addpart(4, key)"
+                [nzColor]="'green'"
+                ><i nz-icon nzType="plus" nzTheme="outline"></i>列表</nz-tag
+              >
+              <nz-upload [nzBeforeUpload]="beforeUpload">
+                <nz-tag
+                  style="cursor: pointer"
+                  [nzColor]="'red'"
+                  (click)="fileid = key"
+                  ><i
+                    nz-icon
+                    nzType="plus"
+                    nzTheme="outline"
+                    nzType="upload"
+                  ></i
+                  >图片</nz-tag
+                >
+              </nz-upload>
+            </ng-template>
+          </div>
+          <!-- 编辑框 -->
+          <div style="clear: both"></div>
+          <div
+            [ngClass]="{ editcodeshow: data.edit, editcodehide: !data.edit }"
+          >
+            <textarea
+              id="input{{ key }}"
+              nz-input
+              placeholder
+              (blur)="onBlur(key)"
+              style="width: 100%"
+              [(ngModel)]="data.value"
+              nzAutosize
+            >
+            </textarea>
+          </div>
+        </div>
+
+        <!-- 列表 -->
+        <div
+          *ngIf="data.type == 4"
+          cdkDrag
+          [cdkDragDisabled]="!move"
+          style="margin-bottom: 10px"
+          nz-typography
+        >
+          <ul
+            style="margin-left: 30px"
+            cdkDropList
+            (cdkDropListDropped)="droplst($event,data.value)"
+          >
+            <li
+              *ngFor="let item of data.value; let skey = index"
+              cdkDrag
+              [cdkDragDisabled]="!move"
+            >
+              <!-- {{item}} -->
+              <p
+                nz-typography
+                [nzEditable]="cdkDro"
+                [(nzContent)]="data.value[skey]"
+                (nzContentChange)="savedata()"
+                style="display: inline"
+              ></p>
+              <i
+                nz-icon
+                nzType="plus"
+                nzTheme="outline"
+                style="color: #1890ff; font-size: 14px; cursor: pointer"
+                *ngIf="data.value.length == skey + 1 && cdkDro"
+                (click)="addlist(key)"
+              ></i>
+
+              <i
+                nz-popconfirm
+                nzPopconfirmTitle="确定删除？？?"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="dellist(key, data.value.length - 1, skey)"
+                nz-icon
+                nzType="close"
+                nzTheme="outline"
+                style="color: #1890ff; font-size: 14px; cursor: pointer"
+                *ngIf="cdkDro"
+              ></i>
+              <i
+                nz-icon
+                nzType="plus"
+                nzTheme="outline"
+                nz-popover
+                nzPopoverTrigger="click"
+                [nzPopoverContent]="contentTemplate"
+                nzPopoverPlacement="top"
+                style="color: #ffadd2; font-size: 18px; cursor: pointer"
+                *ngIf="cdkDro"
+              ></i>
+              <ng-template #contentTemplate>
+                <nz-tag
+                  style="cursor: pointer"
+                  (click)="addpart(1, key)"
+                  [nzColor]="'magenta'"
+                  ><i nz-icon nzType="plus" nzTheme="outline"></i>标题</nz-tag
+                >
+                <nz-tag
+                  style="cursor: pointer"
+                  (click)="addpart(2, key)"
+                  [nzColor]="'purple'"
+                  ><i nz-icon nzType="plus" nzTheme="outline"></i>段落</nz-tag
+                >
+                <nz-tag
+                  style="cursor: pointer"
+                  (click)="addpart(3, key)"
+                  [nzColor]="'gold'"
+                  ><i nz-icon nzType="plus" nzTheme="outline"></i>代码</nz-tag
+                >
+                <nz-tag
+                  style="cursor: pointer"
+                  (click)="addpart(4, key)"
+                  [nzColor]="'green'"
+                  ><i nz-icon nzType="plus" nzTheme="outline"></i>列表</nz-tag
+                >
+                <nz-upload [nzBeforeUpload]="beforeUpload">
+                  <nz-tag
+                    style="cursor: pointer"
+                    [nzColor]="'red'"
+                    (click)="fileid = key"
+                    ><i
+                      nz-icon
+                      nzType="plus"
+                      nzTheme="outline"
+                      nzType="upload"
+                    ></i
+                    >图片</nz-tag
+                  >
+                </nz-upload>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 图片 -->
+        <div
+          *ngIf="data.type == 5"
+          cdkDrag
+          [cdkDragDisabled]="!move"
+          style="margin-bottom: 10px; position: relative"
+        >
+          <img
+            nz-image
+            style="max-height: 300px; margin-left: 40px"
+            [nzSrc]="imgurl + data.value + imgstyle"
+            alt=""
+          />
+          <i
+            nz-popconfirm
+            nzPopconfirmTitle="确定删除？？?"
+            nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="dellst(key); delfile(data.value)"
+            nz-icon
+            nzType="close"
+            nzTheme="outline"
+            style="
+              color: #1890ff;
+              font-size: 18px;
+              position: absolute;
+              top: 0;
+              right: 0px;
+            "
+            *ngIf="cdkDro"
+          ></i>
+          <i
+            nz-icon
+            nzType="plus"
+            nzTheme="outline"
+            nz-popover
+            nzPopoverTrigger="click"
+            [nzPopoverContent]="contentTemplate"
+            nzPopoverPlacement="top"
+            style="
+              color: #1890ff;
+              font-size: 18px;
+              cursor: pointer;
+              position: absolute;
+              top: 0;
+              right: 20px;
+            "
+            *ngIf="cdkDro"
+          ></i>
+          <ng-template #contentTemplate>
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(1, key)"
+              [nzColor]="'magenta'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>标题</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(2, key)"
+              [nzColor]="'purple'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>段落</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(3, key)"
+              [nzColor]="'gold'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>代码</nz-tag
+            >
+            <nz-tag
+              style="cursor: pointer"
+              (click)="addpart(4, key)"
+              [nzColor]="'green'"
+              ><i nz-icon nzType="plus" nzTheme="outline"></i>列表</nz-tag
+            >
+            <nz-upload [nzBeforeUpload]="beforeUpload">
+              <nz-tag
+                style="cursor: pointer"
+                [nzColor]="'red'"
+                (click)="fileid = key"
+                ><i nz-icon nzType="plus" nzTheme="outline" nzType="upload"></i
+                >图片</nz-tag
+              >
+            </nz-upload>
+          </ng-template>
+        </div>
+      </div>
+    </nz-content>
+
+    <nz-sider nzWidth="200px" nzTheme="light">
+      <nz-anchor [nzBounds]="100" [nzAffix]="false" nzShowInkInFixed="true">
+        <div *ngFor="let data of pagedata.content; let key = index">
+          <div *ngIf="data.type == 1">
+            <nz-link nzHref="#id-{{ key }}" [nzTitle]="data.value"></nz-link>
+          </div>
+        </div>
+      </nz-anchor>
+    </nz-sider>
+  </nz-layout>
+  <nz-switch
+    [(ngModel)]="cdkDro"
+    nzCheckedChildren="开启编辑"
+    nzUnCheckedChildren="关闭编辑"
+    class="switchedit"
+  ></nz-switch>
+  <nz-switch
+    [(ngModel)]="move"
+    nzCheckedChildren="开启排序"
+    nzUnCheckedChildren="关闭排序"
+    class="switchsort"
+  ></nz-switch>
+</nz-layout>
+
+<ng-template #title>
+  <i nz-icon nzType="edit" nzTheme="outline" style="font-size: 18px"></i>
+</ng-template>
+
+<div *ngIf="pagedata.content.length < 1">
+  <app-pagebg></app-pagebg>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="addtitle()"
+    style="position: fixed; bottom: 100px; left: 50%"
+  >
+    添加数据
+  </button>
+</div>
+
+<nz-back-top [nzTemplate]="tpl" [nzVisibilityHeight]="0">
+  <ng-template #tpl>
+    <div class="ant-back-top-inner">UP</div>
+  </ng-template>
+</nz-back-top>
+
+<!-- <ng-template [ngTemplateOutlet]="outlet" [ngOutletContext]="context"></ng-template> -->

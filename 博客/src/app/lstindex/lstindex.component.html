@@ -1,0 +1,371 @@
+<!-- 加载框 -->
+<div class="loading_box" *ngIf="showloading">
+  <nz-spin nzSize="large"></nz-spin>
+</div>
+<div *ngIf="!pageshow">
+  <!-- 搜索框+内容 -->
+  <div class="content">
+    <div class="searchinput" [ngClass]="{ sercher: this.data.length < 1 }">
+      <nz-input-group
+        nzSearch
+        nzSize="large"
+        [nzAddOnBefore]="addOnBeforeTemplate"
+        [nzAddOnAfter]="suffixButton"
+      >
+        <input
+          type="text"
+          nz-input
+          placeholder="你想干哈?"
+          [(ngModel)]="seachervalue"
+          (keydown)="keyDown($event)"
+        />
+      </nz-input-group>
+    </div>
+    <div
+      style="text-align: center; width: 80%; margin: 0 auto;margin-right: 35%;"
+      *ngIf="data.length > 0"
+    >
+      <div class="listbox">
+        <nz-timeline [nzMode]="'left'">
+          <nz-timeline-item *ngFor="let item of data" [nzLabel]="editlabel">
+            <ng-template #editlabel>
+              <p
+                *ngIf="seachertag"
+                nz-typography
+                nzEllipsis
+                [(nzContent)]="item.title"
+                (click)="seachertag ? gopage(item) : null"
+                style="cursor: pointer"
+              ></p>
+              <p
+                *ngIf="!seachertag"
+                nz-typography
+                nzEllipsis
+                [nzEditable]="edittable"
+                [(nzContent)]="item.title"
+                (nzContentChange)="changetitle($event, item.id)"
+              >
+                {{ item.title }}-{{ item.url }}
+              </p>
+            </ng-template>
+            <div style="display: inline; cursor: pointer">
+              <span
+                (click)="seachertag ? gopage(item) : null"
+                style="margin-right: 10px"
+                >{{ item.date | date: "yyyy-MM-dd" }}</span
+              >
+              <nz-tag
+                [nzColor]="this.getcolor(item.tag)"
+                nz-dropdown
+                nzTrigger="click"
+                [nzDropdownMenu]="menu"
+                [nzPlacement]="'topRight'"
+              >
+                {{ item.tag }}
+              </nz-tag>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li
+                    nz-menu-item
+                    *ngFor="let t of tag"
+                    (click)="
+                      seachertag
+                        ? pagechangetag(item.id, t.name)
+                        : resourcechangetag(item.id, t.name)
+                    "
+                  >
+                    <nz-tag [nzColor]="this.getcolor(t.name)">
+                      {{ t.name }}
+                    </nz-tag>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </div>
+            <nz-tag
+              *ngIf="!seachertag"
+              style="cursor: pointer"
+              [nzColor]="this.getcolor(item.tag)"
+            >
+              {{ item.url?item.url.substring(item.url.length - 4):''}}
+              <i
+                nz-popconfirm
+                nzPopconfirmTitle="确定下载？？?"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="downfile(item.url)"
+                nz-icon
+                nzType="cloud-download"
+                nzTheme="outline"
+              >
+              </i
+            ></nz-tag>
+
+            <nz-tag
+              *ngIf="!seachertag"
+              style="cursor: pointer"
+              [nzColor]="this.getcolor(item.tag)"
+            >
+              <i
+                (click)="copyfile(item.url)"
+                nz-icon
+                nzType="copy"
+                nzTheme="outline"
+              >
+              </i
+            ></nz-tag>
+
+            <nz-tag style="cursor: pointer" [nzColor]="this.getcolor(item.tag)"
+              ><i
+                nz-popconfirm
+                nzPopconfirmTitle="确定删除？？?"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="
+                  seachertag ? delpage(item.id) : delresource(item.id, item.url)
+                "
+                nz-icon
+                nzType="close"
+                nzTheme="outline"
+              ></i
+            ></nz-tag>
+          </nz-timeline-item>
+        </nz-timeline>
+      </div>
+      <nz-pagination
+        [nzPageSize]="PageSize"
+        [nzPageIndex]="PageIndex"
+        [nzTotal]="Total"
+        nzResponsive
+        nzHideOnSinglePage
+        (nzPageIndexChange)="seachertag ? getdata($event) : getlst($event)"
+      ></nz-pagination>
+    </div>
+  </div>
+
+  <!-- 右边标签页面 -->
+  <div class="tagbox">
+    <nz-radio-group
+      [(ngModel)]="radioValue"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      (ngModelChange)="seachertag ? getdata() : getlst()"
+    >
+      <div *ngFor="let item of tag" nz-row style="margin-top: 20px" cdkDrag>
+        <label nz-radio nzValue="{{ item.name }}">
+          <nz-tag [nzColor]="item.color"
+            >{{ item.name }}
+            <i
+              nz-popconfirm
+              nzPopconfirmTitle="确定删除？？?"
+              nzPopconfirmPlacement="bottom"
+              (nzOnConfirm)="tagClose(item.name)"
+              nz-icon
+              nzType="close"
+              nzTheme="outline"
+            ></i>
+          </nz-tag>
+        </label>
+      </div>
+    </nz-radio-group>
+    <br />
+    <nz-affix [nzOffsetBottom]="70">
+      <button
+        style="margin-top: 20px"
+        nz-button
+        nzType="default"
+        (click)="this.radioValue = ''; seachertag ? getdata() : getlst()"
+        nzDanger
+        *ngIf="tag.length > 0"
+      >
+        <i nz-icon nzType="clear" nzTheme="outline"></i>
+        全部标签
+      </button>
+    </nz-affix>
+
+    <nz-affix [nzOffsetBottom]="20">
+      <button
+        style="margin-top: 20px"
+        nz-button
+        nzType="default"
+        nzDanger
+        nz-popover
+        [(nzPopoverVisible)]="tagboxshow"
+        [nzPopoverContent]="addtagTemplate"
+        nzPopoverTrigger="click"
+        *ngIf="tag.length > 0"
+      >
+        <i nz-icon nzType="plus" nzTheme="outline"></i>添加标签
+      </button>
+    </nz-affix>
+  </div>
+
+  <!-- 背景 -->
+  <div class="catbg">
+    <app-pagebg></app-pagebg>
+  </div>
+
+  <!-- 添加文章 -->
+  <div class="addpage" *ngIf="seachertag">
+    <button
+      nz-button
+      nzType="primary"
+      style="float: left; margin-left: 10px"
+      nz-popover
+      [(nzPopoverVisible)]="pageboxshow"
+      [nzPopoverContent]="contentTemplate"
+      nzPopoverTrigger="click"
+    >
+      <i nz-icon nzType="plus" nzTheme="outline"></i>
+      添加文章
+    </button>
+  </div>
+</div>
+
+<!-- 添加资源 -->
+<div class="addresource" *ngIf="!seachertag">
+  <button
+    nz-button
+    nzType="primary"
+    style="float: left; margin-left: 10px"
+    nzGhost
+    nz-popover
+    [(nzPopoverVisible)]="lstboxshow"
+    [nzPopoverContent]="addresource"
+    nzPopoverTrigger="click"
+  >
+    <i nz-icon nzType="cloud-server" nzTheme="outline"></i>
+    添加资源
+  </button>
+</div>
+<!-- 模板 -->
+<ng-template #contentTemplate>
+  <app-from [formdata]="formdata" [tag]="tag" #pagefrom></app-from>
+  <button
+    nz-button
+    nzType="primary"
+    [disabled]="pagefrom.formcontent.invalid"
+    (click)="addpage()"
+    style="float: right"
+  >
+    添加
+  </button>
+  <div style="clear: both"></div>
+</ng-template>
+
+<!-- 上传模板 -->
+<ng-template #addresource>
+  <div style="text-align: right">
+    <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+      <button nz-button><i nz-icon nzType="upload"></i>选择文件</button>
+    </nz-upload>
+    <div style="width: 400px; margin-bottom: 20px"></div>
+    <app-from [formdata]="formdata" [tag]="tag" #pagefrom></app-from>
+
+    <div style="width: 400px; margin-top: 50px"></div>
+    <button
+      nz-button
+      [nzType]="'primary'"
+      (click)="handleUpload()"
+      [disabled]="fileList.length == 0 || pagefrom.formcontent.invalid"
+      [nzLoading]="uploading"
+      style="margin-top: 16px"
+    >
+      {{ uploading ? "上传中" : "开始上传" }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #ErrorTpl let-control>
+  <ng-container *ngIf="control.hasError('required')"> 必填 </ng-container>
+</ng-template>
+
+<ng-template #addtagTemplate>
+  <div style="margin-bottom: 20px; width: 400px">
+    <nz-tag
+      style="margin-bottom: 20px"
+      *ngFor="let item of colors"
+      [nzColor]="item"
+      (click)="setcolor(item)"
+      >{{ item }}</nz-tag
+    >
+  </div>
+  <app-from [formdata]="addtagdata" #addtagfrom></app-from>
+  <button
+    nz-button
+    nzType="primary"
+    [disabled]="addtagfrom.formcontent.invalid"
+    (click)="addtag()"
+    style="float: right"
+  >
+    添加
+  </button>
+  <div style="clear: both"></div>
+</ng-template>
+
+<ng-template #addOnBeforeTemplate>
+  <nz-select
+    [(ngModel)]="seachertag"
+    (ngModelChange)="seachertag ? getdata() : getlst()"
+  >
+    <nz-option nzLabel="文章" [nzValue]="true"></nz-option>
+    <nz-option nzLabel="资源" [nzValue]="false"></nz-option>
+  </nz-select>
+</ng-template>
+
+<ng-template #suffixButton>
+  <button
+    nz-button
+    nzType="primary"
+    nzSize="large"
+    (click)="seachertag ? getdata() : getlst()"
+    nzSearch
+  >
+    搜索
+  </button>
+  <button
+    nz-button
+    nzType="link"
+    nzGhost
+    nzSize="large"
+    (click)="this.seachervalue = ''; seachertag ? getdata() : getlst()"
+    style="background: #fff !important"
+  >
+    清空
+  </button>
+</ng-template>
+
+<div *ngIf="pageshow">
+  <!-- page页面 -->
+  <app-page *ngIf="pageshow" #getpage [pagedata]="getpagedata"></app-page>
+  <button
+    nz-button
+    nzShape="circle"
+    [nzSize]="'large'"
+    style="position: fixed; bottom: 10px; right: 10px"
+    (click)="pageclose()"
+  >
+    <i nz-icon nzType="close" nzTheme="outline"></i>
+  </button>
+</div>
+
+<div id="sdf" style="height: 30px; clear: both"></div>
+
+<div class="back-bg" *ngIf="uploading">
+  <nz-progress
+    [nzPercent]="percent"
+    [nzStrokeColor]="{ '0%': '#108ee9', '100%': '#87d068' }"
+    nzType="circle"
+  ></nz-progress>
+  <button
+    nz-button
+    nzType="primary"
+    style="margin-top: 20px"
+    (click)="unhttps()"
+  >
+    取消
+  </button>
+</div>
+
+<nz-back-top [nzTemplate]="tpl" [nzVisibilityHeight]="100">
+  <ng-template #tpl>
+    <div class="ant-back-top-inner">UP</div>
+  </ng-template>
+</nz-back-top>

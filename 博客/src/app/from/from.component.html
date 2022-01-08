@@ -1,0 +1,42 @@
+<form nz-form [formGroup]="formcontent">
+    <ng-container *ngFor="let data of formdata">
+      <ng-container [ngSwitch]="data.type">
+        <!-- 常规 -->
+        <nz-form-item *ngSwitchCase="0">
+          <nz-form-label [nzSpan]="5" nzRequired>{{ data.title }}</nz-form-label>
+          <nz-form-control
+            nzHasFeedback
+            [nzSpan]="18"
+            [nzErrorTip]="ErrorTpl"
+            nzValidatingTip="Validating..."
+          >
+            <input
+              nz-input
+              [formControlName]="data.value"
+              [placeholder]="data.placeholder"
+            />
+          </nz-form-control>
+        </nz-form-item>
+
+        <!-- 单选框 -->
+        <nz-form-item *ngSwitchCase="6">
+          <nz-form-label [nzSpan]="5" nzRequired>{{ data.title }}</nz-form-label>
+          <nz-form-control
+            nzHasFeedback
+            [nzSpan]="18"
+            [nzErrorTip]="ErrorTpl"
+            nzValidatingTip="Validating..."
+          >
+            <nz-select [formControlName]="data.value" style="text-align: left;">
+              <nz-option *ngFor="let item of tag" nzValue="{{ item.name }}" nzLabel="{{ item.name }}"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </ng-container>
+    </ng-container>
+  </form>
+  
+  <ng-template #ErrorTpl let-control>
+    <ng-container *ngIf="control.hasError('required')"> 必填 </ng-container>
+  </ng-template>
+  
